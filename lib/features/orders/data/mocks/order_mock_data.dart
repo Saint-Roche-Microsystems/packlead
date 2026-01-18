@@ -19,7 +19,7 @@ class OrderMockData {
       client: 'María García',
       phoneNumber: '+51 987 123 456',
       location: Location(lat: -12.0564, lng: -77.0328),
-      state: 'in_progress',
+      state: 'in_route',
       zone: 'San Isidro',
       dispatcherName: 'Ana López',
     ),
@@ -38,7 +38,7 @@ class OrderMockData {
   static const List<String> orderStates = [
     'pending',
     'assigned',
-    'in_progress',
+    'in_route',
     'delivered',
     'cancelled',
   ];

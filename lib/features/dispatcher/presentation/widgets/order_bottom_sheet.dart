@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_item_button.dart';
+import 'package:packlead/features/dispatcher/presentation/widgets/order_state_dialog.dart';
 import 'package:packlead/features/orders/presentation/providers/mock_order_provider.dart';
 
 class OrderBottomSheet extends ConsumerStatefulWidget {
@@ -11,9 +13,12 @@ class OrderBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _OrferBottomSheetState extends ConsumerState<OrderBottomSheet> {
+  Order? _selectedOrder;
+
   @override
   Widget build(BuildContext context) {
     final orders = ref.watch(mockOrdersProvider);
+    _selectedOrder ??= orders.isNotEmpty ? orders[0] : null;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.3,
@@ -59,33 +64,42 @@ class _OrferBottomSheetState extends ConsumerState<OrderBottomSheet> {
                     return OrderItemButton(
                       order: orders[index],
                       onTap: () {
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Seleccionó orden ORD-${orders[index].id}'),
-                            duration: const Duration(seconds: 1),
-                          ),
-                        );
+                        setState(() {
+                          _selectedOrder = orders[index];
+                        });
                       },
                     );
                   },
                 ),
               ),
 
-              SizedBox(height: 24),
+              SizedBox(height: 12),
 
-              ElevatedButton.icon(
-                onPressed: () {
-                  /*TODO*/
-                },
-                icon: Icon(Icons.check_circle_outline),
-                label: const Text('Confirmar Entrega'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+              if (_selectedOrder != null)
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    final String? newStatus = await showDialog(
+                      context: context,
+                      builder: (context) => OrderStateDialog(order: _selectedOrder!),
+                    );
+
+                    if(newStatus != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('El estado del pedido ORD-${_selectedOrder!.id} se actualizó a "$newStatus".'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  },
+                  icon: Icon(Icons.update),
+                  label: const Text('Actualizar Entrega'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+                  ),
                 ),
-              ),
 
-              SizedBox(height: 24),
+              SizedBox(height: 28),
 
             ],
           ),
