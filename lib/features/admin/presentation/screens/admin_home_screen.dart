@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:packlead/features/admin/presentation/widgets/kpi_card.dart';
+import 'package:packlead/features/admin/presentation/widgets/order_donut_chart.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
@@ -38,7 +39,24 @@ class AdminHomeScreen extends StatelessWidget {
 
           SizedBox(height: 30),
 
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: Text(
+              "Progreso del Día",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
 
+           SizedBox(height: 12,),
+
+           OrdersDonutChart(
+              pending: 12,
+              inRoute: 8,
+              completed: 30,
+           ),
         ],
       ),
     );
