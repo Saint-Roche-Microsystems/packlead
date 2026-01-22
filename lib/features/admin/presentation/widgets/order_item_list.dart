@@ -9,12 +9,16 @@ class OrderItemList extends StatelessWidget {
 
   Color _getStateColor() {
     switch (order.state.toLowerCase()) {
-      case 'pendiente':
+      case 'pending':
         return Colors.orange;
-      case 'en proceso':
+      case 'assigned':
         return Colors.blue;
-      case 'completado':
+      case 'in_route':
+        return Colors.indigo;
+      case 'delivered':
         return Colors.green;
+      case 'cancelled':
+        return Colors.red;
       default:
         return Colors.grey;
     }
@@ -61,7 +65,7 @@ class OrderItemList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'ORD-${order.id}',
+                      order.id,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),

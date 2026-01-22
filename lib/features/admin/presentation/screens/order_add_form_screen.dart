@@ -1,7 +1,94 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/features/orders/presentation/providers/orders_provider.dart';
 
-class OrderAddFormScreen extends StatelessWidget {
+class OrderAddFormScreen extends ConsumerStatefulWidget {
   const OrderAddFormScreen({super.key});
+
+  @override
+  ConsumerState<OrderAddFormScreen> createState() => _OrderAddFormScreenState();
+}
+
+class _OrderAddFormScreenState extends ConsumerState<OrderAddFormScreen> {
+  final _clientCtrl = TextEditingController();
+  final _phoneCtrl = TextEditingController();
+  final _zoneCtrl = TextEditingController();
+  final _dispatcherCtrl = TextEditingController();
+  final _dispatcherIdCtrl = TextEditingController();
+  final _addressCtrl = TextEditingController();
+  final _latCtrl = TextEditingController();
+  final _lngCtrl = TextEditingController();
+
+  bool _isSaving = false;
+
+  @override
+  void dispose() {
+    _clientCtrl.dispose();
+    _phoneCtrl.dispose();
+    _zoneCtrl.dispose();
+    _dispatcherCtrl.dispose();
+    _dispatcherIdCtrl.dispose();
+    _addressCtrl.dispose();
+    _latCtrl.dispose();
+    _lngCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    final client = _clientCtrl.text.trim();
+    final phone = _phoneCtrl.text.trim();
+    final zone = _zoneCtrl.text.trim();
+    final address = _addressCtrl.text.trim();
+    final dispatcherName = _dispatcherCtrl.text.trim();
+    final dispatcherId = _dispatcherIdCtrl.text.trim();
+
+    final lat = double.tryParse(_latCtrl.text.trim());
+    final lng = double.tryParse(_lngCtrl.text.trim());
+
+    if (client.isEmpty || phone.isEmpty || zone.isEmpty || lat == null || lng == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Completa cliente, teléfono, zona, latitud y longitud.')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      await ref.read(ordersRepositoryProvider).createOrder(
+            client: client,
+            phoneNumber: phone,
+            zone: zone,
+            latitude: lat,
+            longitude: lng,
+            dispatcherId: dispatcherId.isEmpty ? null : dispatcherId,
+            dispatcherName: dispatcherName.isEmpty ? null : dispatcherName,
+            address: address.isEmpty ? null : address,
+          );
+
+      if (mounted) {
+        ref.invalidate(defaultOrdersProvider);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pedido creado')), // brief success info
+        );
+        Navigator.pop(context);
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No se pudo crear el pedido: $error')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,173 +101,81 @@ class OrderAddFormScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Campo Cliente
-            Text(
-              'Cliente',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text('Cliente', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
             const SizedBox(height: 8),
             TextField(
-              decoration: InputDecoration(
-                hintText: 'Nombre del cliente',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
+              controller: _clientCtrl,
+              decoration: _inputDecoration('Nombre del cliente'),
             ),
             const SizedBox(height: 20),
 
-            // Campo Teléfono
-            Text(
-              'Teléfono',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text('Teléfono', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
             const SizedBox(height: 8),
             TextField(
+              controller: _phoneCtrl,
               keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                hintText: '+593 99 123 4567',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
+              decoration: _inputDecoration('+51 999 999 999'),
             ),
             const SizedBox(height: 20),
 
-            // Campo Zona
-            Text(
-              'Zona',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
-              hint: const Text('Seleccione una zona'),
-              items: const [
-                DropdownMenuItem(value: 'Norte', child: Text('Norte')),
-                DropdownMenuItem(value: 'Sur', child: Text('Sur')),
-                DropdownMenuItem(value: 'Centro', child: Text('Centro')),
-                DropdownMenuItem(value: 'Este', child: Text('Este')),
-                DropdownMenuItem(value: 'Oeste', child: Text('Oeste')),
-              ],
-              onChanged: (value) {
-                // Sin funcionalidad por ahora
-              },
-            ),
-            const SizedBox(height: 20),
-
-            // Campo Despachador
-            Text(
-              'Despachador',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text('Zona', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
             const SizedBox(height: 8),
             TextField(
-              decoration: InputDecoration(
-                hintText: 'Nombre del despachador',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
+              controller: _zoneCtrl,
+              decoration: _inputDecoration('Ej: Miraflores'),
             ),
             const SizedBox(height: 20),
 
-            // Sección de Ubicación
-            Text(
-              'Ubicación',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            Text('Despachador (opcional)', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _dispatcherCtrl,
+              decoration: _inputDecoration('Nombre del despachador'),
             ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _dispatcherIdCtrl,
+              decoration: _inputDecoration('ID del despachador'),
+            ),
+            const SizedBox(height: 20),
+
+            Text('Dirección (opcional)', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _addressCtrl,
+              decoration: _inputDecoration('Av. Example 123'),
+            ),
+            const SizedBox(height: 20),
+
+            Text('Ubicación', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
 
-            // Campo Latitud
-            Text(
-              'Latitud',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text('Latitud', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
             const SizedBox(height: 8),
             TextField(
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                hintText: '-0.1807',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
+              controller: _latCtrl,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: _inputDecoration('-12.0464'),
             ),
             const SizedBox(height: 20),
 
-            // Campo Longitud
-            Text(
-              'Longitud',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text('Longitud', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)),
             const SizedBox(height: 8),
             TextField(
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                hintText: '-78.4678',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-              ),
+              controller: _lngCtrl,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: _inputDecoration('-77.0428'),
             ),
             const SizedBox(height: 32),
 
-            // Botones
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: _isSaving ? null : () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                     child: const Text('Cancelar'),
                   ),
@@ -188,16 +183,18 @@ class OrderAddFormScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Sin funcionalidad por ahora
-                    },
+                    onPressed: _isSaving ? null : _submit,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text('Guardar'),
+                    child: _isSaving
+                        ? const SizedBox(
+                            height: 18,
+                            width: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Guardar'),
                   ),
                 ),
               ],
@@ -205,6 +202,14 @@ class OrderAddFormScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     );
   }
 }

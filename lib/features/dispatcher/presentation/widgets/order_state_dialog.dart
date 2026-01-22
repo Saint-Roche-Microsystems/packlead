@@ -20,8 +20,16 @@ class _OrderStateDialogState extends State<OrderStateDialog> {
 
   @override
   Widget build(BuildContext context) {
+    const stateOptions = [
+      {'label': 'Pendiente', 'value': 'pending'},
+      {'label': 'Asignado', 'value': 'assigned'},
+      {'label': 'En ruta', 'value': 'in_route'},
+      {'label': 'Entregado', 'value': 'delivered'},
+      {'label': 'Cancelado', 'value': 'cancelled'},
+    ];
+
     return AlertDialog(
-      title: Text('Pedido ORD-${widget.order.id}'),
+      title: Text('Pedido ${widget.order.id}'),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,29 +41,21 @@ class _OrderStateDialogState extends State<OrderStateDialog> {
             ),
             const SizedBox(height: 16),
 
-            RadioGroup<String>(
-              groupValue: _selectedStatus,
-              onChanged: (value) {
-                setState(() {
-                  _selectedStatus = value!;
-                });
-              },
-              child: Column(
-                children: [
-                  RadioListTile<String>(
-                    title: const Text('Pendiente'),
-                    value: 'pending',
-                  ),
-                  RadioListTile<String>(
-                    title: const Text('En ruta'),
-                    value: 'in_route',
-                  ),
-                  RadioListTile<String>(
-                    title: const Text('Completado'),
-                    value: 'delivered',
-                  ),
-                ],
-              ),
+            Column(
+              children: stateOptions.map((option) {
+                return RadioListTile<String>(
+                  title: Text(option['label'] as String),
+                  value: option['value'] as String,
+                  groupValue: _selectedStatus,
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedStatus = value;
+                      });
+                    }
+                  },
+                );
+              }).toList(),
             ),
 
             const SizedBox(height: 16),

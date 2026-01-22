@@ -9,7 +9,7 @@ class OrderDetailDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Pedido ORD-${order.id}'),
+      title: Text('Pedido ${order.id}'),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,7 +19,7 @@ class OrderDetailDialog extends StatelessWidget {
             _buildDetailRow('Teléfono', order.phoneNumber),
             _buildDetailRow('Estado', order.state),
             _buildDetailRow('Zona', order.zone),
-            _buildDetailRow('Despachador', order.dispatcherName),
+            _buildDetailRow('Despachador', order.dispatcherName ?? 'No asignado'),
             _buildDetailRow(
               'Ubicación',
               'Lat: ${order.location.lat.toStringAsFixed(4)}, Lng: ${order.location.lng.toStringAsFixed(4)}',
