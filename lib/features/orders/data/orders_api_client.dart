@@ -20,7 +20,9 @@ class ApiException implements Exception {
 class OrdersApiClient {
   OrdersApiClient({http.Client? httpClient, String? baseUrl})
       : _httpClient = httpClient ?? http.Client(),
-        baseUrl = baseUrl ?? dotenv.env['ORDERS_API_BASE_URL'] ?? _defaultBaseUrl;
+        baseUrl = baseUrl ?? dotenv.env['ORDERS_API_BASE_URL'] ?? _defaultBaseUrl {
+    log('OrdersApiClient baseUrl=$baseUrl', name: 'OrdersApiClient');
+  }
 
   static const String _defaultBaseUrl =
       'https://q0eo9qj8ka.execute-api.us-east-1.amazonaws.com';
@@ -53,7 +55,9 @@ class OrdersApiClient {
     };
 
     final uri = _buildUri('/orders', queryParameters: queryParameters);
+    _logRequest('GET', uri);
     final response = await _httpClient.get(uri);
+    _logResponse('GET', uri, response);
 
     if (response.statusCode != 200) {
       throw _buildException(response, 'Failed to load orders');
@@ -68,7 +72,9 @@ class OrdersApiClient {
     }
 
     final uri = _buildUri('/orders/$orderId');
+    _logRequest('GET', uri);
     final response = await _httpClient.get(uri);
+    _logResponse('GET', uri, response);
 
     if (response.statusCode != 200) {
       throw _buildException(response, 'Failed to load order');
@@ -79,17 +85,13 @@ class OrdersApiClient {
 
   Future<Order> createOrder(Map<String, dynamic> payload) async {
     final uri = _buildUri('/orders');
-    log('POST $uri payload=${jsonEncode(payload)}', name: 'OrdersApiClient');
+    _logRequest('POST', uri, body: payload);
     final response = await _httpClient.post(
       uri,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(payload),
     );
-
-    log(
-      'POST $uri status=${response.statusCode} body=${response.body}',
-      name: 'OrdersApiClient',
-    );
+    _logResponse('POST', uri, response);
 
     if (response.statusCode != 201) {
       throw _buildException(response, 'Failed to create order');
@@ -108,11 +110,13 @@ class OrdersApiClient {
     }
 
     final uri = _buildUri('/orders/$orderId');
+    _logRequest('PUT', uri, body: payload);
     final response = await _httpClient.put(
       uri,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(payload),
     );
+    _logResponse('PUT', uri, response);
 
     if (response.statusCode != 200) {
       throw _buildException(response, 'Failed to update order');
@@ -127,7 +131,9 @@ class OrdersApiClient {
     }
 
     final uri = _buildUri('/orders/$orderId');
+    _logRequest('DELETE', uri);
     final response = await _httpClient.delete(uri);
+    _logResponse('DELETE', uri, response);
 
     if (response.statusCode != 200) {
       throw _buildException(response, 'Failed to delete order');
@@ -179,6 +185,20 @@ class OrdersApiClient {
     }
 
     throw ApiException('Unable to decode server response');
+  }
+
+  void _logRequest(String method, Uri uri, {Object? body}) {
+    log(
+      '$method $uri${body != null ? ' body=${jsonEncode(body)}' : ''}',
+      name: 'OrdersApiClient',
+    );
+  }
+
+  void _logResponse(String method, Uri uri, http.Response response) {
+    log(
+      '$method $uri status=${response.statusCode} body=${response.body}',
+      name: 'OrdersApiClient',
+    );
   }
 
   ApiException _buildException(http.Response response, String fallbackMessage) {
