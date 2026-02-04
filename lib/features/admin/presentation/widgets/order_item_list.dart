@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/admin/presentation/widgets/order_detail_dialog.dart';
 
@@ -6,23 +7,6 @@ class OrderItemList extends StatelessWidget {
   final Order order;
 
   const OrderItemList({super.key, required this.order});
-
-  Color _getStateColor() {
-    switch (order.state.toLowerCase()) {
-      case 'pending':
-        return Colors.orange;
-      case 'assigned':
-        return Colors.blue;
-      case 'in_route':
-        return Colors.indigo;
-      case 'delivered':
-        return Colors.green;
-      case 'cancelled':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +30,7 @@ class OrderItemList extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   border: Border.all(
-                    color: Theme.of(context).primaryColor.withOpacity(0.3),
+                    color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -88,17 +72,17 @@ class OrderItemList extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: _getStateColor().withOpacity(0.2),
+                  color: order.state.color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: _getStateColor(),
+                    color: order.state.color,
                     width: 1,
                   ),
                 ),
                 child: Text(
-                  order.state,
+                  order.state.label,
                   style: TextStyle(
-                    color: _getStateColor(),
+                    color: order.state.color,
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),

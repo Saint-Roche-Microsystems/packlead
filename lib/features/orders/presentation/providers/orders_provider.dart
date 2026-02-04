@@ -40,7 +40,7 @@ final orderStatsProvider = FutureProvider<Map<String, int>>((ref) async {
   final stats = <String, int>{};
 
   for (final order in orders) {
-    stats.update(order.state, (value) => value + 1, ifAbsent: () => 1);
+    stats.update(order.state.name, (value) => value + 1, ifAbsent: () => 1);
   }
 
   return stats;

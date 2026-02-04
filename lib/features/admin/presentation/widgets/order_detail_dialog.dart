@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
 
 class OrderDetailDialog extends StatelessWidget {
@@ -15,9 +16,9 @@ class OrderDetailDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildDetailRow('Cliente', order.client),
-            _buildDetailRow('Teléfono', order.phoneNumber),
-            _buildDetailRow('Estado', order.state),
+            _buildDetailRow('Cliente', order.clientName),
+            _buildDetailRow('Teléfono', order.clientPhoneNumber),
+            _buildDetailRow('Estado', order.state.label),
             _buildDetailRow('Zona', order.zone),
             _buildDetailRow('Despachador', order.dispatcherName ?? 'No asignado'),
             _buildDetailRow(
