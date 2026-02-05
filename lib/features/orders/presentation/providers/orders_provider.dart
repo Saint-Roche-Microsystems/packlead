@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/orders/data/datasources/order_api_datasource.dart';
 import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
@@ -53,6 +54,13 @@ final ordersProvider = FutureProvider<List<Order>>((ref) async {
   return await repository.getAllOrders();
 });
 
+final orderByIdProvider = FutureProvider.family<Order, String>(
+      (ref, orderId) async {
+    final repository = ref.watch(orderRepositoryProvider);
+    return await repository.getOrderById(orderId);
+  },
+);
+
 final ordersByDispatcherProvider = FutureProvider.family<List<Order>, String>(
       (ref, dispatcherId) async {
     final repository = ref.watch(orderRepositoryProvider);
@@ -64,40 +72,89 @@ final ordersByDispatcherProvider = FutureProvider.family<List<Order>, String>(
 ///   CUD PROVIDERS
 /// *******************
 
-final orderMutationProvider = Provider<OrderMutation>((ref) {
-  final repository = ref.watch(orderRepositoryProvider);
-  return OrderMutation(repository, ref);
-});
+final orderMutationProvider = StateNotifierProvider<OrderMutationNotifier, AsyncValue<void>>(
+  (ref) => OrderMutationNotifier(ref),
+);
 
-
-class OrderMutation {
-  final OrderRepository _repository;
+class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
   final Ref _ref;
 
-  OrderMutation(this._repository, this._ref);
+  OrderMutationNotifier(this._ref) : super(const AsyncValue.data(null));
 
-  Future<Order> createOrder(Order order) async {
-    final createdOrder = await _repository.createOrder(order);
+  OrderRepository get _repository => _ref.read(orderRepositoryProvider);
 
-    // Invalidate to refresh data
-    _ref.invalidate(ordersProvider);
+  Future<void> createOrder(Order order) async {
+    state = const AsyncValue.loading();
 
-    return createdOrder;
+    try {
+      await _repository.createOrder(order);
+
+      // Invalidate to refresh data
+      _ref.invalidate(ordersProvider);
+
+      state = const AsyncValue.data(null);
+    } catch(error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
   }
 
-  Future<Order> updateOrder(Order order) async {
-    final updatedOrder = await _repository.updateOrder(order);
+  Future<void> updateOrder(Order order) async {
+    state = const AsyncValue.loading();
 
-    // Invalidate to refresh data
-    _ref.invalidate(ordersProvider);
+    try {
+      await _repository.updateOrder(order);
 
-    return updatedOrder;
+      // Invalidate to refresh data
+      _ref.invalidate(ordersProvider);
+      _ref.invalidate(orderByIdProvider(order.id));
+
+      state = const AsyncValue.data(null);
+    } catch(error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
+
+  Future<void> updateOrderState({
+    required String orderId,
+    required OrderState newState,
+  }) async {
+    state = const AsyncValue.loading();
+
+    try {
+      final currentOrder = await _repository.getOrderById(orderId);
+
+      final updatedOrder = currentOrder.copyWith(state: newState);
+
+      await _repository.updateOrder(updatedOrder);
+
+      // Invalidate to refresh data
+      _ref.invalidate(ordersProvider);
+      _ref.invalidate(orderByIdProvider(orderId));
+
+      state = const AsyncValue.data(null);
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
   }
 
   Future<void> deleteOrder(String orderId) async {
-    await _repository.deleteOrder(orderId);
+    state = const AsyncValue.loading();
 
-    // Invalidate to refresh data
-    _ref.invalidate(ordersProvider);
+    try {
+      await _repository.deleteOrder(orderId);
+
+      // Invalidate to refresh data
+      _ref.invalidate(ordersProvider);
+      _ref.invalidate(orderByIdProvider(orderId));
+
+      state = const AsyncValue.data(null);
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
+
+  // Reset state to default
+  void resetState() {
+    state = const AsyncValue.data(null);
   }
 }

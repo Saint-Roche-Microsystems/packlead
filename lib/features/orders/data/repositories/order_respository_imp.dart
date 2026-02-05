@@ -17,6 +17,15 @@ class OrderRepositoryImp implements OrderRepository {
   }
 
   @override
+  Future<Order> getOrderById(String id) async {
+    try {
+      return await _dataSource.getOrderById(id);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<List<Order>> getOrdersByDispatcher(String dispatcherId) async {
     try{
       return await _dataSource.getOrdersByDispatcher(dispatcherId);

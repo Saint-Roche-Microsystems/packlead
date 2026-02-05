@@ -17,6 +17,15 @@ class OrderApiDataSource implements OrderDataSource {
   }
 
   @override
+  Future<Order> getOrderById(String id) async {
+    try {
+      return await _apiClient.getOrder(id);
+    } catch (e) {
+      throw Exception('Error al obtener orden por ID: $e');
+    }
+  }
+
+  @override
   Future<List<Order>> getOrdersByDispatcher(String dispatcherId) async {
     try {
       return await _apiClient.getOrders(dispatcherId: dispatcherId);

@@ -14,6 +14,17 @@ class OrderMockDataSource implements OrderDataSource {
   }
 
   @override
+  Future<Order> getOrderById(String id) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    try {
+      return _orders.firstWhere((order) => order.id == id);
+    } catch (e) {
+      throw Exception('Orden con ID $id no encontrada');
+    }
+  }
+
+  @override
   Future<List<Order>> getOrdersByDispatcher(String dispatcherId) async {
     await Future.delayed(const Duration(milliseconds: 400));
 
