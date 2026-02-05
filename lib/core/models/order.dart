@@ -1,86 +1,128 @@
 import 'package:packlead/core/models/location.dart';
+import 'package:packlead/core/constants/order_state.dart';
 
 class Order {
   final String id;
   final String? dispatcherId;
-
-  final String? dispatcherName;
-  final String client;
-  final String phoneNumber;
+  final String clientName;
+  final String clientPhoneNumber;
   final Location location;
   final String? address;
-  final String state;
+  final OrderState state;
   final String zone;
   final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime? assignedAt;
-  final DateTime? deliveredAt;
 
   Order({
     required this.id,
-    required this.client,
-    required this.phoneNumber,
+    this.dispatcherId,
+    required this.clientName,
+    required this.clientPhoneNumber,
     required this.location,
+    this.address,
     required this.state,
     required this.zone,
     required this.createdAt,
-    required this.updatedAt,
-    this.dispatcherId,
-    this.dispatcherName,
-    this.address,
-    this.assignedAt,
-    this.deliveredAt,
   });
 
-  factory Order.fromJson(Map<String, dynamic> json) {
-    final locationJson = json['location'] as Map<String, dynamic>?;
+  /// Constructor para procesos de creación (ej: formularios)
+  Order.create({
+    required this.clientName,
+    required this.clientPhoneNumber,
+    required this.location,
+    this.address,
+    this.dispatcherId,
+    required this.zone,
+  })  : id = '',                    // Temporal, backend lo asigna
+        state = OrderState.pending, // Estado por default en la creación
+        createdAt = DateTime.now(); // Temporal, backend lo reemplaza
 
+  /// Deserialización JSON
+  factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      id: json['orderId'] as String? ?? '',
+      id: json['id'] as String,
       dispatcherId: json['dispatcherId'] as String?,
-      dispatcherName: json['dispatcherName'] as String?,
-      client: json['client'] as String? ?? '',
-      phoneNumber: json['phoneNumber'] as String? ?? '',
-      location: locationJson != null
-          ? Location.fromJson(locationJson)
-          : Location(lat: 0, lng: 0),
+      clientName: json['clientName'] as String,
+      clientPhoneNumber: json['clientPhoneNumber'] as String,
+      location: Location.fromJson(json['location'] as Map<String, dynamic>),
       address: json['address'] as String?,
-      state: json['state'] as String? ?? '',
-      zone: json['zone'] as String? ?? '',
-      createdAt: _parseDate(json['createdAt']) ?? DateTime.fromMillisecondsSinceEpoch(0),
-      updatedAt: _parseDate(json['updatedAt']) ?? DateTime.fromMillisecondsSinceEpoch(0),
-      assignedAt: _parseDate(json['assignedAt']),
-      deliveredAt: _parseDate(json['deliveredAt']),
+      state: OrderStateExtension.fromJson(json['state'] as String),
+      zone: json['zone'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
 
+  /// Serialización a JSON
   Map<String, dynamic> toJson() {
     return {
-      'orderId': id,
+      if (id.isNotEmpty) 'id': id,
       'dispatcherId': dispatcherId,
-      'dispatcherName': dispatcherName,
-      'client': client,
-      'phoneNumber': phoneNumber,
+      'clientName': clientName,
+      'clientPhoneNumber': clientPhoneNumber,
       'location': location.toJson(),
       'address': address,
-      'state': state,
+      'state': state.name,
       'zone': zone,
       'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      'assignedAt': assignedAt?.toIso8601String(),
-      'deliveredAt': deliveredAt?.toIso8601String(),
     };
   }
 
-  static DateTime? _parseDate(dynamic value) {
-    if (value == null) {
-      return null;
-    }
+  // Crear copias
+  Order copyWith({
+    String? id,
+    String? dispatcherId,
+    String? clientName,
+    String? clientPhoneNumber,
+    Location? location,
+    String? address,
+    OrderState? state,
+    String? zone,
+    DateTime? createdAt,
+  }) {
+    return Order(
+      id: id ?? this.id,
+      dispatcherId: dispatcherId ?? this.dispatcherId,
+      clientName: clientName ?? this.clientName,
+      clientPhoneNumber: clientPhoneNumber ?? this.clientPhoneNumber,
+      location: location ?? this.location,
+      address: address ?? this.address,
+      state: state ?? this.state,
+      zone: zone ?? this.zone,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 
-    if (value is DateTime) {
-      return value.toUtc();
-    }
+  // UTILITIES
+  @override
+  String toString() {
+    return 'Order(id: $id, clientName: $clientName, state: $state, zone: $zone)';
+  }
 
-    return DateTime.tryParse(value.toString())?.toUtc();
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Order &&
+        other.id == id &&
+        other.dispatcherId == dispatcherId &&
+        other.clientName == clientName &&
+        other.clientPhoneNumber == clientPhoneNumber &&
+        other.location == location &&
+        other.address == address &&
+        other.state == state &&
+        other.zone == zone &&
+        other.createdAt == createdAt;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+    dispatcherId.hashCode ^
+    clientName.hashCode ^
+    clientPhoneNumber.hashCode ^
+    location.hashCode ^
+    address.hashCode ^
+    state.hashCode ^
+    zone.hashCode ^
+    createdAt.hashCode;
   }
 }

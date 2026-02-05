@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:packlead/core/models/order.dart';
+import 'package:packlead/core/constants/order_state.dart';
+import 'package:packlead/features/admin/viewmodels/admin_orders_view_model.dart';
 
 class OrderDetailDialog extends StatelessWidget {
-  final Order order;
+  final AdminOrdersViewModel orderVM;
 
-  const OrderDetailDialog({super.key, required this.order});
+  const OrderDetailDialog({super.key, required this.orderVM});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Pedido ${order.id}'),
+      title: Text('Pedido ${orderVM.id}'),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildDetailRow('Cliente', order.client),
-            _buildDetailRow('Teléfono', order.phoneNumber),
-            _buildDetailRow('Estado', order.state),
-            _buildDetailRow('Zona', order.zone),
-            _buildDetailRow('Despachador', order.dispatcherName ?? 'No asignado'),
+            _buildDetailRow('Cliente', orderVM.clientName),
+            _buildDetailRow('Teléfono', orderVM.clientPhoneNumber),
+            _buildDetailRow('Estado', orderVM.state.label),
+            _buildDetailRow('Zona', orderVM.zone),
+            _buildDetailRow('Despachador', orderVM.dispatcherName ?? 'No asignado'),
             _buildDetailRow(
               'Ubicación',
-              'Lat: ${order.location.lat.toStringAsFixed(4)}, Lng: ${order.location.lng.toStringAsFixed(4)}',
+              'Lat: ${orderVM.location.lat.toStringAsFixed(4)}, Lng: ${orderVM.location.lng.toStringAsFixed(4)}',
             ),
           ],
         ),

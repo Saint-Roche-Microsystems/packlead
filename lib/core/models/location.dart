@@ -17,4 +17,16 @@ class Location {
       'lng': lng,
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Location && other.lat == lat && other.lng == lng;
+  }
+
+  @override
+  int get hashCode => lat.hashCode ^ lng.hashCode;
+
+  @override
+  String toString() => 'Location(lat: $lat, lng: $lng)';
 }

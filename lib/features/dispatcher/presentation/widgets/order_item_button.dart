@@ -47,7 +47,7 @@ class OrderItemButton extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          order.client,
+                          order.clientName,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Colors.grey[600],
                           ),
