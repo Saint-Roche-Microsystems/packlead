@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:packlead/features/orders/presentation/providers/orders_provider_old.dart';
+import 'package:packlead/core/constants/order_state.dart';
+import 'package:packlead/core/models/location.dart';
+import 'package:packlead/core/models/order.dart';
+import 'package:packlead/features/orders/presentation/providers/orders_provider.dart';
 
 class OrderAddFormScreen extends ConsumerStatefulWidget {
   const OrderAddFormScreen({super.key});
@@ -57,19 +60,21 @@ class _OrderAddFormScreenState extends ConsumerState<OrderAddFormScreen> {
     });
 
     try {
-      await ref.read(ordersRepositoryProvider).createOrder(
-            client: client,
-            phoneNumber: phone,
-            zone: zone,
-            latitude: lat,
-            longitude: lng,
-            dispatcherId: dispatcherId.isEmpty ? null : dispatcherId,
-            dispatcherName: dispatcherName.isEmpty ? null : dispatcherName,
-            address: address.isEmpty ? null : address,
-          );
+      final newOrder = Order(
+        id: '',
+        clientName: client,
+        clientPhoneNumber: phone,
+        zone: zone,
+        location: Location(lat: lat, lng: lng),
+        dispatcherId: dispatcherId,
+        address: address.isEmpty ? null : address,
+        state: OrderState.pending,
+        createdAt: DateTime.now(),
+      );
+
+      await ref.read(orderMutationProvider.notifier).createOrder(newOrder);
 
       if (mounted) {
-        ref.invalidate(defaultOrdersProvider);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Pedido creado')), // brief success info
         );

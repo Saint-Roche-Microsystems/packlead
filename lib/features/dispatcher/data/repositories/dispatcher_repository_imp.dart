@@ -26,6 +26,15 @@ class DispatcherRepositoryImp implements DispatcherRepository {
   }
 
   @override
+  Future<Dispatcher> getDispatcherById(String id) async {
+    try{
+      return await _dataSource.getDispatcherById(id);
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<Dispatcher> createDispatcher(Dispatcher dispatcher) async {
     try{
       return await _dataSource.createDispatcher(dispatcher);

@@ -24,7 +24,7 @@ extension OrderStateUI on OrderState {
       case OrderState.pending:
         return 'Pendiente';
       case OrderState.shipped:
-        return 'Enviado';
+        return 'En ruta';
       case OrderState.delivered:
         return 'Entregado';
     }
