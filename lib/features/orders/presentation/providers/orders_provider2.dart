@@ -1,0 +1,73 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/models/order.dart';
+import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
+import 'package:packlead/features/orders/data/datasources/order_mock_datasource.dart';
+import 'package:packlead/features/orders/data/repositories/order_repository.dart';
+import 'package:packlead/features/orders/data/repositories/order_respository_imp.dart';
+
+/// *******************
+/// CONFIG PROVIDERS
+/// *******************
+
+final orderDataSourceProvider = Provider<OrderDataSource>((ref) {
+  // Dev ONY - use mock data
+  return OrderMockDataSource();
+
+  // Use real API service
+  // final apiClient = ref.watch(apiClientProvider);
+  // return OrderApiDataSource(apiClient);
+});
+
+final orderRepositoryProvider = Provider<OrderRepository>((ref) {
+  final dataSource = ref.watch(orderDataSourceProvider);
+  return OrderRepositoryImp(dataSource);
+});
+
+/// *******************
+///   DATA PROVIDERS -> GET
+/// *******************
+
+final ordersProvider = FutureProvider<List<Order>>((ref) async {
+  final repository = ref.watch(orderRepositoryProvider);
+  return await repository.getAllOrders();
+});
+
+final ordersByDispatcherProvider = FutureProvider.family<List<Order>, String>(
+      (ref, dispatcherId) async {
+    final repository = ref.watch(orderRepositoryProvider);
+    return await repository.getOrdersByDispatcher(dispatcherId);
+  },
+);
+
+/// *******************
+///   CUD PROVIDERS
+/// *******************
+
+final orderMutationProvider = Provider<OrderMutation>((ref) {
+  final repository = ref.watch(orderRepositoryProvider);
+  return OrderMutation(repository, ref);
+});
+
+
+class OrderMutation {
+  final OrderRepository _repository;
+  final Ref _ref;
+
+  OrderMutation(this._repository, this._ref);
+
+  Future<Order> createOrder(Order order) async {
+    final createdOrder = await _repository.createOrder(order);
+
+    // Invalidate to refresh data
+    _ref.invalidate(ordersProvider);
+
+    return createdOrder;
+  }
+
+  Future<void> deleteOrder(String orderId) async {
+    await _repository.deleteOrder(orderId);
+
+    // Invalidate to refresh data
+    _ref.invalidate(ordersProvider);
+  }
+}
