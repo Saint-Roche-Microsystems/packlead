@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:packlead/core/constants/order_state.dart';
-import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/admin/presentation/widgets/order_detail_dialog.dart';
+import 'package:packlead/features/admin/viewmodels/admin_orders_view_model.dart';
 
 class OrderItemList extends StatelessWidget {
-  final Order order;
+  final AdminOrdersViewModel orderVM;
 
-  const OrderItemList({super.key, required this.order});
+  const OrderItemList({super.key, required this.orderVM});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class OrderItemList extends StatelessWidget {
         onTap: () {
           showDialog(
             context: context,
-            builder: (context) => OrderDetailDialog(order: order),
+            builder: (context) => OrderDetailDialog(orderVM: orderVM),
           );
         },
         borderRadius: BorderRadius.circular(12),
@@ -49,14 +49,14 @@ class OrderItemList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      order.id,
+                      orderVM.id,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Zona: ${order.zone}',
+                      'Zona: ${orderVM.zone}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.grey[600],
                       ),
@@ -72,17 +72,17 @@ class OrderItemList extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: order.state.color.withValues(alpha: 0.2),
+                  color: orderVM.state.color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: order.state.color,
+                    color: orderVM.state.color,
                     width: 1,
                   ),
                 ),
                 child: Text(
-                  order.state.label,
+                  orderVM.state.label,
                   style: TextStyle(
-                    color: order.state.color,
+                    color: orderVM.state.color,
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
