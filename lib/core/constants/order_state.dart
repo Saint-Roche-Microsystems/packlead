@@ -31,6 +31,17 @@ extension OrderStateUI on OrderState {
   }
 }
 
+extension OrderStateOptions on OrderState {
+  static List<Map<String, String>> get options {
+    return OrderState.values.map((state) {
+      return {
+        'label': state.label,
+        'value': state.name,
+      };
+    }).toList();
+  }
+}
+
 extension OrderStateStyle on OrderState {
   Color get color {
     switch (this) {
