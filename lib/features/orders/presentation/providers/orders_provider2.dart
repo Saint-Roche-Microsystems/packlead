@@ -64,6 +64,15 @@ class OrderMutation {
     return createdOrder;
   }
 
+  Future<Order> updateOrder(Order order) async {
+    final updatedOrder = await _repository.updateOrder(order);
+
+    // Invalidate to refresh data
+    _ref.invalidate(ordersProvider);
+
+    return updatedOrder;
+  }
+
   Future<void> deleteOrder(String orderId) async {
     await _repository.deleteOrder(orderId);
 

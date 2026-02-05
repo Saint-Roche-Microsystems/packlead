@@ -68,6 +68,20 @@ class OrderMockDataSource implements OrderDataSource {
   }
 
   @override
+  Future<Order> updateOrder(Order order) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    final index = _orders.indexWhere((o) => o.id == order.id);
+
+    if (index == -1) {
+      throw Exception('Orden con ID ${order.id} no encontrada');
+    }
+
+    _orders[index] = order;
+    return order;
+  }
+
+  @override
   Future<Order> createOrder(Order order) async {
     await Future.delayed(const Duration(milliseconds: 600));
 

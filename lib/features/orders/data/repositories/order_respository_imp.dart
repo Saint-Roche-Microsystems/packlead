@@ -26,6 +26,15 @@ class OrderRepositoryImp implements OrderRepository {
   }
 
   @override
+  Future<Order> updateOrder(Order order) async {
+    try{
+      return await _dataSource.updateOrder(order);
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<Order> createOrder(Order order) async {
     try{
       return await _dataSource.createOrder(order);
