@@ -1,10 +1,12 @@
+import 'package:packlead/core/constants/dispatcher_state.dart';
+
 class Dispatcher {
   final String id;
   final String name;
   final String email;
   final String vehicle;
   final String licensePlate;
-  final String state;
+  final DispatcherState state;
 
   Dispatcher({
     required this.id,
