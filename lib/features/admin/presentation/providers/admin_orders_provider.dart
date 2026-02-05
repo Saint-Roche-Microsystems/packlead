@@ -6,31 +6,6 @@ import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_p
 import 'package:packlead/features/orders/presentation/providers/orders_provider.dart';
 
 // Provider for list view & dtails for admin orders Screen
-final enrichedOrdersProvider = FutureProvider<List<AdminOrdersViewModel>>((ref) async {
-  // Watch base domain providers
-  final ordersAsync = ref.watch(ordersByStateProvider(OrderState.pending));
-  final dispatchersAsync = ref.watch(dispatchersProvider);
-
-  // Retreive data
-  final orders = ordersAsync.requireValue;
-  final dispatchers = dispatchersAsync.requireValue;
-
-  // Create a map for dispatchers ----> easy access
-  final dispatcherMap = {
-    for (var d in dispatchers) d.id: d
-  };
-
-  // Create AdminOrdersViewModel (as list)
-  return orders.map((Order order) {
-    // Obtain the dispatcher for each order
-    final dispatcher = order.dispatcherId != null
-        ? dispatcherMap[order.dispatcherId]
-        : null;
-
-    return AdminOrdersViewModel.fromOrder(order, dispatcher);
-  }).toList();
-});
-
 final enrichedOrdersByStateProvider = FutureProvider.family<List<AdminOrdersViewModel>, OrderState>((ref, state) async {
   // Watch base domain providers
   final ordersAsync = ref.watch(ordersByStateProvider(state)); // Always fetch by state

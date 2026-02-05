@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/features/admin/presentation/providers/admin_orders_provider.dart';
+import 'package:packlead/features/admin/presentation/screens/forms/create_order_form.dart';
 import 'package:packlead/features/admin/presentation/screens/order_add_form_screen.dart';
 import 'package:packlead/features/admin/presentation/widgets/order_item_list.dart';
 
@@ -42,7 +43,7 @@ class _AdminOrderScreenState extends ConsumerState<AdminOrderScreen>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const OrderAddFormScreen(),
+                    builder: (context) => const CreateOrderForm(),
                   ),
                 );
               },
