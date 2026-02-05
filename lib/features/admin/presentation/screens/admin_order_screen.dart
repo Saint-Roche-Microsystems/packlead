@@ -3,14 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/features/admin/presentation/providers/admin_orders_provider.dart';
 import 'package:packlead/features/admin/presentation/screens/order_add_form_screen.dart';
 import 'package:packlead/features/admin/presentation/widgets/order_item_list.dart';
-import 'package:packlead/features/orders/presentation/providers/orders_provider.dart';
 
 class AdminOrderScreen extends ConsumerWidget {
   const AdminOrderScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ordersAsync = ref.watch(defaultOrdersProvider);
     final enrichedOrdersAsync = ref.watch(enrichedOrdersProvider);
 
     return Column(
