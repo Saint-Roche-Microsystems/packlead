@@ -31,6 +31,31 @@ final enrichedOrdersProvider = FutureProvider<List<AdminOrdersViewModel>>((ref) 
   }).toList();
 });
 
+final enrichedOrdersByStateProvider = FutureProvider.family<List<AdminOrdersViewModel>, OrderState>((ref, state) async {
+  // Watch base domain providers
+  final ordersAsync = ref.watch(ordersByStateProvider(state)); // Always fetch by state
+  final dispatchersAsync = ref.watch(dispatchersProvider);
+
+  // Retreive data
+  final orders = ordersAsync.requireValue;
+  final dispatchers = dispatchersAsync.requireValue;
+
+  // Create a map for dispatchers ----> easy access
+  final dispatcherMap = {
+  for (var dispatcher in dispatchers) dispatcher.id: dispatcher
+  };
+
+  // Create AdminOrdersViewModel (as list)
+  return orders.map((order) {
+    // Obtain the dispatcher for each order
+    final dispatcher = order.dispatcherId != null
+    ? dispatcherMap[order.dispatcherId]
+        : null;
+
+  return AdminOrdersViewModel.fromOrder(order, dispatcher);
+  }).toList();
+});
+
 // Provider to create Orders
 final adminOrderFormProvider = StateNotifierProvider<AdminOrderFormNotifier, AsyncValue<void>>(
   (ref) => AdminOrderFormNotifier(ref),
