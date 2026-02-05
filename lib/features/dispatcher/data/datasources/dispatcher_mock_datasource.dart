@@ -24,6 +24,17 @@ class DispatcherMockDataSource implements DispatcherDatasource {
   }
 
   @override
+  Future<Dispatcher> getDispatcherById(String id) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    try {
+      return _dispatchers.firstWhere((dispatcher) => dispatcher.id == id);
+    } catch (e) {
+      throw Exception('Dispatcher con ID $id no encontrado');
+    }
+  }
+
+  @override
   Future<Dispatcher> createDispatcher(Dispatcher dispatcher) async {
     await Future.delayed(const Duration(milliseconds: 600));
 

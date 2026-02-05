@@ -37,6 +37,13 @@ final dispatchersAvailableProvider = FutureProvider<List<Dispatcher>>((ref) asyn
   return await repository.getAvailableDispatchers();
 });
 
+final dispatcherByIdProvider = FutureProvider.family<Dispatcher, String>(
+      (ref, dispatcherId) async {
+    final repository = ref.watch(dispatcherRepositoryProvider);
+    return await repository.getDispatcherById(dispatcherId);
+  },
+);
+
 /// *******************
 ///   CUD PROVIDERS
 /// *******************
@@ -67,6 +74,7 @@ class DispatcherMutation {
 
     // Invalidate to refresh data
     _ref.invalidate(dispatchersProvider);
+    _ref.invalidate(dispatcherByIdProvider(dispatcher.id));
 
     return updatedOrder;
   }
@@ -76,5 +84,6 @@ class DispatcherMutation {
 
     // Invalidate to refresh data
     _ref.invalidate(dispatchersProvider);
+    _ref.invalidate(dispatcherByIdProvider(dispatcherId));
   }
 }
