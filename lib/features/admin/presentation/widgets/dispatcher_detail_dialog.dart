@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
 
 class DispatcherDetailDialog extends StatelessWidget {
@@ -17,7 +18,7 @@ class DispatcherDetailDialog extends StatelessWidget {
           children: [
             _buildDetailRow('Nombre', dispatcher.name),
             _buildDetailRow('Email', dispatcher.email),
-            _buildDetailRow('Estado', dispatcher.state),
+            _buildDetailRow('Estado', dispatcher.state.label),
             _buildDetailRow('Vehículo', dispatcher.vehicle),
             _buildDetailRow('Placa', dispatcher.licensePlate),
           ],

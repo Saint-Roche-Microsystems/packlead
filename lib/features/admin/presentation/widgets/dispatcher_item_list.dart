@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
 import 'package:packlead/features/admin/presentation/widgets/dispatcher_detail_dialog.dart';
 
@@ -6,19 +7,6 @@ class DispatcherItemList extends StatelessWidget {
   final Dispatcher dispatcher;
 
   const DispatcherItemList({super.key, required this.dispatcher});
-
-  Color _getStateColor() {
-    switch (dispatcher.state.toLowerCase()) {
-      case 'activo':
-        return Colors.green;
-      case 'inactivo':
-        return Colors.grey;
-      case 'en ruta':
-        return Colors.blue;
-      default:
-        return Colors.orange;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,17 +73,17 @@ class DispatcherItemList extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: _getStateColor().withValues(alpha: 0.2),
+                  color: dispatcher.state.color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: _getStateColor(),
+                    color: dispatcher.state.color,
                     width: 1,
                   ),
                 ),
                 child: Text(
-                  dispatcher.state,
+                  dispatcher.state.label,
                   style: TextStyle(
-                    color: _getStateColor(),
+                    color: dispatcher.state.color,
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
