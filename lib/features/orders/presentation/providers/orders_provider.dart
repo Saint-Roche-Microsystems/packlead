@@ -1,47 +1,82 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/models/order.dart';
-import 'package:packlead/features/orders/data/orders_repository.dart';
+import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
+import 'package:packlead/features/orders/data/datasources/order_mock_datasource.dart';
+import 'package:packlead/features/orders/data/repositories/order_repository.dart';
+import 'package:packlead/features/orders/data/repositories/order_respository_imp.dart';
 
-class OrdersQuery {
-  const OrdersQuery({
-    this.state,
-    this.dispatcherId,
-    this.zone,
-    this.limit,
-  });
+/// *******************
+/// CONFIG PROVIDERS
+/// *******************
 
-  final String? state;
-  final String? dispatcherId;
-  final String? zone;
-  final int? limit;
-}
+final orderDataSourceProvider = Provider<OrderDataSource>((ref) {
+  // Dev ONY - use mock data
+  return OrderMockDataSource();
 
-final ordersRepositoryProvider = Provider<OrdersRepository>((ref) {
-  return OrdersRepository();
+  // Use real API service
+  // final apiClient = ref.watch(apiClientProvider);
+  // return OrderApiDataSource(apiClient);
 });
 
-final ordersProvider = FutureProvider.family<List<Order>, OrdersQuery>((ref, query) {
-  final repository = ref.watch(ordersRepositoryProvider);
-
-  return repository.fetchOrders(
-    state: query.state,
-    dispatcherId: query.dispatcherId,
-    zone: query.zone,
-    limit: query.limit,
-  );
+final orderRepositoryProvider = Provider<OrderRepository>((ref) {
+  final dataSource = ref.watch(orderDataSourceProvider);
+  return OrderRepositoryImp(dataSource);
 });
 
-final defaultOrdersProvider = FutureProvider<List<Order>>((ref) {
-  return ref.watch(ordersRepositoryProvider).fetchOrders();
+/// *******************
+///   DATA PROVIDERS -> GET
+/// *******************
+
+final ordersProvider = FutureProvider<List<Order>>((ref) async {
+  final repository = ref.watch(orderRepositoryProvider);
+  return await repository.getAllOrders();
 });
 
-final orderStatsProvider = FutureProvider<Map<String, int>>((ref) async {
-  final orders = await ref.watch(defaultOrdersProvider.future);
-  final stats = <String, int>{};
+final ordersByDispatcherProvider = FutureProvider.family<List<Order>, String>(
+      (ref, dispatcherId) async {
+    final repository = ref.watch(orderRepositoryProvider);
+    return await repository.getOrdersByDispatcher(dispatcherId);
+  },
+);
 
-  for (final order in orders) {
-    stats.update(order.state.name, (value) => value + 1, ifAbsent: () => 1);
+/// *******************
+///   CUD PROVIDERS
+/// *******************
+
+final orderMutationProvider = Provider<OrderMutation>((ref) {
+  final repository = ref.watch(orderRepositoryProvider);
+  return OrderMutation(repository, ref);
+});
+
+
+class OrderMutation {
+  final OrderRepository _repository;
+  final Ref _ref;
+
+  OrderMutation(this._repository, this._ref);
+
+  Future<Order> createOrder(Order order) async {
+    final createdOrder = await _repository.createOrder(order);
+
+    // Invalidate to refresh data
+    _ref.invalidate(ordersProvider);
+
+    return createdOrder;
   }
 
-  return stats;
-});
+  Future<Order> updateOrder(Order order) async {
+    final updatedOrder = await _repository.updateOrder(order);
+
+    // Invalidate to refresh data
+    _ref.invalidate(ordersProvider);
+
+    return updatedOrder;
+  }
+
+  Future<void> deleteOrder(String orderId) async {
+    await _repository.deleteOrder(orderId);
+
+    // Invalidate to refresh data
+    _ref.invalidate(ordersProvider);
+  }
+}

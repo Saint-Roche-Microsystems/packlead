@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/admin/viewmodels/admin_orders_view_model.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_provider.dart';
-import 'package:packlead/features/orders/presentation/providers/orders_provider2.dart';
+import 'package:packlead/features/orders/presentation/providers/orders_provider.dart';
 
 // Provider for list view & dtails for admin orders Screen
 final enrichedOrdersProvider = FutureProvider<List<AdminOrdersViewModel>>((ref) async {
