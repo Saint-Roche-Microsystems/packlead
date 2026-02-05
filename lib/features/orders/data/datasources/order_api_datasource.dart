@@ -1,3 +1,4 @@
+import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
 import 'package:packlead/services/api/clients/orders_api_client.dart';
@@ -31,6 +32,15 @@ class OrderApiDataSource implements OrderDataSource {
       return await _apiClient.getOrders(dispatcherId: dispatcherId);
     } catch (e) {
       throw Exception('Error al obtener órdenes por dispatcher: $e');
+    }
+  }
+
+  @override
+  Future<List<Order>> getOrdersByState(OrderState state) async {
+    try {
+      return await _apiClient.getOrders(state: state.name);
+    } catch (e) {
+      throw Exception('Error al obtener órdenes por estado: $e');
     }
   }
 

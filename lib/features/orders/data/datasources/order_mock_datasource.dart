@@ -34,6 +34,15 @@ class OrderMockDataSource implements OrderDataSource {
   }
 
   @override
+  Future<List<Order>> getOrdersByState(OrderState state) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+
+    return _orders
+        .where((order) => order.state == state)
+        .toList();
+  }
+
+  @override
   Future<Order> updateOrder(Order order) async {
     await Future.delayed(const Duration(milliseconds: 500));
 

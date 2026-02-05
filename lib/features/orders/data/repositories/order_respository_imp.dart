@@ -1,3 +1,4 @@
+import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
 import 'package:packlead/features/orders/data/repositories/order_repository.dart';
@@ -29,6 +30,15 @@ class OrderRepositoryImp implements OrderRepository {
   Future<List<Order>> getOrdersByDispatcher(String dispatcherId) async {
     try{
       return await _dataSource.getOrdersByDispatcher(dispatcherId);
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Order>> getOrdersByState(OrderState state) async {
+    try{
+      return await _dataSource.getOrdersByState(state);
     } catch(e) {
       rethrow;
     }

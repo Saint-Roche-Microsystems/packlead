@@ -68,6 +68,13 @@ final ordersByDispatcherProvider = FutureProvider.family<List<Order>, String>(
   },
 );
 
+final ordersByStateProvider = FutureProvider.family<List<Order>, OrderState>(
+      (ref, state) async {
+    final repository = ref.watch(orderRepositoryProvider);
+    return await repository.getOrdersByState(state);
+  },
+);
+
 /// *******************
 ///   CUD PROVIDERS
 /// *******************
