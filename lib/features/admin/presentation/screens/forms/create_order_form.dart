@@ -4,6 +4,7 @@ import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/location.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/core/validators/order_form_validators.dart';
+import 'package:packlead/core/validators/phone_validators.dart';
 import 'package:packlead/core/widgets/dispatcher_dropdown_field.dart';
 import 'package:packlead/core/widgets/form_action_buttons.dart';
 import 'package:packlead/core/widgets/form_fields/coordinate_fields.dart';
@@ -44,6 +45,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final formatedPhone = PhoneValidators.formatEC(_clientPhoneCtrl.text.trim());
     final lat = double.tryParse(_latCtrl.text.trim());
     final lng = double.tryParse(_lngCtrl.text.trim());
 
@@ -51,7 +53,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
       id: '',
       clientName: _clientNameCtrl.text.trim(),
       dispatcherId: _selectedDispatcherId,
-      clientPhoneNumber: _clientPhoneCtrl.text.trim(),
+      clientPhoneNumber: formatedPhone,
       location: Location(lat: lat!, lng: lng!),
       state: OrderState.pending,
       zone: _zoneCtrl.text.trim(),
