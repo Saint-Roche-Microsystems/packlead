@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class Location {
   final double lat;
   final double lng;
@@ -17,6 +19,8 @@ class Location {
       'lng': lng,
     };
   }
+
+  LatLng toLatLng() => LatLng(lat, lng);
 
   @override
   bool operator ==(Object other) {
