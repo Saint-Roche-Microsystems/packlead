@@ -3,7 +3,6 @@ import 'package:packlead/core/themes/index.dart';
 
 enum DispatcherState {
   available,
-  assigned,
   inactive,
 }
 
@@ -23,8 +22,6 @@ extension DispatcherStateUI on DispatcherState {
     switch (this) {
       case DispatcherState.available:
         return 'Activo';
-      case DispatcherState.assigned:
-        return 'Asignado';
       case DispatcherState.inactive:
         return 'Inactivo';
     }
@@ -36,8 +33,6 @@ extension DispatcherStateStyle on DispatcherState {
     switch (this) {
       case DispatcherState.available:
         return SaintColors.success;
-      case DispatcherState.assigned:
-        return SaintColors.info;
       case DispatcherState.inactive:
         return SaintColors.error;
     }
