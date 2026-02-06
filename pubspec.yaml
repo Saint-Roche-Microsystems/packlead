@@ -21,6 +21,7 @@ dependencies:
   dio: ^5.9.1
   firebase_core: ^4.4.0
   firebase_database: ^12.1.2
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:packlead/core/models/location.dart';
+import 'package:packlead/core/utils/marker_builder.dart';
 import 'package:packlead/core/widgets/maps/base_map.dart';
 import 'package:packlead/core/widgets/snackbars.dart';
 
@@ -101,16 +102,7 @@ class _LocationPickerMapState extends State<LocationPickerMap> {
     if (_selectedPosition == null) return {};
 
     return {
-      Marker(
-        markerId: const MarkerId('selected_location'),
-        position: _selectedPosition!,
-        draggable: true,
-        onDragEnd: (newPosition) {
-          setState(() {
-            _selectedPosition = newPosition;
-          });
-        },
-      ),
+      MarkerBuilder.buildSelectedLocationMarker(_selectedPosition!),
     };
   }
 
