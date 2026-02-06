@@ -7,7 +7,7 @@ import 'package:packlead/core/validators/order_form_validators.dart';
 import 'package:packlead/core/validators/phone_validators.dart';
 import 'package:packlead/core/widgets/dispatcher_dropdown_field.dart';
 import 'package:packlead/core/widgets/form_action_buttons.dart';
-import 'package:packlead/core/widgets/form_fields/coordinate_fields.dart';
+import 'package:packlead/core/widgets/form_fields/location_button_selector.dart';
 import 'package:packlead/core/widgets/form_fields/phone_field.dart';
 import 'package:packlead/core/widgets/form_fields/text_field.dart';
 import 'package:packlead/core/widgets/snackbars.dart';
@@ -30,6 +30,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
   final _lngCtrl = TextEditingController();
 
   String? _selectedDispatcherId;
+  String? _locationError;
 
   @override
   void dispose() {
@@ -42,12 +43,36 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
     super.dispose();
   }
 
-  Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
+  bool _validateLocation() {
+    final lat = double.tryParse(_latCtrl.text);
+    final lng = double.tryParse(_lngCtrl.text);
+    return lat != null && lng != null;
+  }
 
-    final formatedPhone = PhoneValidators.formatEC(_clientPhoneCtrl.text.trim());
+  Future<void> _submit() async {
+    final isValidForm = _formKey.currentState!.validate();
+    final isLocationValid = _validateLocation();
+
+    if(!isValidForm || !isLocationValid) {
+      if(!isLocationValid) {
+        setState(() {
+          _locationError = 'Debe seleccionar una ubicación en el mapa';
+        });
+      } else {
+        setState(() {
+          _locationError = null;
+        });
+      }
+      return;
+    }
+
+    setState(() {
+      _locationError = null;
+    });
+
     final lat = double.tryParse(_latCtrl.text.trim());
     final lng = double.tryParse(_lngCtrl.text.trim());
+    final formatedPhone = PhoneValidators.formatEC(_clientPhoneCtrl.text.trim());
 
     final newOrder = Order(
       id: '',
@@ -148,10 +173,18 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
 
               SizedBox(height: 20),
 
-              CoordinateFields(
+              LocationButtonSelector(
                 latitudeController: _latCtrl,
                 longitudeController: _lngCtrl,
                 enabled: !isLoading,
+                errorText: _locationError,
+                onLocationChanged: () {
+                  if (_locationError != null) {
+                    setState(() {
+                      _locationError = null;
+                    });
+                  }
+                },
               ),
 
               SizedBox(height: 32),
