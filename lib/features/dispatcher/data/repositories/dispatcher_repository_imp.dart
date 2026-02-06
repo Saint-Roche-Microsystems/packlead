@@ -1,3 +1,4 @@
+import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasource.dart';
 import 'package:packlead/features/dispatcher/data/repositories/dispatcher_repository.dart';
@@ -17,9 +18,9 @@ class DispatcherRepositoryImp implements DispatcherRepository {
   }
 
   @override
-  Future<List<Dispatcher>> getAvailableDispatchers() async {
+  Future<List<Dispatcher>> getDispatchersByState(DispatcherState state) async {
     try{
-      return await _dataSource.getAvailableDispatchers();
+      return await _dataSource.getDispatchersByState(state);
     } catch(e) {
       rethrow;
     }

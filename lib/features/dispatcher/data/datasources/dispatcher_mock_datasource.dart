@@ -15,11 +15,11 @@ class DispatcherMockDataSource implements DispatcherDatasource {
   }
 
   @override
-  Future<List<Dispatcher>> getAvailableDispatchers() async {
+  Future<List<Dispatcher>> getDispatchersByState(DispatcherState state) async {
     await Future.delayed(const Duration(milliseconds: 400));
 
     return _dispatchers
-        .where((dispatcher) => dispatcher.state == DispatcherState.available)
+        .where((dispatcher) => dispatcher.state == state)
         .toList();
   }
 

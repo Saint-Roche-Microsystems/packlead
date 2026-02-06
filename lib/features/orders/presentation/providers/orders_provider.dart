@@ -3,6 +3,7 @@ import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/orders/data/datasources/order_api_datasource.dart';
 import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
+import 'package:packlead/features/orders/data/datasources/order_mock_datasource.dart';
 import 'package:packlead/features/orders/data/repositories/order_repository.dart';
 import 'package:packlead/features/orders/data/repositories/order_respository_imp.dart';
 import 'package:packlead/services/api/api_config.dart';
@@ -32,11 +33,11 @@ final ordersApiClientProvider = Provider<OrdersApiClient>((ref) {
 // Datasource related
 final orderDataSourceProvider = Provider<OrderDataSource>((ref) {
   // Dev ONY - use mock data
-  //return OrderMockDataSource();
+  return OrderMockDataSource();
 
   // Use real API service
-  final apiClient = ref.watch(ordersApiClientProvider);
-  return OrderApiDataSource(apiClient);
+  // final apiClient = ref.watch(ordersApiClientProvider);
+  // return OrderApiDataSource(apiClient);
 });
 
 // Repository related
@@ -97,7 +98,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       await _repository.createOrder(order);
 
       // Invalidate to refresh data
-      _ref.invalidate(ordersProvider);
+      _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch(error, stackTrace) {
@@ -114,6 +115,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(ordersProvider);
       _ref.invalidate(orderByIdProvider(order.id));
+      _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch(error, stackTrace) {
@@ -137,6 +139,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(ordersProvider);
       _ref.invalidate(orderByIdProvider(orderId));
+      _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {
@@ -153,6 +156,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(ordersProvider);
       _ref.invalidate(orderByIdProvider(orderId));
+      _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {

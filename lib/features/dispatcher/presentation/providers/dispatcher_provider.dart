@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasource.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_mock_datasource.dart';
@@ -32,10 +33,12 @@ final dispatchersProvider = FutureProvider<List<Dispatcher>>((ref) async {
   return await repository.getAllDispatchers();
 });
 
-final dispatchersAvailableProvider = FutureProvider<List<Dispatcher>>((ref) async {
-  final repository = ref.watch(dispatcherRepositoryProvider);
-  return await repository.getAvailableDispatchers();
-});
+final dispatchersByStateProvider = FutureProvider.family<List<Dispatcher>, DispatcherState>(
+      (ref, state) async {
+    final repository = ref.watch(dispatcherRepositoryProvider);
+    return await repository.getDispatchersByState(state);
+  },
+);
 
 final dispatcherByIdProvider = FutureProvider.family<Dispatcher, String>(
       (ref, dispatcherId) async {
@@ -48,42 +51,91 @@ final dispatcherByIdProvider = FutureProvider.family<Dispatcher, String>(
 ///   CUD PROVIDERS
 /// *******************
 
-final dispatcherMutationProvider = Provider<DispatcherMutation>((ref) {
-  final repository = ref.watch(dispatcherRepositoryProvider);
-  return DispatcherMutation(repository, ref);
-});
+final dispatcherMutationProvider = StateNotifierProvider<DispatcherMutationNotifier, AsyncValue<void>>(
+      (ref) => DispatcherMutationNotifier(ref),
+);
 
 
-class DispatcherMutation {
-  final DispatcherRepository _repository;
+
+class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
   final Ref _ref;
 
-  DispatcherMutation(this._repository, this._ref);
+  DispatcherMutationNotifier(this._ref) : super(const AsyncValue.data(null));
 
-  Future<Dispatcher> createDispatcher(Dispatcher dispatcher) async {
-    final createdDispatcher = await _repository.createDispatcher(dispatcher);
+  DispatcherRepository get _repository => _ref.read(dispatcherRepositoryProvider);
 
-    // Invalidate to refresh data
-    _ref.invalidate(dispatchersProvider);
 
-    return createdDispatcher;
+  Future<void> createDispatcher(Dispatcher dispatcher) async {
+    state = const AsyncValue.loading();
+    try {
+      await _repository.createDispatcher(dispatcher);
+
+      // Invalidate to refresh data
+      _ref.invalidate(dispatchersByStateProvider);
+
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
   }
 
-  Future<Dispatcher> updateDispatcher(Dispatcher dispatcher) async {
-    final updatedOrder = await _repository.updateDispatcher(dispatcher);
+  Future<void> updateDispatcher(Dispatcher dispatcher) async {
+    state = const AsyncValue.loading();
 
-    // Invalidate to refresh data
-    _ref.invalidate(dispatchersProvider);
-    _ref.invalidate(dispatcherByIdProvider(dispatcher.id));
+    try {
+      await _repository.updateDispatcher(dispatcher);
 
-    return updatedOrder;
+      // Invalidate to refresh data
+      _ref.invalidate(dispatchersProvider);
+      _ref.invalidate(dispatcherByIdProvider(dispatcher.id));
+      _ref.invalidate(dispatchersByStateProvider);
+
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> updateDispatcherState(String dispatcherId, DispatcherState newState) async {
+    state = const AsyncValue.loading();
+
+    try {
+      final dispatcher = await _repository.getDispatcherById(dispatcherId);
+
+      final updatedDispatcher = dispatcher.copyWith(state: newState);
+
+      await _repository.updateDispatcher(updatedDispatcher);
+
+      // Invalidate to refresh data
+      _ref.invalidate(dispatchersProvider);
+      _ref.invalidate(dispatcherByIdProvider(dispatcherId));
+      _ref.invalidate(dispatchersByStateProvider);
+
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
   }
 
   Future<void> deleteDispatcher(String dispatcherId) async {
-    await _repository.deleteDispatcher(dispatcherId);
+    state = const AsyncValue.loading();
 
-    // Invalidate to refresh data
-    _ref.invalidate(dispatchersProvider);
-    _ref.invalidate(dispatcherByIdProvider(dispatcherId));
+    try {
+      await _repository.deleteDispatcher(dispatcherId);
+
+      // Invalidate to refresh data
+      _ref.invalidate(dispatchersProvider);
+      _ref.invalidate(dispatcherByIdProvider(dispatcherId));
+      _ref.invalidate(dispatchersByStateProvider);
+
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  // Reset state to default
+  void resetState() {
+    state = const AsyncValue.data(null);
   }
 }
