@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/constants/order_state.dart';
+import 'package:packlead/core/models/location.dart';
+import 'package:packlead/core/models/order.dart';
 import 'package:packlead/core/validators/order_form_validators.dart';
 import 'package:packlead/core/widgets/dispatcher_dropdown_field.dart';
 import 'package:packlead/core/widgets/form_action_buttons.dart';
 import 'package:packlead/core/widgets/form_fields/coordinate_fields.dart';
 import 'package:packlead/core/widgets/form_fields/phone_field.dart';
 import 'package:packlead/core/widgets/form_fields/text_field.dart';
+import 'package:packlead/core/widgets/snackbars.dart';
 import 'package:packlead/features/orders/presentation/providers/orders_provider.dart';
 
 class CreateOrderForm extends ConsumerStatefulWidget {
@@ -40,16 +44,52 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    Navigator.pop(context);
+    final lat = double.tryParse(_latCtrl.text.trim());
+    final lng = double.tryParse(_lngCtrl.text.trim());
+
+    final newOrder = Order(
+      id: '',
+      clientName: _clientNameCtrl.text.trim(),
+      dispatcherId: _selectedDispatcherId,
+      clientPhoneNumber: _clientPhoneCtrl.text.trim(),
+      location: Location(lat: lat!, lng: lng!),
+      state: OrderState.pending,
+      zone: _zoneCtrl.text.trim(),
+      address: _addressCtrl.text.trim(),
+      createdAt: DateTime.now()
+    );
+
+    await ref.read(orderMutationProvider.notifier).createOrder(newOrder);
   }
 
   @override
   Widget build(BuildContext context) {
+
+    // Secondary event listeners
+    ref.listen<AsyncValue<void>>(orderMutationProvider, (previous, next) {
+
+      if(previous?.isLoading == true && next.hasValue) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SuccessSnackBar(message: 'Pedido creado exitosamente'),
+        );
+
+        Navigator.pop(context);
+      }
+
+      if(next.hasError && previous?.hasError != true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          ErrorSnackBar(message: 'Ha ocurrido un error al crear el pedido'),
+        );
+      }
+    });
+
+    // Current UI state observer
     bool isLoading = ref.watch(orderMutationProvider).isLoading;
-    
+
+    // UI render
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar Pedido'),
+        title: const Text('Crear Pedido'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
