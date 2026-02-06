@@ -71,7 +71,7 @@ class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
       await _repository.createDispatcher(dispatcher);
 
       // Invalidate to refresh data
-      _ref.invalidate(dispatchersProvider);
+      _ref.invalidate(dispatchersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (e, st) {
@@ -88,6 +88,7 @@ class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(dispatchersProvider);
       _ref.invalidate(dispatcherByIdProvider(dispatcher.id));
+      _ref.invalidate(dispatchersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (e, st) {
@@ -108,6 +109,7 @@ class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(dispatchersProvider);
       _ref.invalidate(dispatcherByIdProvider(dispatcherId));
+      _ref.invalidate(dispatchersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (e, st) {
@@ -124,6 +126,7 @@ class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(dispatchersProvider);
       _ref.invalidate(dispatcherByIdProvider(dispatcherId));
+      _ref.invalidate(dispatchersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (e, st) {

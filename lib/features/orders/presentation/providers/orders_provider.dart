@@ -98,7 +98,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       await _repository.createOrder(order);
 
       // Invalidate to refresh data
-      _ref.invalidate(ordersProvider);
+      _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch(error, stackTrace) {
@@ -115,6 +115,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(ordersProvider);
       _ref.invalidate(orderByIdProvider(order.id));
+      _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch(error, stackTrace) {
@@ -138,6 +139,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(ordersProvider);
       _ref.invalidate(orderByIdProvider(orderId));
+      _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {
@@ -154,6 +156,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       // Invalidate to refresh data
       _ref.invalidate(ordersProvider);
       _ref.invalidate(orderByIdProvider(orderId));
+      _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {
