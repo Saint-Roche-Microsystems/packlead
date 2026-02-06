@@ -115,7 +115,7 @@ class OrdersDonutChart extends StatelessWidget {
         const SizedBox(width: 36),
         LegendItem(
           value: completed,
-          label: 'Completados',
+          label: 'Entregados',
           color: SaintColors.success,
         ),
       ],

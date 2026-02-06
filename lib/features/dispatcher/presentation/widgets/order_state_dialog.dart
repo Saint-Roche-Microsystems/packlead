@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
 
 class OrderStateDialog extends StatefulWidget {
@@ -15,18 +16,11 @@ class _OrderStateDialogState extends State<OrderStateDialog> {
   @override
   void initState() {
     super.initState();
-    _selectedStatus = widget.order.state;
+    _selectedStatus = widget.order.state.label;
   }
 
   @override
   Widget build(BuildContext context) {
-    const stateOptions = [
-      {'label': 'Pendiente', 'value': 'pending'},
-      {'label': 'Asignado', 'value': 'assigned'},
-      {'label': 'En ruta', 'value': 'in_route'},
-      {'label': 'Entregado', 'value': 'delivered'},
-      {'label': 'Cancelado', 'value': 'cancelled'},
-    ];
 
     return AlertDialog(
       title: Text('Pedido ${widget.order.id}'),
@@ -42,7 +36,7 @@ class _OrderStateDialogState extends State<OrderStateDialog> {
             const SizedBox(height: 16),
 
             Column(
-              children: stateOptions.map((option) {
+              children: OrderStateOptions.options.map((option) {
                 return RadioListTile<String>(
                   title: Text(option['label'] as String),
                   value: option['value'] as String,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_item_button.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_state_dialog.dart';
@@ -17,7 +18,7 @@ class _OrferBottomSheetState extends ConsumerState<OrderBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final ordersAsync = ref.watch(defaultOrdersProvider);
+    final ordersAsync = ref.watch(ordersProvider);
 
     return ordersAsync.when(
       data: (orders) {
@@ -83,18 +84,17 @@ class _OrferBottomSheetState extends ConsumerState<OrderBottomSheet> {
                   if (_selectedOrder != null)
                     ElevatedButton.icon(
                       onPressed: () async {
-                        final String? newStatus = await showDialog(
+                        final OrderState? newStatus = await showDialog(
                           context: context,
                           builder: (context) => OrderStateDialog(order: _selectedOrder!),
                         );
 
                         if (newStatus != null && _selectedOrder != null) {
                           try {
-                            await ref.read(ordersRepositoryProvider).updateOrder(
+                            await ref.read(orderMutationProvider.notifier).updateOrderState(
                                   orderId: _selectedOrder!.id,
-                                  state: newStatus,
+                                  newState: newStatus,
                                 );
-                            ref.invalidate(defaultOrdersProvider);
 
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(

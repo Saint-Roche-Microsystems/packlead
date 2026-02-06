@@ -1,28 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:packlead/core/models/order.dart';
+import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/features/admin/presentation/widgets/order_detail_dialog.dart';
+import 'package:packlead/features/admin/viewmodels/admin_orders_view_model.dart';
 
 class OrderItemList extends StatelessWidget {
-  final Order order;
+  final AdminOrdersViewModel orderVM;
 
-  const OrderItemList({super.key, required this.order});
-
-  Color _getStateColor() {
-    switch (order.state.toLowerCase()) {
-      case 'pending':
-        return Colors.orange;
-      case 'assigned':
-        return Colors.blue;
-      case 'in_route':
-        return Colors.indigo;
-      case 'delivered':
-        return Colors.green;
-      case 'cancelled':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
+  const OrderItemList({super.key, required this.orderVM});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +16,7 @@ class OrderItemList extends StatelessWidget {
         onTap: () {
           showDialog(
             context: context,
-            builder: (context) => OrderDetailDialog(order: order),
+            builder: (context) => OrderDetailDialog(orderVM: orderVM),
           );
         },
         borderRadius: BorderRadius.circular(12),
@@ -46,7 +30,7 @@ class OrderItemList extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   border: Border.all(
-                    color: Theme.of(context).primaryColor.withOpacity(0.3),
+                    color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -65,14 +49,14 @@ class OrderItemList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      order.id,
+                      orderVM.id,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Zona: ${order.zone}',
+                      'Zona: ${orderVM.zone}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.grey[600],
                       ),
@@ -88,17 +72,17 @@ class OrderItemList extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: _getStateColor().withOpacity(0.2),
+                  color: orderVM.state.color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: _getStateColor(),
+                    color: orderVM.state.color,
                     width: 1,
                   ),
                 ),
                 child: Text(
-                  order.state,
+                  orderVM.state.label,
                   style: TextStyle(
-                    color: _getStateColor(),
+                    color: orderVM.state.color,
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),

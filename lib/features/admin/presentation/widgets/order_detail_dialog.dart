@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:packlead/core/models/order.dart';
+import 'package:packlead/core/constants/order_state.dart';
+import 'package:packlead/core/models/location.dart';
+import 'package:packlead/core/utils/map_utils.dart';
+import 'package:packlead/core/widgets/maps/static_location_map.dart';
+import 'package:packlead/features/admin/viewmodels/admin_orders_view_model.dart';
 
 class OrderDetailDialog extends StatelessWidget {
-  final Order order;
+  final AdminOrdersViewModel orderVM;
 
-  const OrderDetailDialog({super.key, required this.order});
+  const OrderDetailDialog({super.key, required this.orderVM});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Pedido ${order.id}'),
+      title: Text('Pedido ${orderVM.id}'),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildDetailRow('Cliente', order.client),
-            _buildDetailRow('Teléfono', order.phoneNumber),
-            _buildDetailRow('Estado', order.state),
-            _buildDetailRow('Zona', order.zone),
-            _buildDetailRow('Despachador', order.dispatcherName ?? 'No asignado'),
-            _buildDetailRow(
-              'Ubicación',
-              'Lat: ${order.location.lat.toStringAsFixed(4)}, Lng: ${order.location.lng.toStringAsFixed(4)}',
-            ),
+            _buildDetailRow('Cliente', orderVM.clientName),
+            _buildDetailRow('Teléfono', orderVM.clientPhoneNumber),
+            _buildDetailRow('Estado', orderVM.state.label),
+            _buildDetailRow('Zona', orderVM.zone),
+            _buildDetailRow('Repartidor', orderVM.dispatcherName ?? 'No asignado'),
+            _buildMapPreview(orderVM.location),
           ],
         ),
       ),
@@ -57,6 +58,32 @@ class OrderDetailDialog extends StatelessWidget {
               fontSize: 16,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMapPreview(Location location) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Ubicación',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 4),
+          StaticLocationMap(
+            location: location,
+            zoom: 16,
+            height: 250,
+            onTap: () => MapUtils.openInGoogleMaps(location),
+          )
         ],
       ),
     );
