@@ -60,11 +60,9 @@ class _AdminOrderScreenState extends ConsumerState<AdminOrderScreen>
           tabs: const [
             Tab(text: 'Pendientes'),
             Tab(text: 'En ruta'),
-            Tab(text: 'Entregadas'),
+            Tab(text: 'Entregados'),
           ],
         ),
-
-
 
         Expanded(
           child: TabBarView(

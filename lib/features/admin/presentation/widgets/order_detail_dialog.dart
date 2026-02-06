@@ -20,7 +20,7 @@ class OrderDetailDialog extends StatelessWidget {
             _buildDetailRow('Teléfono', orderVM.clientPhoneNumber),
             _buildDetailRow('Estado', orderVM.state.label),
             _buildDetailRow('Zona', orderVM.zone),
-            _buildDetailRow('Despachador', orderVM.dispatcherName ?? 'No asignado'),
+            _buildDetailRow('Repartidor', orderVM.dispatcherName ?? 'No asignado'),
             _buildDetailRow(
               'Ubicación',
               'Lat: ${orderVM.location.lat.toStringAsFixed(4)}, Lng: ${orderVM.location.lng.toStringAsFixed(4)}',

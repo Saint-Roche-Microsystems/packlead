@@ -48,7 +48,7 @@ class DispatcherDropdownField extends ConsumerWidget {
   Widget _buildDropdown(BuildContext context, List<Dispatcher> dispatchers) {
     return DropdownButtonFormField<String>(
       initialValue: selectedId,
-      decoration: _inputDecoration('Seleccione un despachador'),
+      decoration: _inputDecoration('Seleccione un repartidor'),
       items: dispatchers.map((dispatcher) {
         return DropdownMenuItem(
           value: dispatcher.id,
@@ -58,7 +58,7 @@ class DispatcherDropdownField extends ConsumerWidget {
       onChanged: enabled ? onChanged : null,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Debe seleccionar un despachador';
+          return 'Debe seleccionar un repartidor';
         }
         return null;
       },
@@ -96,7 +96,7 @@ class DispatcherDropdownField extends ConsumerWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Error al cargar despachadores: $error',
+              'Error al cargar repartidores: $error',
               style: TextStyle(color: SaintColors.error),
             ),
           ),
