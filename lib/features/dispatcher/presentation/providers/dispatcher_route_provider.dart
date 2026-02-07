@@ -51,6 +51,8 @@ final locationTrackingServiceProvider = Provider.autoDispose<LocationTrackingSer
     service.dispose();
   });
 
+  ref.keepAlive();
+
   return service;
 });
 

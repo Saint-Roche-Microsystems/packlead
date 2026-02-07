@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/srmc_hq.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_route_provider.dart';
+import 'package:packlead/features/dispatcher/presentation/screens/home_screen_error.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/order_bottom_sheet.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/route_tracking_map.dart';
-
+import 'package:packlead/features/dispatcher/presentation/widgets/status_tracking_badge.dart';
 import 'package:packlead/navigation/routers/auth_router.dart';
 import 'package:packlead/services/mock_services/mock_auth_service.dart';
 
@@ -19,6 +20,7 @@ class DispatcherHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
+  bool _hasInitializedTracking = false;
 
   @override
   void initState() {
@@ -28,6 +30,23 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(widget.dispatcherId);
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Initiate tracking only for once
+    if (!_hasInitializedTracking) {
+      _hasInitializedTracking = true;
+
+      // Start traking with the provider service
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ref.read(locationTrackingServiceProvider).startTracking();
+        }
+      });
+    }
   }
 
   @override
@@ -64,41 +83,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
       body: homeState.when(
         data: (state) => _buildContent(context, state),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => _buildError(error.toString()),
-      ),
-    );
-  }
-
-  Widget _buildError(String error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.error_outline,
-            color: Colors.red,
-            size: 60,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Error al cargar órdenes',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            error.toString(),
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            onPressed: () {
-              ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(widget.dispatcherId);
-            },
-            icon: const Icon(Icons.refresh),
-            label: const Text('Reintentar'),
-          ),
-        ],
+        error: (error, stackTrace) => HomeScreenError(errorMsg: error.toString(), dispatcherId: widget.dispatcherId),
       ),
     );
   }
@@ -115,6 +100,15 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
             selectedOrder: state.selectedOrder,
             currentPosition: currentLocation,
             hqLocation: SRMCHQ,
+          ),
+        ),
+
+        // TRACK STATE
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: StatusTrackingBadge(),
           ),
         ),
 
