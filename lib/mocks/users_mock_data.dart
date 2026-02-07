@@ -9,29 +9,35 @@ class UsersMockData {
       password: 'admin123',
       role: UserRole.admin,
     ),
-    User(
-      id: 'admin_002',
-      email: 'maria.admin@packlead.com',
-      password: 'maria123',
-      role: UserRole.admin,
-    ),
 
     User(
-      id: 'dispatcher_001',
-      email: 'dispatcher@packlead.com',
-      password: 'dispatcher123',
+      id: 'disp_001',
+      email: 'carlos.disp@packlead.com',
+      password: 'carlos123',
       role: UserRole.dispatcher,
     ),
     User(
-      id: 'dispatcher_002',
+      id: 'disp_002',
+      email: 'ana.disp@packlead.com',
+      password: 'ana123',
+      role: UserRole.dispatcher,
+    ),
+    User(
+      id: 'disp_003',
       email: 'pedro.disp@packlead.com',
       password: 'pedro123',
       role: UserRole.dispatcher,
     ),
     User(
-      id: 'dispatcher_003',
-      email: 'ana.disp@packlead.com',
-      password: 'ana123',
+      id: 'disp_004',
+      email: 'maria.disp@packlead.com',
+      password: 'maria123',
+      role: UserRole.dispatcher,
+    ),
+    User(
+      id: 'disp_005',
+      email: 'luis.disp@packlead.com',
+      password: 'luis123',
       role: UserRole.dispatcher,
     ),
   ];
