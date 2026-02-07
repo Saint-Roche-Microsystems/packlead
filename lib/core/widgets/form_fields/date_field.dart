@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:packlead/core/utils/date_formatter.dart';
 
 class DateField extends StatefulWidget {
   final DateTime? selectedDate;
@@ -20,8 +20,6 @@ class DateField extends StatefulWidget {
 }
 
 class _DateFieldState extends State<DateField> {
-  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,7 +44,7 @@ class _DateFieldState extends State<DateField> {
               children: [
                 Text(
                   widget.selectedDate != null
-                      ? _dateFormat.format(widget.selectedDate!)
+                      ? DateFormatter.formatDate(widget.selectedDate!)
                       : 'Seleccionar fecha',
                   style: TextStyle(
                     color: widget.selectedDate != null
@@ -83,7 +81,14 @@ class _DateFieldState extends State<DateField> {
     );
 
     if (pickedDate != null) {
-      widget.onDateSelected(pickedDate);
+      // Get midnight UTC
+      final dateAtMidnight = DateTime.utc(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+      );
+
+      widget.onDateSelected(dateAtMidnight);
     }
   }
 

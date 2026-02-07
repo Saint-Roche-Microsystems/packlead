@@ -11,6 +11,7 @@ class AdminOrdersViewModel {
   final String? address;
   final OrderState state;
   final String zone;
+  final DateTime deliveryDate;
   final DateTime createdAt;
 
   // Data for UI
@@ -25,6 +26,7 @@ class AdminOrdersViewModel {
     this.address,
     required this.state,
     required this.zone,
+    required this.deliveryDate,
     required this.createdAt,
     this.dispatcherId,
     this.dispatcherName,
@@ -40,6 +42,7 @@ class AdminOrdersViewModel {
       address: order.address,
       state: order.state,
       zone: order.zone,
+      deliveryDate: order.deliveryDate,
       createdAt: order.createdAt,
       dispatcherId: order.dispatcherId,
       dispatcherName: dispatcher?.name,

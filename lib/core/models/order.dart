@@ -1,5 +1,6 @@
 import 'package:packlead/core/models/location.dart';
 import 'package:packlead/core/constants/order_state.dart';
+import 'package:packlead/core/utils/date_formatter.dart';
 
 class Order {
   final String id;
@@ -66,7 +67,7 @@ class Order {
       'address': address,
       'state': state.name,
       'zone': zone,
-      'deliveryDate': deliveryDate.toIso8601String(),
+      'deliveryDate': DateFormatter.formatForBackend(deliveryDate),
       'createdAt': createdAt.toIso8601String(),
     };
   }
