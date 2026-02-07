@@ -7,6 +7,7 @@ import 'package:packlead/core/validators/order_form_validators.dart';
 import 'package:packlead/core/validators/phone_validators.dart';
 import 'package:packlead/core/widgets/dispatcher_dropdown_field.dart';
 import 'package:packlead/core/widgets/form_action_buttons.dart';
+import 'package:packlead/core/widgets/form_fields/date_field.dart';
 import 'package:packlead/core/widgets/form_fields/location_button_selector.dart';
 import 'package:packlead/core/widgets/form_fields/phone_field.dart';
 import 'package:packlead/core/widgets/form_fields/text_field.dart';
@@ -31,6 +32,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
 
   String? _selectedDispatcherId;
   String? _locationError;
+  DateTime? _selectedDeliveryDate;
 
   @override
   void dispose() {
@@ -52,6 +54,14 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
   Future<void> _submit() async {
     final isValidForm = _formKey.currentState!.validate();
     final isLocationValid = _validateLocation();
+
+    final dateError = OrderFormValidators.validateDeliveryDate(_selectedDeliveryDate);
+    if (dateError != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(dateError)),
+      );
+      return;
+    }
 
     if(!isValidForm || !isLocationValid) {
       if(!isLocationValid) {
@@ -83,6 +93,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
       state: OrderState.pending,
       zone: _zoneCtrl.text.trim(),
       address: _addressCtrl.text.trim(),
+      deliveryDate: _selectedDeliveryDate!,
       createdAt: DateTime.now()
     );
 
@@ -157,6 +168,18 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
               DispatcherDropdownField(
                 selectedId: _selectedDispatcherId,
                 onChanged: (id) => setState(() => _selectedDispatcherId = id),
+                enabled: !isLoading,
+              ),
+
+              SizedBox(height: 20),
+
+              DateField(
+                selectedDate: _selectedDeliveryDate,
+                onDateSelected: (date) {
+                  setState(() {
+                    _selectedDeliveryDate = date;
+                  });
+                },
                 enabled: !isLoading,
               ),
 
