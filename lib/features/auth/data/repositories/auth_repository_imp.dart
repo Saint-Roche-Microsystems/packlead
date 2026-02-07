@@ -24,4 +24,9 @@ class AuthRepositoryImp implements AuthRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<User?> getCurrentUser() async {
+    return await _dataSource.getCurrentUser();
+  }
 }

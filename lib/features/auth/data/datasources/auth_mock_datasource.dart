@@ -39,7 +39,12 @@ class AuthMockDataSource implements AuthDataSource {
   @override
   Future<void> logout() async {
     await Future.delayed(const Duration(milliseconds: 300));
-
     _currentUser = null;
+  }
+
+  @override
+  Future<User?> getCurrentUser() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    return _currentUser;
   }
 }
