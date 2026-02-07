@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:packlead/core/validators/common_validators.dart';
 
 class PasswordField extends StatelessWidget {
   final TextEditingController controller;
@@ -52,11 +51,11 @@ class PasswordField extends StatelessWidget {
       ],
     );
   }
+
   static String? validatePassword(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'La contraseña es requerida';
     }
-
     return null;
   }
 }
