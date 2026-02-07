@@ -102,7 +102,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
         // MAP
 
         // BOTTOM SHEET
-        const OrderBottomSheet(),
+        OrderBottomSheet(dispatcherId: widget.dispatcherId),
       ],
     );
   }

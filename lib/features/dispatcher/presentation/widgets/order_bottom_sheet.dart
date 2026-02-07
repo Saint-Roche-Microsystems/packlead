@@ -1,144 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:packlead/core/constants/order_state.dart';
-import 'package:packlead/core/models/order.dart';
-import 'package:packlead/features/dispatcher/presentation/widgets/order_item_button.dart';
-import 'package:packlead/features/dispatcher/presentation/widgets/order_state_dialog.dart';
-import 'package:packlead/features/orders/presentation/providers/orders_provider.dart';
 
-class OrderBottomSheet extends ConsumerStatefulWidget {
-  const OrderBottomSheet({super.key});
+import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/order_bottom_sheet_action_button.dart';
+import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/order_bottom_sheet_header.dart';
+import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/order_bottom_sheet_orders_list.dart';
 
-  @override
-  ConsumerState<OrderBottomSheet> createState() => _OrferBottomSheetState();
-}
+class OrderBottomSheet extends ConsumerWidget {
+  final String dispatcherId;
 
-class _OrferBottomSheetState extends ConsumerState<OrderBottomSheet> {
-  Order? _selectedOrder;
+  const OrderBottomSheet({super.key, required this.dispatcherId});
 
   @override
-  Widget build(BuildContext context) {
-    final ordersAsync = ref.watch(ordersProvider);
-
-    return ordersAsync.when(
-      data: (orders) {
-        if (_selectedOrder == null && orders.isNotEmpty) {
-          _selectedOrder = orders.first;
-        }
-
-        return DraggableScrollableSheet(
-          initialChildSize: 0.3,
-          minChildSize: 0.15,
-          maxChildSize: 0.7,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.4,
+      minChildSize: 0.2,
+      maxChildSize: 0.85,
+      snap: true,
+      snapSizes: const [0.4, 0.85],
+      builder: (BuildContext context, ScrollController scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(20),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+                offset: const Offset(0, -1),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              // HANDLE
+              Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 8),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(2),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, -5),
-                  ),
-                ],
               ),
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 12, bottom: 8),
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
 
-                  Expanded(
-                    child: ListView.separated(
-                      controller: scrollController,
-                      itemCount: orders.length,
-                      separatorBuilder: (context, index) => const Divider(
-                        height: 1,
-                        thickness: 1,
-                      ),
-                      itemBuilder: (context, index) {
-                        return OrderItemButton(
-                          order: orders[index],
-                          onTap: () {
-                            setState(() {
-                              _selectedOrder = orders[index];
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ),
+              OrderBottomSheetHeader(dispatcherId: dispatcherId),
 
-                  const SizedBox(height: 12),
+              const Divider(height: 1),
 
-                  if (_selectedOrder != null)
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        final OrderState? newStatus = await showDialog(
-                          context: context,
-                          builder: (context) => OrderStateDialog(order: _selectedOrder!),
-                        );
-
-                        if (newStatus != null && _selectedOrder != null) {
-                          try {
-                            await ref.read(orderMutationProvider.notifier).updateOrderState(
-                                  orderId: _selectedOrder!.id,
-                                  newState: newStatus,
-                                );
-
-                            if (mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'El estado del pedido ${_selectedOrder!.id} se actualizó a "$newStatus".',
-                                  ),
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                          } catch (error) {
-                            if (mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('No se pudo actualizar: $error'),
-                                  duration: const Duration(seconds: 3),
-                                ),
-                              );
-                            }
-                          }
-                        }
-                      },
-                      icon: const Icon(Icons.update),
-                      label: const Text('Actualizar Entrega'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
-                      ),
-                    ),
-
-                  const SizedBox(height: 28),
-                ],
+              // Orders List
+              Expanded(
+                child: OrderBottomSheetOrdersList(scrollController: scrollController),
               ),
-            );
-          },
+
+              const Divider(height: 1),
+
+              // Action Button
+              OrderBottomSheetActionButton(),
+            ],
+          ),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text('No se pudieron cargar los pedidos: $error'),
-        ),
-      ),
     );
   }
 }
