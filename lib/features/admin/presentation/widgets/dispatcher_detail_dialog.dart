@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
+import 'package:packlead/features/admin/presentation/widgets/dispatcher_state_control.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_provider.dart';
 
 class DispatcherDetailDialog extends ConsumerWidget {
@@ -22,7 +22,7 @@ class DispatcherDetailDialog extends ConsumerWidget {
             _buildDetailRow('Email', dispatcher.email),
             _buildDetailRow('Vehículo', dispatcher.vehicle),
             _buildDetailRow('Placa', dispatcher.licensePlate),
-            _buildDetailRow('Estado', dispatcher.state.label),
+            DispatcherStateControl(dispatcherId: dispatcher.id),
           ],
         ),
       ),
