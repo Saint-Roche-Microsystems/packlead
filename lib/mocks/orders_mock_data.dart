@@ -13,6 +13,7 @@ class OrdersMockData {
       address: 'Av. Amazonas N24-03',
       state: OrderState.pending,
       zone: 'Norte',
+      deliveryDate: DateTime(2026, 2, 8),
       createdAt: DateTime(2026, 2, 1, 10, 30),
     ),
     Order(
@@ -24,6 +25,7 @@ class OrdersMockData {
       address: 'Calle García Moreno 545',
       state: OrderState.shipped,
       zone: 'Centro',
+      deliveryDate: DateTime(2026, 2, 14),
       createdAt: DateTime(2026, 2, 1, 11, 15),
     ),
     Order(
@@ -35,6 +37,7 @@ class OrdersMockData {
       address: null,
       state: OrderState.delivered,
       zone: 'Sur',
+      deliveryDate: DateTime(2026, 2, 8),
       createdAt: DateTime(2026, 2, 1, 14, 45),
     ),
     Order(
@@ -46,6 +49,7 @@ class OrdersMockData {
       address: 'Av. Naciones Unidas E10-43',
       state: OrderState.pending,
       zone: 'Norte',
+      deliveryDate: DateTime(2026, 2, 9),
       createdAt: DateTime(2026, 2, 2, 9, 20),
     ),
   ];

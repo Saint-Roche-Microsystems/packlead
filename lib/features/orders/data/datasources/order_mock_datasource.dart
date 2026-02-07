@@ -69,6 +69,7 @@ class OrderMockDataSource implements OrderDataSource {
       address: order.address,
       state: OrderState.pending,
       zone: order.zone,
+      deliveryDate: order.deliveryDate,
       createdAt: DateTime.now(),
     );
 

@@ -10,6 +10,7 @@ class Order {
   final String? address;
   final OrderState state;
   final String zone;
+  final DateTime deliveryDate;
   final DateTime createdAt;
 
   Order({
@@ -21,6 +22,7 @@ class Order {
     this.address,
     required this.state,
     required this.zone,
+    required this.deliveryDate,
     required this.createdAt,
   });
 
@@ -32,6 +34,7 @@ class Order {
     this.address,
     this.dispatcherId,
     required this.zone,
+    required this.deliveryDate,
   })  : id = '',                    // Temporal, backend lo asigna
         state = OrderState.pending, // Estado por default en la creación
         createdAt = DateTime.now(); // Temporal, backend lo reemplaza
@@ -47,6 +50,7 @@ class Order {
       address: json['address'] as String?,
       state: OrderStateExtension.fromJson(json['state'] as String),
       zone: json['zone'] as String,
+      deliveryDate: DateTime.parse(json['deliveryDate'] as String),
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
@@ -62,6 +66,7 @@ class Order {
       'address': address,
       'state': state.name,
       'zone': zone,
+      'deliveryDate': deliveryDate.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -76,6 +81,7 @@ class Order {
     String? address,
     OrderState? state,
     String? zone,
+    DateTime? deliveryDate,
     DateTime? createdAt,
   }) {
     return Order(
@@ -87,6 +93,7 @@ class Order {
       address: address ?? this.address,
       state: state ?? this.state,
       zone: zone ?? this.zone,
+      deliveryDate: deliveryDate ?? this.deliveryDate,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -94,7 +101,7 @@ class Order {
   // UTILITIES
   @override
   String toString() {
-    return 'Order(id: $id, clientName: $clientName, state: $state, zone: $zone)';
+    return 'Order(id: $id, clientName: $clientName, state: $state, zone: $zone, deliveryDate: $deliveryDate)';
   }
 
   @override
@@ -110,6 +117,7 @@ class Order {
         other.address == address &&
         other.state == state &&
         other.zone == zone &&
+        other.deliveryDate == deliveryDate &&
         other.createdAt == createdAt;
   }
 
@@ -123,6 +131,7 @@ class Order {
     address.hashCode ^
     state.hashCode ^
     zone.hashCode ^
+    deliveryDate.hashCode ^
     createdAt.hashCode;
   }
 }
