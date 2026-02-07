@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/dispatcher_state.dart';
-import 'package:packlead/features/admin/presentation/screens/dispatcher_add_form_screen.dart';
+import 'package:packlead/features/admin/presentation/screens/forms/create_dispatcher_form.dart';
 import 'package:packlead/features/admin/presentation/widgets/dispatcher_item_list.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_provider.dart';
 
@@ -42,7 +42,7 @@ class _AdminDispatcherScreenState extends ConsumerState<AdminDispatcherScreen>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const DispatcherAddFormScreen(),
+                    builder: (context) => const CreateDispatcherForm(),
                   ),
                 );
               },

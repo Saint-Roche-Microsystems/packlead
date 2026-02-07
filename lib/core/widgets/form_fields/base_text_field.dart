@@ -9,6 +9,7 @@ class BaseTextField extends StatelessWidget {
   final bool enabled;
   final bool readOnly;
   final TextInputType? keyboardType;
+  final TextCapitalization? textCapitalization;
   final TextInputAction? textInputAction;
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLength;
@@ -26,6 +27,7 @@ class BaseTextField extends StatelessWidget {
     this.enabled = true,
     this.readOnly = false,
     this.keyboardType,
+    this.textCapitalization,
     this.textInputAction,
     this.inputFormatters,
     this.maxLength,
@@ -59,6 +61,7 @@ class BaseTextField extends StatelessWidget {
           enabled: enabled,
           readOnly: readOnly,
           keyboardType: keyboardType,
+          textCapitalization: textCapitalization ?? TextCapitalization.none,
           textInputAction: textInputAction,
           inputFormatters: inputFormatters,
           maxLength: maxLength,
