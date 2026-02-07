@@ -9,7 +9,7 @@ class DispatcherRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return MaterialPageRoute(builder: (_) => DispatcherHomeScreen());
+        return MaterialPageRoute(builder: (_) => DispatcherHomeScreen(dispatcherId: 'disp-1',));
       default:
         return MaterialPageRoute(builder: (_) => ScreenNotFound());
     }

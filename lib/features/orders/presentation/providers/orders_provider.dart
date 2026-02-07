@@ -6,6 +6,7 @@ import 'package:packlead/features/orders/data/datasources/order_datasource.dart'
 import 'package:packlead/features/orders/data/datasources/order_mock_datasource.dart';
 import 'package:packlead/features/orders/data/repositories/order_repository.dart';
 import 'package:packlead/features/orders/data/repositories/order_respository_imp.dart';
+import 'package:packlead/features/orders/models/order_by_dispatcher_params.dart';
 import 'package:packlead/services/api/api_config.dart';
 import 'package:packlead/services/api/base/base_api_client.dart';
 import 'package:packlead/services/api/clients/orders_api_client.dart';
@@ -62,10 +63,10 @@ final orderByIdProvider = FutureProvider.family<Order, String>(
   },
 );
 
-final ordersByDispatcherProvider = FutureProvider.family<List<Order>, String>(
-      (ref, dispatcherId) async {
+final ordersByDispatcherProvider = FutureProvider.family<List<Order>, OrdersByDispatcherParams>(
+      (ref, params) async {
     final repository = ref.watch(orderRepositoryProvider);
-    return await repository.getOrdersByDispatcher(dispatcherId);
+    return await repository.getOrdersByDispatcher(params.dispatcherId, params.forDate);
   },
 );
 

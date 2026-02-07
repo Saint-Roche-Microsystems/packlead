@@ -27,7 +27,7 @@ class OrderApiDataSource implements OrderDataSource {
   }
 
   @override
-  Future<List<Order>> getOrdersByDispatcher(String dispatcherId) async {
+  Future<List<Order>> getOrdersByDispatcher(String dispatcherId, DateTime forDate) async {
     try {
       return await _apiClient.getOrders(dispatcherId: dispatcherId);
     } catch (e) {

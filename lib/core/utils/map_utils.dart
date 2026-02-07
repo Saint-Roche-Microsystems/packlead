@@ -22,14 +22,95 @@ class MapUtils {
     return [];
   }
 
-  /// Center the camera at a location
-  static Future<void> animateToLocation(
-      GoogleMapController controller,
+  // Adjust camera to focus on a location with a specific zoom level
+  static CameraUpdate focusOnLocation(
       Location location, {
-        double zoom = 15,
-      }) async {
-    await controller.animateCamera(
-      CameraUpdate.newLatLngZoom(location.toLatLng(), zoom),
+        double zoom = 14.0,
+      }) {
+    return CameraUpdate.newLatLngZoom(
+      location.toLatLng(),
+      zoom,
+    );
+  }
+
+  /// Adjust the camera to show multiple locations with appropriate zoom and padding
+  static CameraUpdate focusOnMultipleLocations(
+      List<Location> locations, {
+        double padding = 80.0,
+      }) {
+    if (locations.isEmpty) {
+      // If no locations, center aroound default coordinates
+      return CameraUpdate.newLatLngZoom(
+        const LatLng(-0.1807, -78.4678),
+        12.0,
+      );
+    }
+
+    if (locations.length == 1) {
+      // If only one location, focus on it directly
+      return focusOnLocation(locations.first);
+    }
+
+    // Calculate bounds to include all locations
+    final bounds = calculateBounds(locations);
+
+    return CameraUpdate.newLatLngBounds(bounds, padding);
+  }
+
+  /// Adjust the camera to show a complete route in the map
+  static CameraUpdate focusOnRoute({
+    required Location origin,
+    required Location destination,
+    List<Location>? routePoints,
+    double padding = 80.0,
+  }) {
+    // If there's a route, focus on all the points
+    if (routePoints != null && routePoints.isNotEmpty) {
+      return focusOnMultipleLocations(routePoints, padding: padding);
+    }
+
+    // If no route is provided, focus between the origin and destination
+    return focusOnMultipleLocations([origin, destination], padding: padding);
+  }
+
+  /// BOUNDS CALCULATION
+  /// It finds the furthest points in the north, south, east, and west
+  /// directions to create a bounding box that includes all locations.
+  static LatLngBounds calculateBounds(List<Location> locations) {
+    if (locations.isEmpty) {
+      // Default bounds if no locations are provided
+      const defaultPoint = LatLng(-0.1807, -78.4678);
+      return LatLngBounds(
+        southwest: defaultPoint,
+        northeast: defaultPoint,
+      );
+    }
+
+    if (locations.length == 1) {
+      // If there is only one location, create a small bounds around it
+      final point = locations.first.toLatLng();
+      return LatLngBounds(
+        southwest: LatLng(point.latitude - 0.01, point.longitude - 0.01),
+        northeast: LatLng(point.latitude + 0.01, point.longitude + 0.01),
+      );
+    }
+
+    // Find limits
+    double minLat = locations.first.lat;
+    double maxLat = locations.first.lat;
+    double minLng = locations.first.lng;
+    double maxLng = locations.first.lng;
+
+    for (final location in locations) {
+      if (location.lat < minLat) minLat = location.lat;
+      if (location.lat > maxLat) maxLat = location.lat;
+      if (location.lng < minLng) minLng = location.lng;
+      if (location.lng > maxLng) maxLng = location.lng;
+    }
+
+    return LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
     );
   }
 }

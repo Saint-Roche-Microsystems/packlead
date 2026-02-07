@@ -53,4 +53,15 @@ extension OrderStateStyle on OrderState {
         return SaintColors.success;
     }
   }
+
+  IconData get icon {
+    switch (this) {
+      case OrderState.pending:
+        return Icons.access_time;
+      case OrderState.shipped:
+        return Icons.local_shipping;
+      case OrderState.delivered:
+        return Icons.check_circle;
+    }
+  }
 }
