@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
+import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_route_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/order_bottom_sheet.dart';
+import 'package:packlead/features/dispatcher/presentation/widgets/route_tracking_map.dart';
 
 import 'package:packlead/navigation/routers/auth_router.dart';
 import 'package:packlead/services/mock_services/mock_auth_service.dart';
@@ -97,9 +99,18 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
   }
 
   Widget _buildContent(BuildContext context, dynamic state) {
+    final currentLocation = ref.watch(dispatcherCurrentLocationProvider);
+
     return Stack(
       children: [
         // MAP
+        Positioned.fill(
+          child: RouteTrackingMap(
+            destination: state.selectedOrder?.location,
+            selectedOrder: state.selectedOrder,
+            currentPosition: currentLocation,
+          ),
+        ),
 
         // BOTTOM SHEET
         OrderBottomSheet(dispatcherId: widget.dispatcherId),
