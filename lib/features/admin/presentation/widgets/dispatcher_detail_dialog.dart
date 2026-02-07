@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:packlead/core/constants/dispatcher_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/models/dispatcher.dart';
+import 'package:packlead/features/admin/presentation/widgets/dispatcher_state_control.dart';
+import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_provider.dart';
 
-class DispatcherDetailDialog extends StatelessWidget {
+class DispatcherDetailDialog extends ConsumerWidget {
   final Dispatcher dispatcher;
 
   const DispatcherDetailDialog({super.key, required this.dispatcher});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
       title: Text('Detalles de ${dispatcher.name}'),
       content: SingleChildScrollView(
@@ -18,9 +20,9 @@ class DispatcherDetailDialog extends StatelessWidget {
           children: [
             _buildDetailRow('Nombre', dispatcher.name),
             _buildDetailRow('Email', dispatcher.email),
-            _buildDetailRow('Estado', dispatcher.state.label),
             _buildDetailRow('Vehículo', dispatcher.vehicle),
             _buildDetailRow('Placa', dispatcher.licensePlate),
+            DispatcherStateControl(dispatcherId: dispatcher.id),
           ],
         ),
       ),
@@ -30,8 +32,12 @@ class DispatcherDetailDialog extends StatelessWidget {
           child: const Text('Cerrar'),
         ),
         TextButton(
-          onPressed: () {
-            // TODO
+          onPressed: () async {
+            await ref.read(dispatcherMutationProvider.notifier).deleteDispatcher(dispatcher.id);
+
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
           },
           style: TextButton.styleFrom(
             foregroundColor: Colors.red,

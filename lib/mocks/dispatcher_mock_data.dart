@@ -9,7 +9,7 @@ class DispatcherMockData {
       email: 'carlos.mendez@delivery.com',
       vehicle: 'Moto Honda CG 150',
       licensePlate: 'PBX-1234',
-      state: DispatcherState.assigned,
+      state: DispatcherState.available,
     ),
     Dispatcher(
       id: 'disp-2',
@@ -41,7 +41,7 @@ class DispatcherMockData {
       email: 'jorge.sanchez@delivery.com',
       vehicle: 'Moto Honda Wave',
       licensePlate: 'PLT-7890',
-      state: DispatcherState.assigned,
+      state: DispatcherState.inactive,
     ),
   ];
 }
