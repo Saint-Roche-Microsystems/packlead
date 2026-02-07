@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:packlead/core/themes/index.dart';
 import 'package:packlead/core/utils/date_formatter.dart';
 
 class DateField extends StatefulWidget {
@@ -6,6 +7,7 @@ class DateField extends StatefulWidget {
   final ValueChanged<DateTime> onDateSelected;
   final bool enabled;
   final String label;
+  final String? errorText;
 
   const DateField({
     super.key,
@@ -13,6 +15,7 @@ class DateField extends StatefulWidget {
     required this.onDateSelected,
     this.enabled = true,
     this.label = 'Fecha de entrega',
+    this.errorText,
   });
 
   @override
@@ -55,13 +58,25 @@ class _DateFieldState extends State<DateField> {
                 Icon(
                   Icons.calendar_today,
                   color: widget.enabled
-                      ? Theme.of(context).primaryColor
+                      ? SaintColors.foreground.withValues(alpha: 0.8)
                       : Theme.of(context).disabledColor,
                 ),
               ],
             ),
           ),
         ),
+
+        // From the parent we check if the coordinates are valid from the form
+        if (widget.errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 12.0),
+            child: Text(
+              widget.errorText!,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: SaintColors.error,
+              ),
+            ),
+          ),
       ],
     );
   }
