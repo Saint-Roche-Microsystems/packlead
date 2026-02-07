@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/constants/srmc_hq.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_route_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/order_bottom_sheet.dart';
@@ -31,6 +32,10 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
 
   @override
   void dispose() {
+    // Stop tracking service when leaving the screen
+    if (mounted) {
+      ref.read(locationTrackingServiceProvider).stopTracking();
+    }
     ref.read(dispatcherHomeProvider.notifier).reset();
     super.dispose();
   }
@@ -109,6 +114,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
             destination: state.selectedOrder?.location,
             selectedOrder: state.selectedOrder,
             currentPosition: currentLocation,
+            hqLocation: SRMCHQ,
           ),
         ),
 
