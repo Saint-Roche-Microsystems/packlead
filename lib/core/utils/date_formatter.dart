@@ -23,4 +23,15 @@ class DateFormatter {
   static String formatForBackend(DateTime date) {
     return _dateOnlyFormat.format(date);
   }
+
+  // example: "Hace 5m", "Hace 2h", "Hace 3d"
+  static String formatRelativeTime(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inSeconds < 60) return 'Hace ${difference.inSeconds}s';
+    if (difference.inMinutes < 60) return 'Hace ${difference.inMinutes}m';
+    if (difference.inHours < 24) return 'Hace ${difference.inHours}h';
+    return 'Hace ${difference.inDays}d';
+  }
 }

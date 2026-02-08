@@ -4,6 +4,7 @@ import 'package:packlead/core/constants/srmc_hq.dart';
 import 'package:packlead/core/models/location.dart';
 import 'package:packlead/core/models/order.dart';
 import 'package:packlead/core/utils/map_utils.dart';
+import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_location_provider.dart';
 import 'package:packlead/services/location/location_tracking_service.dart';
 
 /// Hardcoded origin location.
@@ -29,6 +30,9 @@ final dispatcherCurrentLocationProvider = StateProvider<Location?>((ref) {
   return null;
 });
 
+// Provider to track if the location tracking is active or not.
+final isTrackingActiveProvider = StateProvider<bool>((ref) => false);
+
 final locationTrackingServiceProvider = Provider.autoDispose<LocationTrackingService>((ref) {
   // The service has implemented a lifecycle
   // onLocationUpdate only calls every 5 seconds and if the distance difference
@@ -39,22 +43,21 @@ final locationTrackingServiceProvider = Provider.autoDispose<LocationTrackingSer
       // Update current dispatcher provider with new location
       ref.read(dispatcherCurrentLocationProvider.notifier).state = location;
 
-      // await _sendLocationToBackend(location);
+      // Send location to RTDB
+      ref.read(dispatcherLocationProvider.notifier).updateLocation(location);
     },
     onError: (error) {
       debugPrint('Error de ubicación: $error');
     },
   );
 
+  ref.keepAlive();
+
   // Refresh when the provider is disposed (log out or app closed)
   ref.onDispose(() {
     service.dispose();
   });
 
-  ref.keepAlive();
 
   return service;
 });
-
-// TODO: Send location to backend
-// Future<void> _sendLocationToBackend(Location location) async {}

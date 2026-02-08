@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/srmc_hq.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
+import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_location_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_route_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/screens/home_screen_error.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/order_bottom_sheet.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/route_tracking_map.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/status_tracking_badge.dart';
 import 'package:packlead/navigation/routers/auth_router.dart';
+import 'package:packlead/services/location/location_tracking_service.dart';
 import 'package:packlead/services/mock_services/mock_auth_service.dart';
 
 class DispatcherHomeScreen extends ConsumerStatefulWidget {
   final String dispatcherId;
+  final String dispatcherName;
 
-  const DispatcherHomeScreen({super.key, required this.dispatcherId});
+  const DispatcherHomeScreen({
+    super.key,
+    required this.dispatcherId,
+    required this.dispatcherName
+  });
 
   @override
   ConsumerState<DispatcherHomeScreen> createState() => _DispatcherHomeScreenState();
@@ -21,6 +28,8 @@ class DispatcherHomeScreen extends ConsumerStatefulWidget {
 
 class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
   bool _hasInitializedTracking = false;
+  LocationTrackingService? _trackingService;
+  DispatcherLocationNotifier? _locationNotifier;
 
   @override
   void initState() {
@@ -41,9 +50,26 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
       _hasInitializedTracking = true;
 
       // Start traking with the provider service
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (mounted) {
-          ref.read(locationTrackingServiceProvider).startTracking();
+          _trackingService = ref.read(locationTrackingServiceProvider);
+          _trackingService!.startTracking();
+
+          ref.read(isTrackingActiveProvider.notifier).state = true;
+
+          // Get initial location (could be null)
+          final currentLocation = ref.read(dispatcherCurrentLocationProvider);
+
+          // If current location is null, use SRMC HQ as default initial location
+          final initialLocation = currentLocation ?? SRMCHQ;
+
+          _locationNotifier = ref.read(dispatcherLocationProvider.notifier);
+
+          await _locationNotifier!.register(
+            dispatcherId: widget.dispatcherId,
+            name: widget.dispatcherName,
+            initialLocation: initialLocation,
+          );
         }
       });
     }
@@ -51,11 +77,13 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
 
   @override
   void dispose() {
-    // Stop tracking service when leaving the screen
-    if (mounted) {
-      ref.read(locationTrackingServiceProvider).stopTracking();
+    if(_trackingService != null) {
+      _trackingService!.stopTracking();
     }
-    ref.read(dispatcherHomeProvider.notifier).reset();
+
+    if(_locationNotifier != null) {
+      _locationNotifier!.unregister();
+    }
     super.dispose();
   }
 
