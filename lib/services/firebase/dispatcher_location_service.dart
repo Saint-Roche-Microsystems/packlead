@@ -62,9 +62,11 @@ class DispatcherLocationService {
 
       return data.entries.map((entry) {
         final locationData = entry.value as Map<dynamic, dynamic>;
-        return DispatcherLocation.fromJson(
-          Map<String, dynamic>.from(locationData),
-        );
+        final Map<String, dynamic> locationMap = Map<String,dynamic>.from(locationData);
+
+        locationMap['dispatcherId'] = entry.key as String;
+
+        return DispatcherLocation.fromJson(locationMap);
       }).toList();
     });
   }
