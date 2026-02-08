@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:packlead/features/admin/presentation/screens/admin_dispatcher_screen.dart';
 import 'package:packlead/features/admin/presentation/screens/admin_home_screen.dart';
-import 'package:packlead/features/admin/presentation/screens/admin_map_screen.dart';
 import 'package:packlead/features/admin/presentation/screens/admin_order_screen.dart';
+import 'package:packlead/features/admin/presentation/screens/admin_tracking_screen.dart';
 import 'package:packlead/navigation/routers/auth_router.dart';
 import 'package:packlead/services/mock_services/mock_auth_service.dart';
 
@@ -20,7 +20,7 @@ class _AdminBottomNavLayoutState extends State<AdminBottomNavLayout> {
     AdminHomeScreen(),
     AdminOrderScreen(),
     AdminDispatcherScreen(),
-    AdminMapScreen(),
+    AdminTrackingScreen(),
   ];
 
   void _onItemTapped(int index) {
