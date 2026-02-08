@@ -46,6 +46,16 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: Image.asset(
+                  'assets/packlead_logo.png',
+                  width: 250,
+                  fit: BoxFit.contain,
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
               Text(
                 'Iniciar sesión',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
