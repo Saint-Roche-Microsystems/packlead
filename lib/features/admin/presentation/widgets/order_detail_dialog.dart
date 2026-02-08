@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/location.dart';
+import 'package:packlead/core/utils/date_formatter.dart';
 import 'package:packlead/core/utils/map_utils.dart';
 import 'package:packlead/core/widgets/maps/static_location_map.dart';
 import 'package:packlead/features/admin/viewmodels/admin_orders_view_model.dart';
@@ -23,6 +24,7 @@ class OrderDetailDialog extends StatelessWidget {
             _buildDetailRow('Teléfono', orderVM.clientPhoneNumber),
             _buildDetailRow('Estado', orderVM.state.label),
             _buildDetailRow('Zona', orderVM.zone),
+            _buildDetailRow('Fecha de entrega', DateFormatter.formatDate(orderVM.deliveryDate)),
             _buildDetailRow('Repartidor', orderVM.dispatcherName ?? 'No asignado'),
             _buildMapPreview(orderVM.location),
           ],

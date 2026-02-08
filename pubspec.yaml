@@ -22,6 +22,7 @@ dependencies:
   firebase_core: ^4.4.0
   firebase_database: ^12.1.2
   url_launcher: ^6.3.2
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -32,3 +33,4 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/packlead_logo.png

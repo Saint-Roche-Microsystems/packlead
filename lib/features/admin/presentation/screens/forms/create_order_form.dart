@@ -7,6 +7,7 @@ import 'package:packlead/core/validators/order_form_validators.dart';
 import 'package:packlead/core/validators/phone_validators.dart';
 import 'package:packlead/core/widgets/dispatcher_dropdown_field.dart';
 import 'package:packlead/core/widgets/form_action_buttons.dart';
+import 'package:packlead/core/widgets/form_fields/date_field.dart';
 import 'package:packlead/core/widgets/form_fields/location_button_selector.dart';
 import 'package:packlead/core/widgets/form_fields/phone_field.dart';
 import 'package:packlead/core/widgets/form_fields/text_field.dart';
@@ -31,6 +32,8 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
 
   String? _selectedDispatcherId;
   String? _locationError;
+  DateTime? _selectedDeliveryDate;
+  String? _dateError;
 
   @override
   void dispose() {
@@ -43,35 +46,39 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
     super.dispose();
   }
 
-  bool _validateLocation() {
+  String? _checkLocationError() {
     final lat = double.tryParse(_latCtrl.text);
     final lng = double.tryParse(_lngCtrl.text);
-    return lat != null && lng != null;
+
+    if (lat == null || lng == null) {
+      return 'Debe seleccionar una ubicación en el mapa';
+    }
+
+    return null;
+  }
+
+  void _prevSubmitCheck() {
+    // Check for all fields at the same time
+    final isValidForm = _formKey.currentState!.validate();
+    final locationValidMsg = _checkLocationError();
+    final dateValidMsg = OrderFormValidators.validateDeliveryDate(_selectedDeliveryDate);
+
+    setState(() {
+      _locationError = locationValidMsg;
+    });
+
+    setState(() {
+      _dateError = dateValidMsg;
+    });
+
+    if(!isValidForm || locationValidMsg != null || dateValidMsg != null) return;
+
+    _submit();
   }
 
   Future<void> _submit() async {
-    final isValidForm = _formKey.currentState!.validate();
-    final isLocationValid = _validateLocation();
-
-    if(!isValidForm || !isLocationValid) {
-      if(!isLocationValid) {
-        setState(() {
-          _locationError = 'Debe seleccionar una ubicación en el mapa';
-        });
-      } else {
-        setState(() {
-          _locationError = null;
-        });
-      }
-      return;
-    }
-
-    setState(() {
-      _locationError = null;
-    });
-
-    final lat = double.tryParse(_latCtrl.text.trim());
-    final lng = double.tryParse(_lngCtrl.text.trim());
+    final lat = double.parse(_latCtrl.text.trim());
+    final lng = double.parse(_lngCtrl.text.trim());
     final formatedPhone = PhoneValidators.formatEC(_clientPhoneCtrl.text.trim());
 
     final newOrder = Order(
@@ -79,10 +86,11 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
       clientName: _clientNameCtrl.text.trim(),
       dispatcherId: _selectedDispatcherId,
       clientPhoneNumber: formatedPhone,
-      location: Location(lat: lat!, lng: lng!),
+      location: Location(lat: lat, lng: lng),
       state: OrderState.pending,
       zone: _zoneCtrl.text.trim(),
       address: _addressCtrl.text.trim(),
+      deliveryDate: _selectedDeliveryDate!,
       createdAt: DateTime.now()
     );
 
@@ -162,6 +170,25 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
 
               SizedBox(height: 20),
 
+              DateField(
+                selectedDate: _selectedDeliveryDate,
+                onDateSelected: (date) {
+                  setState(() {
+                    _selectedDeliveryDate = date;
+                  });
+
+                  if(_dateError != null) {
+                    setState(() {
+                      _dateError = null;
+                    });
+                  }
+                },
+                errorText: _dateError,
+                enabled: !isLoading,
+              ),
+
+              SizedBox(height: 20),
+
               SaintTextField(
                 controller: _addressCtrl,
                 label: 'Dirección (opcional)',
@@ -191,7 +218,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
 
               FormActionButtons(
                 onCancel: () => Navigator.pop(context),
-                onConfirm: _submit,
+                onConfirm: _prevSubmitCheck,
                 isLoading: isLoading,
                 confirmText: 'Guardar',
               ),

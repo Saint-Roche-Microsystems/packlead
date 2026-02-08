@@ -25,11 +25,12 @@ class OrderMockDataSource implements OrderDataSource {
   }
 
   @override
-  Future<List<Order>> getOrdersByDispatcher(String dispatcherId) async {
+  Future<List<Order>> getOrdersByDispatcher(String dispatcherId, DateTime forDate) async {
     await Future.delayed(const Duration(milliseconds: 400));
 
     return _orders
         .where((order) => order.dispatcherId == dispatcherId)
+    ///TODO - filter by date, also update mocks to test this properly
         .toList();
   }
 
@@ -69,6 +70,7 @@ class OrderMockDataSource implements OrderDataSource {
       address: order.address,
       state: OrderState.pending,
       zone: order.zone,
+      deliveryDate: order.deliveryDate,
       createdAt: DateTime.now(),
     );
 
