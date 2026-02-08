@@ -1,6 +1,6 @@
 import 'package:packlead/core/models/location.dart';
 
-/// Modelo específico para ubicaciones en Firebase RTDB
+// model specific for RTDB
 class DispatcherLocation {
   final String dispatcherId;
   final String name;
@@ -16,8 +16,14 @@ class DispatcherLocation {
     required this.updatedAt,
   });
 
+  // convert DispatcherLocation to Location
   Location toLocation() {
     return Location(lat: lat, lng: lng);
+  }
+
+  // convert a list of DispatcherLocation to a list of Location
+  static List<Location> toLocations(List<DispatcherLocation> dispatcherLocations) {
+    return dispatcherLocations.map((dl) => dl.toLocation()).toList();
   }
 
   Map<String, dynamic> toJson() {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:packlead/core/models/dispatcher_location.dart';
+import 'package:packlead/core/utils/date_formatter.dart';
+import 'package:packlead/core/utils/map_utils.dart';
 
 class MultiPointRealtimeMap extends ConsumerWidget {
   final List<DispatcherLocation> locations;
@@ -20,7 +22,7 @@ class MultiPointRealtimeMap extends ConsumerWidget {
         position: LatLng(location.lat, location.lng),
         infoWindow: InfoWindow(
           title: location.name,
-          snippet: 'Última actualización: ${_formatTime(location.updatedAt)}',
+          snippet: 'Última actualización: ${DateFormatter.formatRelativeTime(location.updatedAt)}',
         ),
         icon: BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueBlue,
@@ -28,7 +30,7 @@ class MultiPointRealtimeMap extends ConsumerWidget {
       );
     }).toSet();
 
-    final bounds = _calculateBounds(locations);
+    final bounds = MapUtils.calculateBounds(DispatcherLocation.toLocations(locations));
 
     return GoogleMap(
       initialCameraPosition: CameraPosition(
@@ -44,33 +46,5 @@ class MultiPointRealtimeMap extends ConsumerWidget {
         }
       },
     );
-  }
-
-  LatLngBounds _calculateBounds(List<DispatcherLocation> locations) {
-    double minLat = locations.first.lat;
-    double maxLat = locations.first.lat;
-    double minLng = locations.first.lng;
-    double maxLng = locations.first.lng;
-
-    for (var location in locations) {
-      if (location.lat < minLat) minLat = location.lat;
-      if (location.lat > maxLat) maxLat = location.lat;
-      if (location.lng < minLng) minLng = location.lng;
-      if (location.lng > maxLng) maxLng = location.lng;
-    }
-
-    return LatLngBounds(
-      southwest: LatLng(minLat, minLng),
-      northeast: LatLng(maxLat, maxLng),
-    );
-  }
-
-  String _formatTime(DateTime time) {
-    final now = DateTime.now();
-    final difference = now.difference(time);
-
-    if (difference.inSeconds < 60) return 'Hace ${difference.inSeconds}s';
-    if (difference.inMinutes < 60) return 'Hace ${difference.inMinutes}m';
-    return 'Hace ${difference.inHours}h';
   }
 }
