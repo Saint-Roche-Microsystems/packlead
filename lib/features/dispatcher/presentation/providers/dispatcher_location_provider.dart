@@ -65,7 +65,15 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
   bool get isRegistered => _currentDispatcherId != null;
 }
 
-final dispatcherLocationProvider = StateNotifierProvider<DispatcherLocationNotifier, AsyncValue<void>>((ref) {
+final dispatcherLocationProvider = StateNotifierProvider.autoDispose<DispatcherLocationNotifier, AsyncValue<void>>((ref) {
   final locationService = ref.watch(dispatcherLocationServiceProvider);
-  return DispatcherLocationNotifier(locationService);
+  final notifier = DispatcherLocationNotifier(locationService);
+
+  ref.onDispose(() {
+    notifier.unregister();
+  });
+
+  ref.keepAlive();
+
+  return notifier;
 });

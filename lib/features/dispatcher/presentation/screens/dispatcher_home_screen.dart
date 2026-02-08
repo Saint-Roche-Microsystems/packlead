@@ -9,6 +9,7 @@ import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_s
 import 'package:packlead/features/dispatcher/presentation/widgets/route_tracking_map.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/status_tracking_badge.dart';
 import 'package:packlead/navigation/routers/auth_router.dart';
+import 'package:packlead/services/location/location_tracking_service.dart';
 import 'package:packlead/services/mock_services/mock_auth_service.dart';
 
 class DispatcherHomeScreen extends ConsumerStatefulWidget {
@@ -27,6 +28,8 @@ class DispatcherHomeScreen extends ConsumerStatefulWidget {
 
 class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
   bool _hasInitializedTracking = false;
+  LocationTrackingService? _trackingService;
+  DispatcherLocationNotifier? _locationNotifier;
 
   @override
   void initState() {
@@ -49,7 +52,10 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
       // Start traking with the provider service
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (mounted) {
-          ref.read(locationTrackingServiceProvider).startTracking();
+          _trackingService = ref.read(locationTrackingServiceProvider);
+          _trackingService!.startTracking();
+
+          ref.read(isTrackingActiveProvider.notifier).state = true;
 
           // Get initial location (could be null)
           final currentLocation = ref.read(dispatcherCurrentLocationProvider);
@@ -57,7 +63,9 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
           // If current location is null, use SRMC HQ as default initial location
           final initialLocation = currentLocation ?? SRMCHQ;
 
-          await ref.read(dispatcherLocationProvider.notifier).register(
+          _locationNotifier = ref.read(dispatcherLocationProvider.notifier);
+
+          await _locationNotifier!.register(
             dispatcherId: widget.dispatcherId,
             name: widget.dispatcherName,
             initialLocation: initialLocation,
@@ -69,12 +77,13 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
 
   @override
   void dispose() {
-    // Stop tracking service when leaving the screen
-    if (mounted) {
-      ref.read(locationTrackingServiceProvider).stopTracking();
+    if(_trackingService != null) {
+      _trackingService!.stopTracking();
     }
-    ref.read(dispatcherHomeProvider.notifier).reset();
-    ref.read(dispatcherLocationProvider.notifier).unregister();
+
+    if(_locationNotifier != null) {
+      _locationNotifier!.unregister();
+    }
     super.dispose();
   }
 

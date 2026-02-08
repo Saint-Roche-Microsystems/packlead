@@ -30,6 +30,9 @@ final dispatcherCurrentLocationProvider = StateProvider<Location?>((ref) {
   return null;
 });
 
+// Provider to track if the location tracking is active or not.
+final isTrackingActiveProvider = StateProvider<bool>((ref) => false);
+
 final locationTrackingServiceProvider = Provider.autoDispose<LocationTrackingService>((ref) {
   // The service has implemented a lifecycle
   // onLocationUpdate only calls every 5 seconds and if the distance difference
@@ -48,12 +51,13 @@ final locationTrackingServiceProvider = Provider.autoDispose<LocationTrackingSer
     },
   );
 
+  ref.keepAlive();
+
   // Refresh when the provider is disposed (log out or app closed)
   ref.onDispose(() {
     service.dispose();
   });
 
-  ref.keepAlive();
 
   return service;
 });
