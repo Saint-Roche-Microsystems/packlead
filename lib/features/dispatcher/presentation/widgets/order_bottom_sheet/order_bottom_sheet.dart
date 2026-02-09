@@ -14,7 +14,7 @@ class OrderBottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DraggableScrollableSheet(
       initialChildSize: 0.4,
-      minChildSize: 0.2,
+      minChildSize: 0.32,
       maxChildSize: 0.85,
       snap: true,
       snapSizes: const [0.4, 0.85],
