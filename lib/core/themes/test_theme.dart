@@ -163,7 +163,7 @@ class TestThemeScreen extends StatelessWidget {
 
           _ColorTile('Primary', colors.primary, colors.onPrimary),
           _ColorTile('Secondary', colors.secondary, colors.onSecondary),
-          _ColorTile('Background', colors.background, colors.onBackground),
+          _ColorTile('Background', colors.surface, colors.onSurface),
           _ColorTile('Surface', colors.surface, colors.onSurface),
           _ColorTile('Error', colors.error, colors.onError),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/srmc_hq.dart';
+import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_location_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_route_provider.dart';
@@ -8,9 +9,7 @@ import 'package:packlead/features/dispatcher/presentation/screens/home_screen_er
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/order_bottom_sheet.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/route_tracking_map.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/status_tracking_badge.dart';
-import 'package:packlead/navigation/routers/auth_router.dart';
 import 'package:packlead/services/location/location_tracking_service.dart';
-import 'package:packlead/services/mock_services/mock_auth_service.dart';
 
 class DispatcherHomeScreen extends ConsumerStatefulWidget {
   final String dispatcherId;
@@ -87,11 +86,6 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
     super.dispose();
   }
 
-  void _logout(BuildContext context) {
-    MockAuthService.logout();
-    Navigator.pushReplacementNamed(context, AuthRouter.login);
-  }
-
   @override
   Widget build(BuildContext context) {
     final homeState = ref.watch(dispatcherHomeProvider);
@@ -104,7 +98,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
           IconButton(
             tooltip: 'Salir',
             icon: const Icon(Icons.logout),
-            onPressed: () => _logout(context),
+            onPressed: () => ref.read(authStateProvider.notifier).logout(),
           ),
         ],
       ),

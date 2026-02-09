@@ -30,8 +30,15 @@ class OrderMockDataSource implements OrderDataSource {
 
     return _orders
         .where((order) => order.dispatcherId == dispatcherId)
-    ///TODO - filter by date, also update mocks to test this properly
         .toList();
+
+    // return _orders
+    //     .where((order) =>
+    //         order.dispatcherId == dispatcherId &&
+    //         order.deliveryDate.year == forDate.year &&
+    //         order.deliveryDate.month == forDate.month &&
+    //         order.deliveryDate.day == forDate.day)
+    //     .toList();
   }
 
   @override
