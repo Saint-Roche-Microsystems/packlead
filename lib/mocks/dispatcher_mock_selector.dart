@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:packlead/core/constants/user_roles.dart';
-import 'package:packlead/core/models/user.dart';
 import 'package:packlead/mocks/users_mock_data.dart';
 
 class DispatcherCredentials {
