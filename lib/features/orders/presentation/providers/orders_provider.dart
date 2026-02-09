@@ -77,6 +77,20 @@ final ordersByStateProvider = FutureProvider.family<List<Order>, OrderState>(
   },
 );
 
+final todayOrdersProvider = FutureProvider<List<Order>>((ref) async {
+  final repository = ref.watch(orderRepositoryProvider);
+  final today = DateTime.now();
+
+  return await repository.getOrdersByDate(today);
+});
+
+final ordersByDateProvider = FutureProvider.family<List<Order>, DateTime>(
+      (ref, date) async {
+    final repository = ref.watch(orderRepositoryProvider);
+    return await repository.getOrdersByDate(date);
+  },
+);
+
 /// *******************
 ///   CUD PROVIDERS
 /// *******************

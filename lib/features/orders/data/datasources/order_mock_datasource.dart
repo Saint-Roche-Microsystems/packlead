@@ -44,6 +44,22 @@ class OrderMockDataSource implements OrderDataSource {
   }
 
   @override
+  Future<List<Order>> getOrdersByDate(DateTime date) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+
+    final targetDate = DateTime(date.year, date.month, date.day);
+
+    return _orders.where((order) {
+      final orderDate = DateTime(
+        order.deliveryDate.year,
+        order.deliveryDate.month,
+        order.deliveryDate.day,
+      );
+      return orderDate.isAtSameMomentAs(targetDate);
+    }).toList();
+  }
+
+  @override
   Future<Order> updateOrder(Order order) async {
     await Future.delayed(const Duration(milliseconds: 500));
 

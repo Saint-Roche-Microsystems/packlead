@@ -6,6 +6,7 @@ abstract class OrderRepository {
   Future<Order> getOrderById(String id);
   Future<List<Order>> getOrdersByDispatcher(String dispatcherId, DateTime forDate);
   Future<List<Order>> getOrdersByState(OrderState state);
+  Future<List<Order>> getOrdersByDate(DateTime date);
   Future<Order> createOrder(Order order);
   Future<Order> updateOrder(Order order);
   Future<void> deleteOrder(String id);
