@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:packlead/core/models/user.dart';
 import 'package:packlead/features/auth/data/datasources/auth_datasource.dart';
 import 'package:packlead/features/auth/data/datasources/auth_mock_datasource.dart';
 import 'package:packlead/features/auth/data/repositories/auth_repository.dart';

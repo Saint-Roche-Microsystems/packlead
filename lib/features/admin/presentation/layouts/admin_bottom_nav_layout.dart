@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/features/admin/presentation/screens/admin_dispatcher_screen.dart';
 import 'package:packlead/features/admin/presentation/screens/admin_home_screen.dart';
 import 'package:packlead/features/admin/presentation/screens/admin_order_screen.dart';
 import 'package:packlead/features/admin/presentation/screens/admin_tracking_screen.dart';
-import 'package:packlead/navigation/routers/auth_router.dart';
-import 'package:packlead/services/mock_services/mock_auth_service.dart';
+import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 
-class AdminBottomNavLayout extends StatefulWidget {
+class AdminBottomNavLayout extends ConsumerStatefulWidget {
   const AdminBottomNavLayout({super.key});
 
   @override
-  State<AdminBottomNavLayout> createState() => _AdminBottomNavLayoutState();
+  ConsumerState<AdminBottomNavLayout> createState() => _AdminBottomNavLayoutState();
 }
 
-class _AdminBottomNavLayoutState extends State<AdminBottomNavLayout> {
+class _AdminBottomNavLayoutState extends ConsumerState<AdminBottomNavLayout> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = const [
@@ -29,11 +29,6 @@ class _AdminBottomNavLayoutState extends State<AdminBottomNavLayout> {
     });
   }
 
-  void _logout(BuildContext context) {
-    MockAuthService.logout();
-    Navigator.pushReplacementNamed(context, AuthRouter.login);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +39,7 @@ class _AdminBottomNavLayoutState extends State<AdminBottomNavLayout> {
           IconButton(
             tooltip: 'Salir',
             icon: const Icon(Icons.logout),
-            onPressed: () => _logout(context),
+            onPressed: () => ref.read(authStateProvider.notifier).logout(),
           ),
         ],
       ),
