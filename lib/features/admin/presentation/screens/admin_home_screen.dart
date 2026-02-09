@@ -1,62 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/themes/core/color_schema.dart';
+import 'package:packlead/features/admin/presentation/providers/admin_dashboard_provider.dart';
 import 'package:packlead/features/admin/presentation/widgets/kpi_card.dart';
 import 'package:packlead/features/admin/presentation/widgets/order_donut_chart.dart';
 
-class AdminHomeScreen extends StatelessWidget {
+class AdminHomeScreen extends ConsumerWidget {
+
   const AdminHomeScreen({super.key});
 
-  final int pedidosDelDia = 45;
-  final int repartidoresActivos = 8;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dashboardAsync = ref.watch(adminDashboardProvider);
+
     return Container(
       color: Colors.grey[50],
       padding: EdgeInsets.all(20),
+      child: dashboardAsync.when(
+        data: (dashboard) => Consumer(
+          builder: (context, ref, child) {
+            return RefreshIndicator(
+              onRefresh: () => ref.read(adminDashboardProvider.notifier).refresh(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+
+                      // Orders from Today Card
+                      KPICard(
+                        title: "Pedidos del día",
+                        icon: Icons.shopping_bag_rounded,
+                        value: dashboard.totalOrders,
+                      ),
+
+                      // Available Dispatchers Card
+                      KPICard(
+                        title: "Repartidores activos",
+                        icon: Icons.fire_truck,
+                        value: dashboard.totalOnlineDispatchers,
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 30),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: Text(
+                      "Progreso del Día",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 12,),
+
+                  OrdersDonutChart(
+                    pending: dashboard.pendingOrders,
+                    inRoute: dashboard.shippedOrders,
+                    completed: dashboard.deliveredOrders,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => _buildError(context, error.toString(), ref)
+      ),
+    );
+  }
+
+  Widget _buildError(BuildContext context, String error, WidgetRef ref) {
+    return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-
-              // Orders from Today Card
-              KPICard(
-                title: "Pedidos del día",
-                icon: Icons.shopping_bag_rounded,
-                value: pedidosDelDia,
-              ),
-
-              // Available Dispatchers Card
-              KPICard(
-                title: "Repartidores activos",
-                icon: Icons.fire_truck,
-                value: repartidoresActivos,
-              ),
-            ],
+          Icon(Icons.error_outline, size: 48, color: SaintColors.error),
+          const SizedBox(height: 16),
+          Text('Error al obtener los datos del dashboard', style: Theme.of(context).textTheme.headlineSmall),
+          const SizedBox(height: 8),
+          Text(
+            error.toString(),
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
           ),
-
-          SizedBox(height: 30),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: Text(
-              "Progreso del Día",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-
-           SizedBox(height: 12,),
-
-           OrdersDonutChart(
-              pending: 12,
-              inRoute: 8,
-              completed: 30,
-           ),
         ],
       ),
     );

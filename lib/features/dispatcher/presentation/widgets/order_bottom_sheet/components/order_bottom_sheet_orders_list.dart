@@ -7,9 +7,8 @@ import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_s
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/utils/order_list_helpers.dart';
 
 class OrderBottomSheetOrdersList extends ConsumerWidget {
-  final ScrollController scrollController;
 
-  const OrderBottomSheetOrdersList({super.key, required this.scrollController});
+  const OrderBottomSheetOrdersList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +25,6 @@ class OrderBottomSheetOrdersList extends ConsumerWidget {
 
         return OrderListView(
           orders: sortedOrders,
-          scrollController: scrollController,
           selectedOrderId: state.selectedOrder?.id,
           isOrderSelectable:(order) => isOrderSelectable(order, state),
           onOrderTap: (order) {

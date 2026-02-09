@@ -1,3 +1,4 @@
+import 'package:packlead/core/errors/auth_exceptions.dart';
 import 'package:packlead/core/models/user.dart';
 import 'package:packlead/features/auth/data/datasources/auth_datasource.dart';
 import 'package:packlead/mocks/users_mock_data.dart';
@@ -23,12 +24,8 @@ class AuthMockDataSource implements AuthDataSource {
 
     final user = getUserByEmail(email);
 
-    if (user == null) {
-      throw Exception('Usuario no encontrado');
-    }
-
-    if (user.password != password) {
-      throw Exception('Contraseña incorrecta');
+    if (user == null || user.password != password) {
+      throw const InvalidCredentialsException();
     }
 
     _currentUser = user;

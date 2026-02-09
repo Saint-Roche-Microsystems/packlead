@@ -4,7 +4,6 @@ import 'package:packlead/features/dispatcher/presentation/widgets/dispatcher_ord
 
 class OrderListView extends StatelessWidget {
   final List<Order> orders;
-  final ScrollController scrollController;
   final String? selectedOrderId;
   final bool Function(Order) isOrderSelectable;
   final void Function(Order) onOrderTap;
@@ -12,7 +11,6 @@ class OrderListView extends StatelessWidget {
   const OrderListView({
     super.key,
     required this.orders,
-    required this.scrollController,
     this.selectedOrderId,
     required this.isOrderSelectable,
     required this.onOrderTap
@@ -21,7 +19,6 @@ class OrderListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      controller: scrollController,
       itemCount: orders.length,
       padding: const EdgeInsets.only(bottom: 8),
       itemBuilder: (context, index) {

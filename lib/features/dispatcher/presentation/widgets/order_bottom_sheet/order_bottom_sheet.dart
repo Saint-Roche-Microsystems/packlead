@@ -14,7 +14,7 @@ class OrderBottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DraggableScrollableSheet(
       initialChildSize: 0.4,
-      minChildSize: 0.2,
+      minChildSize: 0.32,
       maxChildSize: 0.85,
       snap: true,
       snapSizes: const [0.4, 0.85],
@@ -36,24 +36,33 @@ class OrderBottomSheet extends ConsumerWidget {
           ),
           child: Column(
             children: [
-              // HANDLE
-              Container(
-                margin: const EdgeInsets.only(top: 12, bottom: 8),
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+
+            SingleChildScrollView(
+              controller: scrollController,
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                children: [
+                  // HANDLE
+                  Container(
+                    margin: const EdgeInsets.only(top: 12, bottom: 8),
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+
+                  OrderBottomSheetHeader(dispatcherId: dispatcherId),
+
+                  const Divider(height: 1),
+                ],
               ),
-
-              OrderBottomSheetHeader(dispatcherId: dispatcherId),
-
-              const Divider(height: 1),
+            ),
 
               // Orders List
               Expanded(
-                child: OrderBottomSheetOrdersList(scrollController: scrollController),
+                child: OrderBottomSheetOrdersList(),
               ),
 
               const Divider(height: 1),

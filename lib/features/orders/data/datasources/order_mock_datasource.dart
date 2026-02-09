@@ -30,8 +30,15 @@ class OrderMockDataSource implements OrderDataSource {
 
     return _orders
         .where((order) => order.dispatcherId == dispatcherId)
-    ///TODO - filter by date, also update mocks to test this properly
         .toList();
+
+    // return _orders
+    //     .where((order) =>
+    //         order.dispatcherId == dispatcherId &&
+    //         order.deliveryDate.year == forDate.year &&
+    //         order.deliveryDate.month == forDate.month &&
+    //         order.deliveryDate.day == forDate.day)
+    //     .toList();
   }
 
   @override
@@ -41,6 +48,22 @@ class OrderMockDataSource implements OrderDataSource {
     return _orders
         .where((order) => order.state == state)
         .toList();
+  }
+
+  @override
+  Future<List<Order>> getOrdersByDate(DateTime date) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+
+    final targetDate = DateTime(date.year, date.month, date.day);
+
+    return _orders.where((order) {
+      final orderDate = DateTime(
+        order.deliveryDate.year,
+        order.deliveryDate.month,
+        order.deliveryDate.day,
+      );
+      return orderDate.isAtSameMomentAs(targetDate);
+    }).toList();
   }
 
   @override
