@@ -32,26 +32,59 @@ class AdminDashboardState {
       .length;
 }
 
-/// Dashboard provider
-final adminDashboardProvider = Provider<AsyncValue<AdminDashboardState>>((ref) {
-  final todayOrdersAsync = ref.watch(todayOrdersProvider);
-  final onlineDispatchersAsync = ref.watch(liveTrackingProvider);
+/// Dashboard Notifier
+class AdminDashboardNotifier extends StateNotifier<AsyncValue<AdminDashboardState>> {
+  final Ref _ref;
 
-  // Combine both AsyncValues
-  return todayOrdersAsync.whenData((orders) {
-    return onlineDispatchersAsync.whenData((dispatchers) {
-      return AdminDashboardState(
-        todayOrders: orders,
-        onlineDispatchers: dispatchers,
+  AdminDashboardNotifier(this._ref) : super(const AsyncValue.loading()) {
+    _loadDashboard();
+
+    // Listen actively for both providers
+    _ref.listen(todayOrdersProvider, (previous, next) {
+      _loadDashboard();
+    });
+
+    _ref.listen(liveTrackingProvider, (previous, next) {
+      _loadDashboard();
+    });
+  }
+
+  Future<void> _loadDashboard() async {
+    state = const AsyncValue.loading();
+
+    try {
+      // Load orders & dispatchers providers at the same time
+      final results = await Future.wait([
+        _ref.read(todayOrdersProvider.future),
+        _ref.read(liveTrackingProvider.future),
+      ]);
+
+      final todayOrders = results[0] as List<Order>;
+      final onlineDispatchers = results[1] as List<DispatcherLocation>;
+
+      state = AsyncValue.data(
+        AdminDashboardState(
+          todayOrders: todayOrders,
+          onlineDispatchers: onlineDispatchers,
+        ),
       );
-    }).when(
-      data: (state) => AsyncValue.data(state),
-      loading: () => const AsyncValue.loading(),
-      error: (error, stack) => AsyncValue.error(error, stack),
-    );
-  }).when(
-    data: (value) => value as AsyncValue<AdminDashboardState>,
-    loading: () => const AsyncValue.loading(),
-    error: (error, stack) => AsyncValue.error(error, stack),
-  );
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+    }
+  }
+
+  /// Refresh dashboard data
+  Future<void> refresh() async {
+    _ref.invalidate(todayOrdersProvider);
+    _ref.invalidate(liveTrackingProvider);
+
+    await _loadDashboard();
+  }
+}
+
+/// Dashboard provider
+final adminDashboardProvider = StateNotifierProvider<
+    AdminDashboardNotifier, AsyncValue<AdminDashboardState>
+>((ref) {
+  return AdminDashboardNotifier(ref);
 });
