@@ -6,7 +6,6 @@ import 'package:packlead/core/widgets/screen_not_found.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 import 'package:packlead/firebase_options.dart';
 import 'package:packlead/home_builder.dart';
-import 'package:packlead/navigation/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -37,7 +36,6 @@ class MyApp extends ConsumerWidget {
       darkTheme: getGeneralTheme(Brightness.dark),
       themeMode: ThemeMode.system,
       home: HomeBuilder(authState: authState),
-      onGenerateRoute: (settings) => AppRouter.generateRoute(settings, ref),
       onUnknownRoute: (settings) => MaterialPageRoute(
         builder: (_) => ScreenNotFound(),
       ),
