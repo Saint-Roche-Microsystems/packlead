@@ -23,12 +23,8 @@ class AuthMockDataSource implements AuthDataSource {
 
     final user = getUserByEmail(email);
 
-    if (user == null) {
-      throw Exception('Usuario no encontrado');
-    }
-
-    if (user.password != password) {
-      throw Exception('Contraseña incorrecta');
+    if (user == null || user.password != password) {
+      throw Exception('Correo o contraseña incorrectos');
     }
 
     _currentUser = user;

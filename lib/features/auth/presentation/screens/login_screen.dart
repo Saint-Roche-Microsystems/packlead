@@ -8,6 +8,7 @@ import 'package:packlead/core/widgets/snackbars.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_state.dart';
 import 'package:packlead/features/auth/presentation/widgets/quick_login_buttons.dart';
+import 'package:packlead/mocks/dispatcher_mock_selector.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -44,9 +45,10 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
   }
 
   void _fillDispatcherCredentials() {
+    final credentials = getRandomMockDispatcher();
     setState(() {
-      _emailCtrl.text = 'dispatcher1@packlead.com';
-      _pwdCtrl.text = 'disp123';
+      _emailCtrl.text = credentials?.email ?? '';
+      _pwdCtrl.text = credentials?.password ?? '';
     });
   }
 

@@ -13,25 +13,17 @@ class HomeBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (authState.status) {
-      case AuthStatus.loading:
-      case AuthStatus.initial:
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
-      case AuthStatus.authenticated:
-        final role = authState.user?.role ?? UserRole.none;
-        return switch (role) {
-          UserRole.admin => const AdminBottomNavLayout(),
-          UserRole.dispatcher => DispatcherHomeScreen(
-            dispatcherId: authState.user!.id,
-            dispatcherName: authState.user!.name,
-          ),
-          UserRole.none => const LoginScreen(),
-        };
-      case AuthStatus.unauthenticated:
-      case AuthStatus.error:
-        return const LoginScreen();
+    if(authState.status == AuthStatus.authenticated) {
+      final role = authState.user?.role ?? UserRole.none;
+      return switch (role) {
+        UserRole.admin => AdminBottomNavLayout(),
+        UserRole.dispatcher => DispatcherHomeScreen(
+          dispatcherId: authState.user!.id,
+          dispatcherName: authState.user!.name,
+        ),
+        UserRole.none => const LoginScreen(),
+      };
     }
+    return const LoginScreen();
   }
 }
