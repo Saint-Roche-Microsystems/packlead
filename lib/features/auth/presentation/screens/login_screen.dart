@@ -7,7 +7,7 @@ import 'package:packlead/core/widgets/form_fields/password_field.dart';
 import 'package:packlead/core/widgets/snackbars.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_state.dart';
-import 'package:packlead/services/mock_services/mock_auth_service.dart';
+import 'package:packlead/features/auth/presentation/widgets/quick_login_buttons.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -36,6 +36,20 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
     ref.read(authStateProvider.notifier).login(_emailCtrl.text, _pwdCtrl.text);
   }
 
+  void _fillAdminCredentials() {
+    setState(() {
+      _emailCtrl.text = 'admin@packlead.com';
+      _pwdCtrl.text = 'admin123';
+    });
+  }
+
+  void _fillDispatcherCredentials() {
+    setState(() {
+      _emailCtrl.text = 'dispatcher1@packlead.com';
+      _pwdCtrl.text = 'disp123';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
@@ -50,12 +64,14 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+
               Center(
                 child: Image.asset(
                   'assets/packlead_logo.png',
@@ -64,14 +80,6 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
-
-              Text(
-                'Iniciar sesión',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               const SizedBox(height: 32),
 
               Form(
@@ -100,9 +108,14 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
 
                     SizedBox(
                       width: double.infinity,
-                      height: 48,
                       child: ElevatedButton(
                         onPressed: authState.status == AuthStatus.loading ? null : _handleLogin,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                         child: authState.status == AuthStatus.loading
                             ? const SizedBox(
                           width: 20,
@@ -117,63 +130,20 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                             : const Text(
                           'Iniciar Sesión',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: SaintColors.surface
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: SaintColors.surface
                           ),
                         ),
                       ),
                     ),
+
+                    // Devloper ONLY. Remove on production.
+                    QuickLoginButtons(
+                      onAdminLogin: _fillAdminCredentials,
+                      onDispatcherLogin: _fillDispatcherCredentials,
+                    ),
                   ],
-                ),
-              ),
-
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    MockAuthService.loginAsAdmin();
-                    // Navigator.pushReplacementNamed(context, AppRouter.initialRoute);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    'Ingresar Admin',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: SaintColors.surface
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    MockAuthService.loginAsOperator();
-                    // Navigator.pushReplacementNamed(context, AppRouter.initialRoute);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    'Ingresar Repartidor',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: SaintColors.surface
-                    ),
-                  ),
                 ),
               ),
             ],
