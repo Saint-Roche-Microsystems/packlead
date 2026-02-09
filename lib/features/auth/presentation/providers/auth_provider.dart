@@ -51,13 +51,12 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> login(String email, String password) async {
     state = AuthState.loading();
 
-    try {
-      final user = await _repository.login(email, password);
+    final result = await _repository.login(email, password);
 
-      state = AuthState.authenticated(user);
-    } catch (error, _) {
-      state = AuthState.error(error.toString());
-    }
+    result.fold(
+       (error) => state = AuthState.error(error),
+       (user) => state = AuthState.authenticated(user),
+    );
   }
 
   Future<void> logout() async {
