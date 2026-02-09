@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/constants/user_status.dart';
 import 'package:packlead/core/themes/core/color_schema.dart';
 import 'package:packlead/core/widgets/form_fields/email_field.dart';
 import 'package:packlead/core/widgets/form_fields/password_field.dart';
+import 'package:packlead/core/widgets/snackbars.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
-import 'package:packlead/navigation/app_router.dart';
+import 'package:packlead/features/auth/presentation/providers/auth_state.dart';
 import 'package:packlead/services/mock_services/mock_auth_service.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -31,12 +33,20 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
   void _handleLogin() {
     if (!_formKey.currentState!.validate()) return;
 
-    ref.read(authStateProvider.notifier).login(_emailCtrl.text.trim(), _pwdCtrl.text);
+    ref.read(authStateProvider.notifier).login(_emailCtrl.text, _pwdCtrl.text);
   }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
+
+    ref.listen<AuthState>(authStateProvider, (previous, next) {
+      if (next.status == AuthStatus.error && next.errorMessage != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          ErrorSnackBar(message: next.errorMessage!),
+        );
+      }
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -92,8 +102,8 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                       width: double.infinity,
                       height: 48,
                       child: ElevatedButton(
-                        onPressed: authState.isLoading ? null : _handleLogin,
-                        child: authState.isLoading
+                        onPressed: authState.status == AuthStatus.loading ? null : _handleLogin,
+                        child: authState.status == AuthStatus.loading
                             ? const SizedBox(
                           width: 20,
                           height: 20,
@@ -114,36 +124,6 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                         ),
                       ),
                     ),
-
-                    if (authState.hasError) ...[
-                      const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade50,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: SaintColors.error.withValues(alpha: 0.25)),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              color: SaintColors.error,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                authState.error.toString(),
-                                style: TextStyle(
-                                  color: SaintColors.error,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-
                   ],
                 ),
               ),
@@ -154,7 +134,7 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     MockAuthService.loginAsAdmin();
-                    Navigator.pushReplacementNamed(context, AppRouter.initialRoute);
+                    // Navigator.pushReplacementNamed(context, AppRouter.initialRoute);
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 18),
@@ -179,7 +159,7 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     MockAuthService.loginAsOperator();
-                    Navigator.pushReplacementNamed(context, AppRouter.initialRoute);
+                    // Navigator.pushReplacementNamed(context, AppRouter.initialRoute);
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 18),

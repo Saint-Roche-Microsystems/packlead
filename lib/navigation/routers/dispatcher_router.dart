@@ -6,10 +6,17 @@ class DispatcherRouter {
   static const String initialRoute = '/dispatcher/home';
   static const String home = '/dispatcher/home';
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  static Route<dynamic> generateRoute(
+      RouteSettings settings,{
+        required String dispatcherId,
+        required String dispatcherName,
+  }) {
     switch (settings.name) {
       case home:
-        return MaterialPageRoute(builder: (_) => DispatcherHomeScreen(dispatcherId: 'disp_001', dispatcherName: 'Carlos Méndez'));
+        return MaterialPageRoute(builder: (_) => DispatcherHomeScreen(
+            dispatcherId: dispatcherId,
+            dispatcherName: dispatcherName,
+        ));
       default:
         return MaterialPageRoute(builder: (_) => ScreenNotFound());
     }
