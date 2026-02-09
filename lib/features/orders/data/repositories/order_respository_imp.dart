@@ -45,6 +45,15 @@ class OrderRepositoryImp implements OrderRepository {
   }
 
   @override
+  Future<List<Order>> getOrdersByDate(DateTime date) async {
+    try{
+      return await _dataSource.getOrdersByDate(date);
+    } catch(e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<Order> updateOrder(Order order) async {
     try{
       return await _dataSource.updateOrder(order);

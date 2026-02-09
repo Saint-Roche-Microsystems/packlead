@@ -11,6 +11,7 @@ class OrdersApiClient {
   /// GET /orders with optional filters
   Future<List<Order>> getOrders({
     String? state,
+    String? deliveryDate,
     String? dispatcherId,
     String? zone,
     int? limit,
@@ -20,6 +21,7 @@ class OrdersApiClient {
       final queryParameters = <String, dynamic>{};
 
       if (state != null) queryParameters['state'] = state;
+      if (deliveryDate != null) queryParameters['deliveryDate'] = deliveryDate;
       if (dispatcherId != null) queryParameters['dispatcherId'] = dispatcherId;
       if (zone != null) queryParameters['zone'] = zone;
       if (limit != null) queryParameters['limit'] = limit.toString();
