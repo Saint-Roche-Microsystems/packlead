@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/order_state.dart';
+import 'package:packlead/core/widgets/empty_screen.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/admin/presentation/providers/admin_orders_provider.dart';
 import 'package:packlead/features/admin/presentation/screens/forms/create_order_form.dart';
@@ -93,7 +94,10 @@ class _OrderListByState extends ConsumerWidget {
     return enrichedOrdersAsync.when(
       data: (enrichedOrders) {
         if (enrichedOrders.isEmpty) {
-          return Center(child: Text('No hay pedidos ${state.label} registrados'));
+          return EmptyScreen(
+            icon: Icons.receipt_long,
+            message: 'No hay pedidos ${state.label} registrados',
+          );
         }
 
         return RefreshIndicator(

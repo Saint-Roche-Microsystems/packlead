@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/dispatcher_state.dart';
+import 'package:packlead/core/widgets/empty_screen.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/admin/presentation/screens/forms/create_dispatcher_form.dart';
 import 'package:packlead/features/admin/presentation/widgets/dispatcher_item_list.dart';
@@ -90,7 +91,10 @@ class _DispatcherListByState extends ConsumerWidget {
     return dispatchersAsync.when(
       data: (dispatchers) {
         if (dispatchers.isEmpty) {
-          return Center(child: Text('No hay repartidores ${state.label}s registrados'));
+          return EmptyScreen(
+            icon: Icons.person_outline_outlined,
+            message: 'No hay repartidores ${state.label}s registrados',
+          );
         }
 
         return RefreshIndicator(
