@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
-import 'package:packlead/features/orders/data/datasources/order_api_datasource.dart';
+//import 'package:packlead/features/orders/data/datasources/order_api_datasource.dart';
 import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
 import 'package:packlead/features/orders/data/datasources/order_mock_datasource.dart';
 import 'package:packlead/features/orders/data/repositories/order_repository.dart';
@@ -177,6 +177,11 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
     } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
     }
+  }
+
+  /// Refresh data
+  Future<void> refresh() async {
+    _ref.invalidate(ordersByStateProvider);
   }
 
   // Reset state to default
