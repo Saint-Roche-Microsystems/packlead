@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:packlead/core/themes/core/color_schema.dart';
+import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/admin/presentation/providers/admin_dashboard_provider.dart';
 import 'package:packlead/features/admin/presentation/widgets/kpi_card.dart';
 import 'package:packlead/features/admin/presentation/widgets/order_donut_chart.dart';
@@ -21,76 +21,64 @@ class AdminHomeScreen extends ConsumerWidget {
           builder: (context, ref, child) {
             return RefreshIndicator(
               onRefresh: () => ref.read(adminDashboardProvider.notifier).refresh(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
 
-                      // Orders from Today Card
-                      KPICard(
-                        title: "Pedidos del día",
-                        icon: Icons.shopping_bag_rounded,
-                        value: dashboard.totalOrders,
-                      ),
+                        // Orders from Today Card
+                        KPICard(
+                          title: "Pedidos del día",
+                          icon: Icons.shopping_bag_rounded,
+                          value: dashboard.totalOrders,
+                        ),
 
-                      // Available Dispatchers Card
-                      KPICard(
-                        title: "Repartidores activos",
-                        icon: Icons.fire_truck,
-                        value: dashboard.totalOnlineDispatchers,
-                      ),
-                    ],
-                  ),
+                        // Available Dispatchers Card
+                        KPICard(
+                          title: "Repartidores activos",
+                          icon: Icons.fire_truck,
+                          value: dashboard.totalOnlineDispatchers,
+                        ),
+                      ],
+                    ),
 
-                  SizedBox(height: 30),
+                    SizedBox(height: 30),
 
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: Text(
-                      "Progreso del Día",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        "Progreso del Día",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
 
-                  SizedBox(height: 12,),
+                    SizedBox(height: 12,),
 
-                  OrdersDonutChart(
-                    pending: dashboard.pendingOrders,
-                    inRoute: dashboard.shippedOrders,
-                    completed: dashboard.deliveredOrders,
-                  ),
-                ],
+                    OrdersDonutChart(
+                      pending: dashboard.pendingOrders,
+                      inRoute: dashboard.shippedOrders,
+                      completed: dashboard.deliveredOrders,
+                    ),
+                  ],
+                ),
               ),
             );
           },
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => _buildError(context, error.toString(), ref)
-      ),
-    );
-  }
-
-  Widget _buildError(BuildContext context, String error, WidgetRef ref) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.error_outline, size: 48, color: SaintColors.error),
-          const SizedBox(height: 16),
-          Text('Error al obtener los datos del dashboard', style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 8),
-          Text(
-            error.toString(),
-            style: Theme.of(context).textTheme.bodySmall,
-            textAlign: TextAlign.center,
-          ),
-        ],
+        error: (error, _) => ErrorScreen(
+            title: 'Oops! Ocurrió un error al obtener los datos del dashboard',
+            message: error.toString(),
+            onRetry: () => ref.read(adminDashboardProvider.notifier).refresh(),
+        ),
       ),
     );
   }
