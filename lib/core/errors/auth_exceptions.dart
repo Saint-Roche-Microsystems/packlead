@@ -13,6 +13,12 @@ class InvalidCredentialsException extends AuthException {
   ]);
 }
 
+class InactiveDispatcherException extends AuthException {
+  const InactiveDispatcherException([
+    super.message = 'Tu cuenta se encuentra inactiva',
+  ]);
+}
+
 class NetworkException extends AuthException {
   const NetworkException([
     super.message = 'Error de conexión. Verifica tu internet.',
