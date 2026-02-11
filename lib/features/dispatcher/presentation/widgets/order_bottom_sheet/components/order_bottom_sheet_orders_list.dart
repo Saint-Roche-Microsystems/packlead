@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/widgets/empty_screen.dart';
+import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
-import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/orders_list/order_list_empty.dart';
-import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/orders_list/order_list_error.dart';
-import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/orders_list/order_list_view.dart';
+import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/order_list_view.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/utils/order_list_helpers.dart';
 
 class OrderBottomSheetOrdersList extends ConsumerWidget {
@@ -17,7 +17,13 @@ class OrderBottomSheetOrdersList extends ConsumerWidget {
     return homeStateAsync.when(
       data: (state) {
         if (state.todayOrders.isEmpty) {
-          return OrderListEmpty();
+          return SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+             child: EmptyScreen(
+                 icon: Icons.receipt_long,
+                 message: 'No tienes órdenes para hoy'
+             ),
+          );
         }
 
         // Sort: pending/shipped UP, delivered DOWN
@@ -45,7 +51,11 @@ class OrderBottomSheetOrdersList extends ConsumerWidget {
           child: CircularProgressIndicator(),
         ),
       ),
-      error: (error, _) => OrderListError(errorMsg: error.toString()),
+      error: (error, _) => ErrorScreen(
+        title: 'Ocurrió un error al cargar tus órdenes',
+        message: error.toString(),
+        onRetry: () => ref.invalidate(dispatcherHomeProvider),
+      ),
     );
   }
 }

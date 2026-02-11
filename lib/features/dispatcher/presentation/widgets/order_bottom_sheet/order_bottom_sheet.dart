@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/order_bottom_sheet_action_button.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/order_bottom_sheet_header.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/components/order_bottom_sheet_orders_list.dart';
 
-class OrderBottomSheet extends ConsumerWidget {
+class OrderBottomSheet extends StatelessWidget {
   final String dispatcherId;
 
   const OrderBottomSheet({super.key, required this.dispatcherId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       initialChildSize: 0.4,
       minChildSize: 0.32,
