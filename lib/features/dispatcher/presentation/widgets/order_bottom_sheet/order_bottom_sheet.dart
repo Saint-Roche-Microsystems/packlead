@@ -12,7 +12,7 @@ class OrderBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       initialChildSize: 0.4,
-      minChildSize: 0.32,
+      minChildSize: 0.31,
       maxChildSize: 0.85,
       snap: true,
       snapSizes: const [0.4, 0.85],
@@ -52,8 +52,6 @@ class OrderBottomSheet extends StatelessWidget {
                   ),
 
                   OrderBottomSheetHeader(dispatcherId: dispatcherId),
-
-                  const Divider(height: 1),
                 ],
               ),
             ),
@@ -62,8 +60,6 @@ class OrderBottomSheet extends StatelessWidget {
               Expanded(
                 child: OrderBottomSheetOrdersList(),
               ),
-
-              const Divider(height: 1),
 
               // Action Button
               OrderBottomSheetActionButton(),
