@@ -34,14 +34,14 @@ class AdminHomeScreen extends ConsumerWidget {
                         // Orders from Today Card
                         KPICard(
                           title: "Pedidos del día",
-                          icon: Icons.shopping_bag_rounded,
+                          icon: Icons.receipt_long,
                           value: dashboard.totalOrders,
                         ),
 
                         // Available Dispatchers Card
                         KPICard(
                           title: "Repartidores activos",
-                          icon: Icons.fire_truck,
+                          icon: Icons.local_shipping,
                           value: dashboard.totalOnlineDispatchers,
                         ),
                       ],
