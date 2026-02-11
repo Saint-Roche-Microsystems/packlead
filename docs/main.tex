@@ -1,0 +1,256 @@
+\listfiles
+\documentclass[11pt,letterpaper]{article}
+
+% =====================
+% Configuración general
+% =====================
+\input{config/libs.tex}
+\input{config/format.tex}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{tabularx} 
+\usepackage{booktabs} 
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{float} % Debes poner esto en tu preámbulo
+\geometry{a4paper, margin=2.5cm}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\usepackage{csquotes}
+\sloppy
+% =====================
+% Documento
+% =====================
+\setlength{\headheight}{14pt}
+\addtolength{\topmargin}{-2pt}
+\begin{document}
+\renewcommand{\figurename}{Ilustración} 
+{\textbf{\textcolor{azulOscuro}{INFORME PROYECTO}}}
+
+%===========================================================
+%===========================================================
+% --- Tabla de Datos ---
+%===========================================================
+%===========================================================
+
+{\setlength{\parskip}{0pt}
+\section{Datos Generales}
+}
+
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+Título del Informe: &  Aplicación Móvil para Optimización y Control de Entregas Logísticas - Packlead \\
+\hline
+Autor(a): & Carlos Hernández, Olivier Paspuel, Antonio Revilla, Frederick Tipán\\
+\hline
+Carrera: & Ingeniería en Software \\
+\hline
+Asignatura o Proyecto: & App de Logística con Geolocalización en Tiempo Real \\
+\hline
+Tutor o Supervisor: & Mgtr. Doris Karina Chicaiza Angamarca\\
+\hline
+Institución: & Universidad de las Fuerzas Armadas ESPE – Matriz Sangolquí \\
+\hline
+Fecha de entrega: & 10 de Febrero del 2026 \\
+\hline
+\end{tabularx}
+
+
+%===========================================================
+%===========================================================
+% --- Introducción ---
+%===========================================================
+%===========================================================
+
+\section{Introducción}
+El presente informe expone el desarrollo de una aplicación móvil enfocada en la gestión logística y el seguimiento en tiempo real de pedidos. Este tipo de sistema surge como una alternativa para optimizar los procesos de distribución, mejorar la trazabilidad de las entregas y brindar mayor visibilidad operativa tanto a administradores como a repartidores. A través del uso de herramientas de geolocalización y monitoreo constante, se busca apoyar una toma de decisiones más eficiente dentro del entorno logístico.
+
+El sistema creado tiene por nombre Packlead, combina herramientas modernas como Flutter para que funcione en diferentes plataformas, Firebase para manejar una base de datos que se actualiza en tiempo real, y servicios de mapas que muestran dónde están las entregas. Además, incluye librerías robustas como Riverpod y Dio para el manejo de estados y peticiones HTTP, respectivamente. Dando como resultado una mejor experiencia de desarrollo, pues se integraba bien con la arquitectura selecionada.
+
+En lo que respecta a cómo funciona, la app deja monitorear en vivo a los repartidores, asignar y manejar los pedidos, y ver los datos de logística a través de paneles para administradores. La estructura de la app se pensó con ideas de que sea fácil de mantener y de hacer crecer, lo que ayuda a agregar mejoras más adelante y ajustarla a diferentes situaciones de trabajo. En general, esta solución que propusimos ayuda a que los procesos de distribución logística sean más eficientes, transparentes y con mejor calidad en el servicio.
+\newpage
+
+%===========================================================
+%===========================================================
+% --- índice de Contenidos y Figuras ---
+%===========================================================
+%===========================================================
+
+\renewcommand{\contentsname}{Índice de Contenidos}
+{\setlength{\parskip}{0pt}
+\tableofcontents
+}
+
+\vspace{1.0cm}
+
+\renewcommand{\listfigurename}{Índice de Ilustraciones}
+{\setlength{\cftbeforefigskip}{2pt}
+\listoffigures
+}
+
+\newpage
+
+%===========================================================
+%===========================================================
+% --- Objetivos ---
+%===========================================================
+%===========================================================
+
+\section{Objetivos}
+\subsection{Objetivo General}
+Desarrollar una aplicación móvil orientada a la gestión logística y seguimiento de pedidos en tiempo real, utilizando tecnologías modernas como Flutter, Firebase y servicios de geolocalización, con el propósito de optimizar la supervisión de entregas, mejorar la eficiencia operativa y facilitar la toma de decisiones dentro de los procesos logísticos.
+
+\subsection{Objetivo Específicos}
+- Diseñar la arquitectura del sistema mediante un enfoque modular y desacoplado, para garantizar escalabilidad, mantenimiento eficiente y correcta organización de los componentes.
+
+- Implementar funcionalidades de monitoreo y gestión de pedidos en tiempo real, permitiendo la visualización de ubicaciones, estados de entrega y asignación de repartidores.
+
+- Desarrollar un panel de control con indicadores y visualización de datos logísticos, para apoyar la supervisión operativa y la toma de decisiones dentro del proceso de distribución.
+
+%===========================================================
+%===========================================================
+% --- Marco Teórico ---
+%===========================================================
+%===========================================================
+
+\section{Marco Teórico}
+\input{body/marco_teorico.tex}
+
+%===========================================================
+%===========================================================
+% --- Desarollo ---
+%===========================================================
+%===========================================================
+\section{Requisitos Funcionales y No Funcionales}
+\input{body/req.tex}
+
+%===========================================================
+%===========================================================
+% --- Desarollo ---
+%===========================================================
+%===========================================================
+
+\section{Desarrollo}
+
+El proyecto se encuentra cargado en el siguiente repositorio de GitHub: 
+
+\href{https://github.com/Saint-Roche-Microsystems/packlead.git}{\color{blue}\underline{https://github.com/Saint-Roche-Microsystems/packlead.git}}
+
+\input{body/desarrollo/prob1.tex}
+
+\section{Pruebas}
+
+\input{body/test.tex}
+
+
+%===========================================================
+%===========================================================
+% --- Conclusiones y Recomendaciones ---
+%===========================================================
+%===========================================================
+
+\section{Conclusiones y Recomendaciones}
+\input{body/conclusiones_recomendaciones.tex}
+
+%===========================================================
+%===========================================================
+% --- Referencias Bibliográficas ---
+%===========================================================
+%===========================================================
+
+\newpage
+\section{Referencias Bibliográficas}
+\printbibliography[heading=none]
+
+%===========================================================
+%===========================================================
+% --- Anexos ---
+%===========================================================
+%===========================================================
+
+\newpage
+\clearpage
+\section{Anexos}
+
+\subsection{Pantallas de ejecución}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=12cm, keepaspectratio]{img/App1.jpeg}
+    \caption{Mapa de repartidor en proceso de entregar una orden siguiendo una ruta}
+    \label{fig:ejecucción1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/App9.jpeg}
+    \caption{Mapa de repartidor confirmando el inicio de una ruta para una orden}
+    \label{fig:ejecucción2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/App2.jpeg}
+    \caption{Dashboard del administrador para ver el resumen de las órdenes del día}
+    \label{fig:ejecucción3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/App8.jpeg}
+    \caption{Snackbar de éxito mostrando que el repartidor se creó correctamente}
+    \label{fig:ejecucción4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/App7.jpeg}
+    \caption{Lista extendida de todas las órdenes asignadas a un repartidor}
+    \label{fig:ejecucción5}
+\end{figure}
+
+\subsection{Manejo de errores}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/Err1.jpeg}
+    \caption{Inicio de credenciales requerido en login}
+    \label{fig:error1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/Err6.jpeg}
+    \caption{Credenciales inválidas en login}
+    \label{fig:error2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/Err2.jpeg}
+    \caption{Error al cargar las órdenes del repartidor en su vista principal}
+    \label{fig:error3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/Err3.jpeg}
+    \caption{Repartidores no registrados}  Ni me compilaba cuando ingresé antes
+    \label{fig:error4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/Err4.jpeg}
+    \caption{Repartidores no activos para visualización de mapa en tiempo real}
+    \label{fig:error5}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6 \textwidth, height=10cm, keepaspectratio]{img/Err5.jpeg}
+    \caption{Campos incompletos en formulario para agregar orden}
+    \label{fig:error6}
+\end{figure}
+
+\end{document}
