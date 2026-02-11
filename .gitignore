@@ -48,3 +48,15 @@ app.*.map.json
 
 firebase.json
 google-services.json
+
+# Latex Builds
+docs/build/
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+*.synctex.gz

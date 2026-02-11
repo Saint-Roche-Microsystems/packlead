@@ -1,0 +1,17 @@
+\subsection{Conclusiones}
+\begin{itemize}
+    \item La arquitectura modular que usamos en el proyecto nos permitió dividir todo bien claro. La lógica del negocio va por un lado, el manejo de los datos por otro y la interfaz queda separada. Gracias a eso mantener el sistema resulta mucho más fácil, se cometen menos errores porque las partes no se interfieren entre sí y si más adelante hay que crecer o agregar funcionalidades nuevas se puede hacer sin tocar ni romper lo que ya está funcionando.
+    
+    \item El uso de Firebase Realtime Database combinado con el patrón Repository nos permitió sincronizar de forma rápida y sin fallos los pedidos, sus estados y las ubicaciones. Gracias a eso tanto los administradores como los repartidores siempre trabajan con la información más reciente y actualizada en tiempo real.
+
+    \item La integración del sistema de geolocalización y monitoreo en vivo nos ayudó muchísimo a mejorar el control de toda la logística. Ahora se puede ver en tiempo real las rutas que siguen los repartidores, el estado actual de cada entrega y exactamente dónde está cada uno. Esto hace que sea mucho más fácil tomar decisiones operativas rápidas y acertadas para que todo funcione mejor.
+\end{itemize}
+
+\subsection{Recomendaciones}
+\begin{itemize}
+    \item Hay que seguir mejorando la arquitectura modular del proyecto. Para eso, lo ideal es ir agregando pruebas automatizadas y también una buena documentación técnica. De esta forma se mantiene todo más estable, se evitan problemas inesperados y cuando toque hacer mejoras o agregar cosas nuevas en el futuro, va a ser mucho más fácil y rápido.
+
+    \item Se recomienda optimizar cómo se maneja la data en tiempo real. Para eso, lo mejor es monitorear bien el rendimiento, controlar que las sincronizaciones vayan fluidas y ver si se pueden mejorar las actualizaciones para que sean más eficientes. Así se evita que la información se vuelva inconsistente entre los dispositivos.
+    
+    \item Se sugiere ampliar las partes de análisis y visualización de la app, agregando más KPIs, reportes detallados y métricas relacionadas con la logística. De esta forma se ayuda a planificar mejor las operaciones y los administradores pueden tomar decisiones con información más clara y completa, en lugar de ir a ciegas.
+\end{itemize}

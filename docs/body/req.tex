@@ -1,0 +1,105 @@
+\subsection{Descripción del Sistema}
+La app \textbf{Packlead} es una aplicación móvil pensada para seguir los pedidos en tiempo real, sobre todo para mejorar todo lo que tiene que ver con la entrega de última milla en logística.
+Está hecha con una arquitectura modular, o sea que separa bien la lógica del negocio (las reglas y procesos importantes) de la parte técnica de infraestructura. Así se maneja fácil los diferentes roles: por un lado los administradores y por otro los repartidores o dispatchers. Esta forma de organizarlo hace que el sistema sea más fácil de escalar, de mantener a largo plazo y de entender quién hace qué en la plataforma.
+
+\subsubsection{Propósito}
+El propósito principal de Packlead es ser una solución completa para manejar la logística de entregas, haciendo más fácil controlar todo lo que pasa en las operaciones y tener siempre una vista clara de los procesos. La plataforma te deja gestionar desde un solo lugar tanto los pedidos como a los repartidores, usando una interfaz pensada especialmente para el control.
+
+Además, ofrece visibilidad en tiempo real del estado de los pedidos y de la ubicación de los repartidores, ayudando a optimizar los tiempos de entrega y a tomar decisiones rápidas en el día a día. Por último, el sistema mantiene todo sincronizado entre el servidor y los dispositivos móviles gracias a tecnologías en la nube, garantizando que la información esté siempre actualizada y consistente para todos.
+
+\subsubsection{Alcance}
+La aplicación incluye varias funcionalidades clave para manejar de forma completa los pedidos y la distribución. Entre las más importantes están:
+
+\begin{itemize}
+    \item El \textbf{Módulo administrativo}, que permite crear y gestionar a los repartidores, generar órdenes nuevas y ver indicadores clave de desempeño con gráficos fáciles de entender.
+    \item El \textbf{Seguimiento geográfico}, que integra mapas interactivos para mostrar las rutas y los puntos de entrega en tiempo real.
+    \item La \textbf{Gestión del ciclo de vida} de las órdenes, que controla con detalle los diferentes estados por los que pasa cada pedido, como pendiente, en camino o entregado.
+    \item El \textbf{Esquema multiperfil}, que maneja la autenticación de forma diferente según el rol del usuario y adapta los flujos de trabajo a cada tipo de perfil.
+\end{itemize}
+
+\subsubsection{Límites y Exclusiones}
+En su configuración actual, el sistema tiene algunas limitaciones importantes que hay que tener en cuenta al usarlo. Todo depende mucho de servicios de terceros, sobre todo de Google Maps Platform y Firebase, así que si alguno de estos falla o se cae, la app puede dejar de funcionar correctamente o interrumpirse por completo.
+Además, como usa Firebase Realtime Database, necesita que el celular tenga internet todo el tiempo para actualizar las coordenadas y sincronizar la información entre el servidor y los repartidores. El seguimiento de la ubicación se basa solo en el GPS del teléfono del repartidor, por lo que la precisión puede variar dependiendo del modelo del celular o de las condiciones del momento. Por último, en la versión actual no hay integración de pasarelas de pago ni nada para manejar transacciones financieras directamente desde la plataforma.
+
+\subsubsection{Componentes Principales}
+El sistema está organizado en cuatro componentes principales que se ven bien claros en cómo está hecho técnicamente.
+
+\begin{itemize}
+    \item El primero es el \textbf{núcleo de gestión de estado}, que usa Riverpod para manejar el flujo de los datos y para que la interfaz reaccione rápido cada vez que algo cambia.
+    \item El segundo es la \textbf{capa de servicios de ubicación}, que combina Geolocator para sacar las coordenadas del GPS y Google Maps para mostrar todo en un mapa de forma visual.
+    \item El tercero es el \textbf{motor de comunicación}, que se apoya en librerías como Dio y Http para hacer las peticiones asíncronas a las APIs externas sin que la app se trabe.
+    \item El cuarto es la \textbf{infraestructura en la nube}, basada en Firebase, que sirve como el lugar central donde se guardan las rutas en tiempo real y se sincronizan todos los datos entre el servidor y los móviles.
+\end{itemize}
+
+\subsection{Casos de Uso}
+Para dejar bien claro cómo interactúan los usuarios con el sistema Packlead, se definen varios casos de uso. Estos casos explican las funciones principales que tienen los administradores y los repartidores (o dispatchers), enfocándose en las operaciones más importantes para manejar la logística, seguir los pedidos y controlar todo el proceso de entregas.
+
+Definir estos casos de uso ayuda a organizar los requisitos funcionales del sistema, facilita analizarlo mejor y sirve de guía sólida para el diseño, la programación y las pruebas que se hagan después.
+
+\begin{table}[H]
+\centering
+\caption{Matriz de Casos de Uso de Packlead}
+\vspace{3mm}
+\begin{tabularx}{\textwidth}{l l L}
+\toprule
+\textbf{Código} & \textbf{Nombre del Caso de Uso} & \textbf{Descripción Técnica} \\
+\midrule
+UC-01 & Autenticar Usuario & Permite a administradores y dispatchers acceder al sistema mediante validación de credenciales utilizando el módulo \texttt{auth\_provider.dart}. \\
+\addlinespace
+UC-02 & Registrar Pedido & El administrador ingresa los datos del pedido (cliente, teléfono, zona, fecha y ubicación), inicializándolo en estado \textit{pending}. \\
+\addlinespace
+UC-03 & Asignar Dispatcher & El administrador asocia un \texttt{dispatcherId} a un pedido existente para habilitar su visualización en la hoja de ruta. \\
+\addlinespace
+UC-04 & Gestionar Repartidores & Permite crear, editar y visualizar perfiles, así como monitorear su estado (\textit{available/inactive}). \\
+\addlinespace
+UC-05 & Consultar Hoja de Ruta & El dispatcher visualiza los pedidos asignados pendientes de entrega según su identificador. \\
+\addlinespace
+UC-06 & Actualizar Estado & El dispatcher actualiza el estado del pedido siguiendo el flujo \textit{pending $\rightarrow$ shipped $\rightarrow$ delivered}. \\
+\addlinespace
+UC-07 & Cambiar Disponibilidad & El dispatcher puede modificar su estado operativo para recibir o pausar asignaciones. \\
+\addlinespace
+UC-08 & Visualizar Seguimiento & El administrador supervisa en tiempo real o mediante historial la ubicación y progreso de las entregas. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Reglas de Negocio}
+Las reglas de negocio establecen restricciones operativas que garantizan la coherencia del proceso logístico, la integridad de los datos y la correcta aplicación de los roles dentro del sistema.
+
+\begin{table}[H]
+\centering
+\caption{Reglas de Negocio del Sistema Logístico}
+\vspace{3mm}
+\begin{tabularx}{\textwidth}{l p{4cm} L}
+\toprule
+\textbf{Código} & \textbf{Regla de Negocio} & \textbf{Descripción} \\
+\midrule
+RN-01 & Ciclo de Vida del Pedido & Cada pedido solo puede adoptar tres estados: pendiente, en ruta y entregado, definidos mediante el \texttt{enum OrderState}. \\
+RN-02 & Asignación de Roles & Segregación estricta según \texttt{UserRole} (admin, dispatcher, none). Rol \textit{none} no posee acceso operativo. \\
+RN-03 & Geolocalización Obligatoria & No se permite registrar pedidos sin coordenadas válidas (latitud/longitud). \\
+RN-04 & Estado de Repartidor & Repartidores en estado inactivo no son elegibles para nuevas asignaciones. \\
+RN-05 & Integridad Temporal & Almacenamiento de fechas en formato ISO 8601 para interoperabilidad entre Flutter y Backend. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Requisitos No Funcionales}
+Los requisitos no funcionales definen atributos de calidad y restricciones técnicas que influyen directamente en el rendimiento, seguridad y mantenibilidad.
+
+\begin{table}[H]
+\centering
+\caption{Especificación de Requisitos No Funcionales}
+\vspace{3mm}
+\begin{tabularx}{\textwidth}{l l L}
+\toprule
+\textbf{Código} & \textbf{Categoría} & \textbf{Requisito} \\
+\midrule
+RNF-01 & Arquitectura & Implementación reactiva basada en \textbf{Riverpod} para gestión de estado desacoplada. \\
+RNF-02 & Portabilidad & Ejecución multiplataforma en Android e iOS mediante el framework \textbf{Flutter}. \\
+RNF-03 & Persistencia & Integración con \textbf{Firebase} para sincronización en tiempo real y almacenamiento \textit{cloud}. \\
+RNF-04 & Usabilidad / UI & Soporte dinámico para modo claro y oscuro según la configuración del SO. \\
+RNF-05 & Configuración Segura & Uso de archivos \texttt{.env} y scripts para manejo de claves API, evitando \textit{hardcoding}. \\
+RNF-06 & Robustez & Manejo de rutas inexistentes mediante pantalla \texttt{ScreenNotFound} para evitar cierres inesperados. \\
+\bottomrule
+\end{tabularx}
+\end{table}
