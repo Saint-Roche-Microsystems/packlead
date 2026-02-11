@@ -75,56 +75,7 @@ lib/
 
 ## Data Flow Diagram
 
-```mermaid
-flowchart LR
- subgraph UI["Flutter UI"]
-        Login["Login Screen"]
-        Admin["Admin Views"]
-        Dispatcher["Dispatcher View"]
-        MapUI["Maps UI"]
-  end
- subgraph State["Riverpod State"]
-        AuthProvider["Auth Provider"]
-        OrdersProvider["Orders Providers"]
-        DispatchersProvider["Dispatchers Providers"]
-        TrackingProvider["Live Tracking Provider"]
-        LocationProvider["Dispatcher Location Provider"]
-  end
- subgraph Domain["Repositories"]
-        AuthRepo["Auth Repository"]
-        OrdersRepo["Orders Repository"]
-        DispatcherRepo["Dispatcher Repository"]
-  end
- subgraph Data["Datasources"]
-        AuthDS["Auth Datasource"]
-        OrdersDS["Orders Datasource"]
-        DispatcherDS["Dispatcher Datasource"]
-  end
- subgraph Services["External Services"]
-        OrdersAPI["Orders API"]
-        DispatchersAPI["Dispatchers API"]
-        AuthAPI["Auth API"]
-        FirebaseRTDB["Firebase RTDB"]
-        Geo["Device Location"]
-        Maps["Google Maps"]
-  end
-    Login --> AuthProvider
-    AuthProvider --> AuthRepo
-    AuthRepo --> AuthDS
-    AuthDS -- Mock or API --> AuthAPI
-    Admin --> OrdersProvider & TrackingProvider & DispatchersProvider
-    OrdersProvider --> OrdersRepo & MapUI
-    OrdersRepo --> OrdersDS
-    OrdersDS -- Mock or API --> OrdersAPI
-    TrackingProvider --> FirebaseRTDB & MapUI
-    Dispatcher --> OrdersProvider & LocationProvider & Geo
-    DispatchersProvider --> DispatcherRepo
-    DispatcherRepo --> DispatcherDS
-    DispatcherDS -- Mock or API --> DispatchersAPI
-    LocationProvider --> FirebaseRTDB
-    Geo --> LocationProvider
-    MapUI --> Maps
-```
+<img src="docs/diagrams/data_flow.svg" alt="Data flow diagram" style="width: 100%; height: auto;" />
 
 ## Integrations
 
