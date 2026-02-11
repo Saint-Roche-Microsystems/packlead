@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/srmc_hq.dart';
+import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_location_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_route_provider.dart';
-import 'package:packlead/features/dispatcher/presentation/screens/home_screen_error.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/order_bottom_sheet.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/route_tracking_map.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/status_tracking_badge.dart';
@@ -105,7 +105,11 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
       body: homeState.when(
         data: (state) => _buildContent(context, state),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => HomeScreenError(errorMsg: error.toString(), dispatcherId: widget.dispatcherId),
+        error: (error, stackTrace) => ErrorScreen(
+          title: 'Error al cargar tus órdenes',
+          message: error.toString(),
+          onRetry: () => ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(widget.dispatcherId),
+        ),
       ),
     );
   }

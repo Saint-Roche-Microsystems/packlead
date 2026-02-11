@@ -18,10 +18,12 @@ class OrdersDonutChart extends StatelessWidget {
   static const colorPending = SaintColors.warning;
   static const colorInRoute = SaintColors.primary;
   static const colorCompleted = SaintColors.success;
+  static const colorEmpty = Colors.grey;
 
   @override
   Widget build(BuildContext context) {
     final total = pending + inRoute + completed;
+    final isEmpty = total == 0;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -47,31 +49,51 @@ class OrdersDonutChart extends StatelessWidget {
               PieChartData(
                 centerSpaceRadius: 55,
                 sectionsSpace: 2,
-                sections: [
-                  _buildSection(
-                    value: pending.toDouble(),
-                    color: colorPending,
-                    title: _percentage(pending, total),
-                  ),
-                  _buildSection(
-                    value: inRoute.toDouble(),
-                    color: colorInRoute,
-                    title: _percentage(inRoute, total),
-                  ),
-                  _buildSection(
-                    value: completed.toDouble(),
-                    color: colorCompleted,
-                    title: _percentage(completed, total),
-                  ),
-                ],
+                sections: isEmpty ? _buildEmptySections() : _buildDataSections(total),
               ),
             ),
           ),
           const SizedBox(height: 16),
-          _buildLegend(),
+          _buildLegend(isEmpty),
         ],
       ),
     );
+  }
+
+  List<PieChartSectionData> _buildEmptySections() {
+    return [
+      PieChartSectionData(
+        value: 1,
+        color: colorEmpty,
+        radius: 40,
+        title: '0%',
+        titleStyle: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    ];
+  }
+
+  List<PieChartSectionData> _buildDataSections(int total) {
+    return [
+      _buildSection(
+        value: pending.toDouble(),
+        color: colorPending,
+        title: _percentage(pending, total),
+      ),
+      _buildSection(
+        value: inRoute.toDouble(),
+        color: colorInRoute,
+        title: _percentage(inRoute, total),
+      ),
+      _buildSection(
+        value: completed.toDouble(),
+        color: colorCompleted,
+        title: _percentage(completed, total),
+      ),
+    ];
   }
 
   PieChartSectionData _buildSection({
@@ -97,7 +119,17 @@ class OrdersDonutChart extends StatelessWidget {
     return '${((value / total) * 100).round()}%';
   }
 
-  Widget _buildLegend() {
+  Widget _buildLegend(bool isEmpty) {
+    if(isEmpty) {
+      return const Text(
+        'No hay pedidos registrados aún',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.grey,
+        ),
+      );
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
