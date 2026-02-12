@@ -134,6 +134,11 @@ class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
     }
   }
 
+  /// Refresh data
+  Future<void> refresh() async {
+    _ref.invalidate(dispatchersByStateProvider);
+  }
+
   // Reset state to default
   void resetState() {
     state = const AsyncValue.data(null);

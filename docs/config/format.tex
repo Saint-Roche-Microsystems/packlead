@@ -1,0 +1,170 @@
+% =====================
+% --- Bloques de código ---
+% =====================
+% Definir colores para sintaxis Dart
+\definecolor{keywordColor}{RGB}{0,0,180}   % azul para keywords
+\definecolor{stringColor}{RGB}{163,21,21}  % rojo para strings
+\definecolor{commentColor}{RGB}{0,128,0}   % verde para comentarios
+
+% Configuración de listings para Dart
+\lstdefinelanguage{Dart}{
+  keywords={abstract, as, assert, async, await, break, case, catch, class, const,
+            continue, covariant, default, defer, do, else, enum, export, extends,
+            external, factory, false, final, finally, for, Function, get, if, implements,
+            import, in, interface, is, late, library, mixin, new, null, on, operator,
+            part, required, rethrow, return, set, show, static, super, switch, sync, 
+            this, throw, true, try, typedef, var, void, while, with, yield},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  string=[b]",
+}
+
+\lstset{
+  literate={á}{{\'a}}1
+           {é}{{\'e}}1
+           {í}{{\'i}}1
+           {ó}{{\'o}}1
+           {ú}{{\'u}}1
+           {Á}{{\'A}}1
+           {É}{{\'E}}1
+           {Í}{{\'I}}1
+           {Ó}{{\'O}}1
+           {Ú}{{\'U}}1
+           {ñ}{{\~n}}1
+           {Ñ}{{\~N}}1
+           {¡}{{!`}}1
+           {¿}{{?`}}1,
+  language=Dart,
+  basicstyle=\ttfamily\fontsize{11}{13}\selectfont, % Consolas 11pt
+  keywordstyle=\color{keywordColor}\bfseries,
+  stringstyle=\color{stringColor},
+  commentstyle=\color{commentColor}\itshape,
+  showstringspaces=false,
+  tabsize=4,
+  breaklines=true,
+  numbers=none,
+  frame=single,
+  rulecolor=\color{black},
+  linewidth=\textwidth,
+  framerule=0.1pt,
+  xleftmargin=0pt,
+  xrightmargin=0pt,
+  captionpos=b
+}
+
+% Configuración de lstinline
+\definecolor{inlinebg}{RGB}{240,240,240}       % gris claro
+\definecolor{inlineborder}{RGB}{200,200,200}
+
+\let\oldlstinline\lstinline
+\renewcommand{\lstinline}[1]{%
+  \colorbox{inlinebg!80!white}{%
+    \setlength{\fboxsep}{1pt}%
+    \textcolor{black}{\ttfamily\fontsize{11}{13}\selectfont #1}%
+  }%
+}
+
+% =====================
+% --- Bibliografía ---
+% =====================
+\addbibresource{ref.bib}  
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,     % enlaces internos (capítulos, secciones) en negro
+    citecolor=black,     % enlaces de citas en negro
+    urlcolor=black       % enlaces de URLs en negro
+}
+
+% =====================
+% --- Márgenes ---
+% =====================
+\geometry{
+  top=2.54cm,
+  bottom=2.54cm,
+  left=3.17cm,
+  right=3.17cm
+}
+
+% =====================
+% --- Fuente Arial (Helvética) ---
+% =====================
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand\normalsize{\fontsize{11}{13}\selectfont}
+
+% =====================
+% --- Espaciado general ---
+% =====================
+\setstretch{1.5}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{16pt}
+
+% =====================
+% Encabezado y numeración
+% =====================
+\pagestyle{fancy}
+\fancyhf{} % limpia encabezados/pies
+\fancyhead[R]{\thepage} % número de página arriba a la derecha
+\renewcommand{\headrulewidth}{0pt} % sin línea inferior
+
+% =====================
+% Colores institucionales
+% =====================
+\definecolor{azulOscuro}{RGB}{54,95,145}  % para Título1
+\definecolor{azulClaro}{RGB}{79,129,189}  % para Título2
+\definecolor{negro}{RGB}{0,0,0}
+
+% =====================
+% --- Formato de Figuras ---
+% =====================
+\captionsetup[figure]{
+    labelfont={bf, color=azulClaro},
+    textfont={color=azulClaro, small},
+    justification=centering,
+    labelsep=space
+}
+
+\graphicspath{{img/}}
+
+% =====================
+% Formato de Título1 (chapters) y Título2 (sections)
+% =====================
+
+% -- Título 1 --
+\titleformat{\section}[hang]
+  {\bfseries\color{azulOscuro}\fontsize{14}{16}\selectfont}
+  {\thesection.}
+  {1em}
+  {}
+\titlespacing*{\section}{0pt}{24pt}{{-16pt}}  % espaciado "antes" 24pt, "después" 12pt
+
+% -- Título 2 --
+\titleformat{\subsection}[hang]
+  {\bfseries\color{azulClaro}\fontsize{12}{14}\selectfont}
+  {\thesubsection.}
+  {0.8em}
+  {}
+\titlespacing*{\subsection}{0pt}{10pt}{{-16pt}}  % espaciado "antes" 10pt, "después" 0pt
+
+% =====================
+% Índice de contenidos dinámico
+% =====================
+\setcounter{tocdepth}{2} % muestra capítulos y secciones en el índice
+\hypersetup{
+    colorlinks=true,
+    linkcolor=negro,
+    urlcolor=negro
+}
+
+% Hacer que las secciones tengan puntos hasta el número de página
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+
+% =====================
+% Índice de figuras dinámico
+% =====================
+\renewcommand{\cftfigpresnum}{Ilustración\ }
+\setlength{\cftfignumwidth}{3cm}
+\renewcommand{\cftfigleader}{\cftdotfill{\cftdotsep}}
