@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/features/auth/data/datasources/auth_datasource.dart';
-import 'package:packlead/features/auth/data/datasources/auth_mock_datasource.dart';
+import 'package:packlead/features/auth/data/datasources/firebase_auth_datasource.dart';
 import 'package:packlead/features/auth/data/repositories/auth_repository.dart';
 import 'package:packlead/features/auth/data/repositories/auth_repository_imp.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_state.dart';
@@ -11,11 +11,10 @@ import 'package:packlead/features/auth/presentation/providers/auth_state.dart';
 
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
   // Dev ONLY - use mock data
-  return AuthMockDataSource();
+  //return AuthMockDataSource();
 
-  // Use real API service
-  // final apiClient = ref.watch(authApiClientProvider);
-  // return AuthApiDataSource(apiClient);
+  // Use Firebase Auth
+  return FirebaseAuthDataSource();
 });
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
