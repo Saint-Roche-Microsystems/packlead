@@ -2,7 +2,7 @@ name: packlead
 description: "Ordering tracking app"
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.1.0+1
 
 environment:
   sdk: ^3.9.2
@@ -21,6 +21,8 @@ dependencies:
   dio: ^5.9.1
   firebase_core: ^4.4.0
   firebase_database: ^12.1.2
+  firebase_auth: ^6.3.0
+  cloud_firestore: ^6.2.0
   url_launcher: ^6.3.2
   intl: ^0.20.2
   dartz: ^0.10.1
