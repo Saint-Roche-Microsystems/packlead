@@ -67,7 +67,7 @@ class Order {
       'address': address,
       'state': state.name,
       'zone': zone,
-      'deliveryDate': DateFormatter.formatForBackend(deliveryDate),
+      'deliveryDate': DateFormatter.formatDateTimeUTC(deliveryDate),
       'createdAt': createdAt.toIso8601String(),
     };
   }

@@ -54,7 +54,7 @@ class OrderApiDataSource implements OrderDataSource {
   Future<List<Order>> getOrdersByDate(DateTime date) async {
     try {
       // Format date to YYYY-MM-DD
-      final dateString = DateFormatter.formatForBackend(date);
+      final dateString = DateFormatter.formatDateUTC(date);
 
       return await _apiClient.getOrders(
         deliveryDate: dateString,
