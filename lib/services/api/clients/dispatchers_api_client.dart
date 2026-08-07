@@ -9,10 +9,10 @@ class DispatchersApiClient {
 
   DispatchersApiClient(this._client);
 
-  /// GET /dispatchers (admin)
+  /// GET /dispatchers (admin) - backend returns a plain JSON array
   Future<List<Dispatcher>> getDispatchers() async {
     try {
-      final response = await _client.get<Map<String, dynamic>>('/dispatchers');
+      final response = await _client.get<List<dynamic>>('/dispatchers');
       return _parseDispatcherList(response);
     } on ApiException {
       rethrow;
@@ -47,12 +47,7 @@ class DispatchersApiClient {
         data: payload,
       );
 
-      final data = response['data'];
-      if (data is! Map<String, dynamic>) {
-        throw ApiException(DispatchersApiErrors.invalidCreateDispatcherResponse);
-      }
-
-      return data;
+      return response;
     } on ApiException {
       rethrow;
     } catch (e, st) {
@@ -100,27 +95,14 @@ class DispatchersApiClient {
   /// **************
   /// ** Parsers ***
   /// **************
-
-  List<Dispatcher> _parseDispatcherList(Map<String, dynamic> response) {
-    final data = response['data'];
-
-    if (data is! List) {
-      throw ApiException(DispatchersApiErrors.invalidDispatcherListResponse);
-    }
-
-    return data
+  List<Dispatcher> _parseDispatcherList(List<dynamic> response) {
+    return response
         .whereType<Map<String, dynamic>>()
         .map((json) => Dispatcher.fromJson(json))
         .toList();
   }
 
   Dispatcher _parseDispatcher(Map<String, dynamic> response) {
-    final data = response['data'];
-
-    if (data is! Map<String, dynamic>) {
-      throw ApiException(DispatchersApiErrors.invalidDispatcherResponse);
-    }
-
-    return Dispatcher.fromJson(data);
+    return Dispatcher.fromJson(response);
   }
 }

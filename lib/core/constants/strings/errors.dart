@@ -9,9 +9,6 @@ class OrdersApiErrors {
 
   static const orderIdRequired = 'ID de pedido es requerido';
   static const payloadRequired = 'Payload no puede estar vacío';
-
-  static const invalidOrderListResponse = 'Formato de respuesta inválido para lista de pedidos';
-  static const invalidOrderResponse = 'Formato de respuesta inválido para pedido';
 }
 
 class DispatchersApiErrors {
@@ -24,8 +21,4 @@ class DispatchersApiErrors {
   static const deleteDispatcher = 'Error al eliminar repartidor';
 
   static const dispatcherIdRequired = 'ID de repartidor es requerido';
-
-  static const invalidDispatcherListResponse = 'Formato de respuesta inválido para lista de repartidores';
-  static const invalidDispatcherResponse = 'Formato de respuesta inválido para repartidor';
-  static const invalidCreateDispatcherResponse = 'Formato de respuesta inválido al crear repartidor';
 }

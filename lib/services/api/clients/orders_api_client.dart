@@ -28,8 +28,7 @@ class OrdersApiClient {
       if (zone != null) queryParameters['zone'] = zone;
       if (limit != null) queryParameters['limit'] = limit.toString();
 
-      // Do the request
-      final response = await _client.get<Map<String, dynamic>>(
+      final response = await _client.get<List<dynamic>>(
         '/orders',
         queryParameters: queryParameters,
       );
@@ -120,27 +119,14 @@ class OrdersApiClient {
   /// **************
   /// ** Parsers ***
   /// **************
-
-  List<Order> _parseOrderList(Map<String, dynamic> response) {
-    final data = response['data'];
-
-    if (data is! List) {
-      throw ApiException(OrdersApiErrors.invalidOrderListResponse);
-    }
-
-    return data
+  List<Order> _parseOrderList(List<dynamic> response) {
+    return response
         .whereType<Map<String, dynamic>>()
         .map((json) => Order.fromJson(json))
         .toList();
   }
 
   Order _parseOrder(Map<String, dynamic> response) {
-    final data = response['data'];
-
-    if (data is! Map<String, dynamic>) {
-      throw ApiException(OrdersApiErrors.invalidOrderResponse);
-    }
-
-    return Order.fromJson(data);
+    return Order.fromJson(response);
   }
 }
