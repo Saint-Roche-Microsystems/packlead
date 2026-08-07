@@ -4,7 +4,7 @@ class ApiConfig {
   ApiConfig._();
 
   /// Base URLs
-  static String get ordersBaseUrl => EnvConfig.ordersApiBaseUrl;
+  static String get apiBaseUrl => EnvConfig.apiBaseUrl;
 
   /// Global Timeouts
   static const Duration connectTimeout = Duration(seconds: 30);
