@@ -1,0 +1,68 @@
+import 'package:packlead/core/constants/dispatcher_state.dart';
+import 'package:packlead/core/models/dispatcher.dart';
+import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasource.dart';
+import 'package:packlead/services/api/clients/dispatchers_api_client.dart';
+
+class DispatcherApiDataSource implements DispatcherDatasource {
+  final DispatchersApiClient _apiClient;
+
+  DispatcherApiDataSource(this._apiClient);
+
+  @override
+  Future<List<Dispatcher>> getAllDispatchers() async {
+    try {
+      return await _apiClient.getDispatchers();
+    } catch (e) {
+      throw Exception('Error al obtener todos los dispatchers: $e');
+    }
+  }
+
+  @override
+  Future<List<Dispatcher>> getDispatchersByState(DispatcherState state) async {
+    try {
+      final dispatchers = await _apiClient.getDispatchers();
+      return dispatchers.where((dispatcher) => dispatcher.state == state).toList();
+    } catch (e) {
+      throw Exception('Error al obtener dispatchers por estado: $e');
+    }
+  }
+
+  @override
+  Future<Dispatcher> getDispatcherById(String id) async {
+    try {
+      return await _apiClient.getDispatcher(id);
+    } catch (e) {
+      throw Exception('Error al obtener dispatcher por ID: $e');
+    }
+  }
+
+  @override
+  Future<Dispatcher> createDispatcher(Dispatcher dispatcher) async {
+    try {
+      final payload = dispatcher.toJson();
+      final data = await _apiClient.createDispatcher(payload);
+      return Dispatcher.fromJson(data);
+    } catch (e) {
+      throw Exception('Error al crear dispatcher: $e');
+    }
+  }
+
+  @override
+  Future<Dispatcher> updateDispatcher(Dispatcher dispatcher) async {
+    try {
+      final payload = dispatcher.toJson();
+      return await _apiClient.updateDispatcher(dispatcher.id, payload);
+    } catch (e) {
+      throw Exception('Error al actualizar dispatcher: $e');
+    }
+  }
+
+  @override
+  Future<void> deleteDispatcher(String id) async {
+    try {
+      await _apiClient.deleteDispatcher(id);
+    } catch (e) {
+      throw Exception('Error al eliminar dispatcher: $e');
+    }
+  }
+}
