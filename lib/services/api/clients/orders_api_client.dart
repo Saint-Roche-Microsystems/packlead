@@ -1,4 +1,6 @@
+import 'package:packlead/core/constants/strings/errors.dart';
 import 'package:packlead/core/models/order.dart';
+import 'package:packlead/core/utils/app_logger.dart';
 import 'package:packlead/services/api/base/api_exception.dart';
 import 'package:packlead/services/api/base/base_api_client.dart';
 
@@ -36,15 +38,16 @@ class OrdersApiClient {
       return _parseOrderList(response);
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al obtener órdenes: $e');
+    } catch (e, st) {
+      AppLogger.error(OrdersApiErrors.getOrders, error: e, stackTrace: st);
+      throw ApiException(OrdersApiErrors.getOrders);
     }
   }
 
   /// GET /orders/:id
   Future<Order> getOrder(String orderId) async {
     if (orderId.isEmpty) {
-      throw ArgumentError('Order ID es requerido');
+      throw ArgumentError(OrdersApiErrors.orderIdRequired);
     }
 
     try {
@@ -52,8 +55,9 @@ class OrdersApiClient {
       return _parseOrder(response);
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al obtener orden: $e');
+    } catch (e, st) {
+      AppLogger.error(OrdersApiErrors.getOrder, error: e, stackTrace: st);
+      throw ApiException(OrdersApiErrors.getOrder);
     }
   }
 
@@ -67,19 +71,20 @@ class OrdersApiClient {
       return _parseOrder(response);
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al crear orden: $e');
+    } catch (e, st) {
+      AppLogger.error(OrdersApiErrors.createOrder, error: e, stackTrace: st);
+      throw ApiException(OrdersApiErrors.createOrder);
     }
   }
 
   /// PUT /orders/:id
   Future<Order> updateOrder(String orderId, Map<String, dynamic> payload) async {
     if (orderId.isEmpty) {
-      throw ArgumentError('Order ID es requerido');
+      throw ArgumentError(OrdersApiErrors.orderIdRequired);
     }
 
     if (payload.isEmpty) {
-      throw ArgumentError('Payload no puede estar vacío');
+      throw ArgumentError(OrdersApiErrors.payloadRequired);
     }
 
     try {
@@ -90,23 +95,25 @@ class OrdersApiClient {
       return _parseOrder(response);
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al actualizar orden: $e');
+    } catch (e, st) {
+      AppLogger.error(OrdersApiErrors.updateOrder, error: e, stackTrace: st);
+      throw ApiException(OrdersApiErrors.updateOrder);
     }
   }
 
   /// DELETE /orders/:id
   Future<void> deleteOrder(String orderId) async {
     if (orderId.isEmpty) {
-      throw ArgumentError('Order ID es requerido');
+      throw ArgumentError(OrdersApiErrors.orderIdRequired);
     }
 
     try {
       await _client.delete('/orders/$orderId');
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al eliminar orden: $e');
+    } catch (e, st) {
+      AppLogger.error(OrdersApiErrors.deleteOrder, error: e, stackTrace: st);
+      throw ApiException(OrdersApiErrors.deleteOrder);
     }
   }
 
@@ -118,7 +125,7 @@ class OrdersApiClient {
     final data = response['data'];
 
     if (data is! List) {
-      throw ApiException('Formato de respuesta inválido para lista de órdenes');
+      throw ApiException(OrdersApiErrors.invalidOrderListResponse);
     }
 
     return data
@@ -131,7 +138,7 @@ class OrdersApiClient {
     final data = response['data'];
 
     if (data is! Map<String, dynamic>) {
-      throw ApiException('Formato de respuesta inválido para orden');
+      throw ApiException(OrdersApiErrors.invalidOrderResponse);
     }
 
     return Order.fromJson(data);

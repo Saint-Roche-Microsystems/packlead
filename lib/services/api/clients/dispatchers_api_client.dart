@@ -1,4 +1,6 @@
+import 'package:packlead/core/constants/strings/errors.dart';
 import 'package:packlead/core/models/dispatcher.dart';
+import 'package:packlead/core/utils/app_logger.dart';
 import 'package:packlead/services/api/base/api_exception.dart';
 import 'package:packlead/services/api/base/base_api_client.dart';
 
@@ -14,15 +16,16 @@ class DispatchersApiClient {
       return _parseDispatcherList(response);
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al obtener dispatchers: $e');
+    } catch (e, st) {
+      AppLogger.error(DispatchersApiErrors.getDispatchers, error: e, stackTrace: st);
+      throw ApiException(DispatchersApiErrors.getDispatchers);
     }
   }
 
   /// GET /dispatchers/:id (admin)
   Future<Dispatcher> getDispatcher(String dispatcherId) async {
     if (dispatcherId.isEmpty) {
-      throw ArgumentError('Dispatcher ID es requerido');
+      throw ArgumentError(DispatchersApiErrors.dispatcherIdRequired);
     }
 
     try {
@@ -30,8 +33,9 @@ class DispatchersApiClient {
       return _parseDispatcher(response);
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al obtener dispatcher: $e');
+    } catch (e, st) {
+      AppLogger.error(DispatchersApiErrors.getDispatcher, error: e, stackTrace: st);
+      throw ApiException(DispatchersApiErrors.getDispatcher);
     }
   }
 
@@ -45,21 +49,22 @@ class DispatchersApiClient {
 
       final data = response['data'];
       if (data is! Map<String, dynamic>) {
-        throw ApiException('Formato de respuesta inválido al crear dispatcher');
+        throw ApiException(DispatchersApiErrors.invalidCreateDispatcherResponse);
       }
 
       return data;
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al crear dispatcher: $e');
+    } catch (e, st) {
+      AppLogger.error(DispatchersApiErrors.createDispatcher, error: e, stackTrace: st);
+      throw ApiException(DispatchersApiErrors.createDispatcher);
     }
   }
 
   /// PUT /dispatchers/:id (admin)
   Future<Dispatcher> updateDispatcher(String dispatcherId, Map<String, dynamic> payload) async {
     if (dispatcherId.isEmpty) {
-      throw ArgumentError('Dispatcher ID es requerido');
+      throw ArgumentError(DispatchersApiErrors.dispatcherIdRequired);
     }
 
     try {
@@ -70,23 +75,25 @@ class DispatchersApiClient {
       return _parseDispatcher(response);
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al actualizar dispatcher: $e');
+    } catch (e, st) {
+      AppLogger.error(DispatchersApiErrors.updateDispatcher, error: e, stackTrace: st);
+      throw ApiException(DispatchersApiErrors.updateDispatcher);
     }
   }
 
   /// DELETE /dispatchers/:id (admin)
   Future<void> deleteDispatcher(String dispatcherId) async {
     if (dispatcherId.isEmpty) {
-      throw ArgumentError('Dispatcher ID es requerido');
+      throw ArgumentError(DispatchersApiErrors.dispatcherIdRequired);
     }
 
     try {
       await _client.delete('/dispatchers/$dispatcherId');
     } on ApiException {
       rethrow;
-    } catch (e) {
-      throw ApiException('Error al eliminar dispatcher: $e');
+    } catch (e, st) {
+      AppLogger.error(DispatchersApiErrors.deleteDispatcher, error: e, stackTrace: st);
+      throw ApiException(DispatchersApiErrors.deleteDispatcher);
     }
   }
 
@@ -98,7 +105,7 @@ class DispatchersApiClient {
     final data = response['data'];
 
     if (data is! List) {
-      throw ApiException('Formato de respuesta inválido para lista de dispatchers');
+      throw ApiException(DispatchersApiErrors.invalidDispatcherListResponse);
     }
 
     return data
@@ -111,7 +118,7 @@ class DispatchersApiClient {
     final data = response['data'];
 
     if (data is! Map<String, dynamic>) {
-      throw ApiException('Formato de respuesta inválido para dispatcher');
+      throw ApiException(DispatchersApiErrors.invalidDispatcherResponse);
     }
 
     return Dispatcher.fromJson(data);
