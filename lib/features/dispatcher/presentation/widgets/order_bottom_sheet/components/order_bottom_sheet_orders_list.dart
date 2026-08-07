@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/errors/error_handler.dart';
 import 'package:packlead/core/widgets/empty_screen.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
@@ -53,7 +54,7 @@ class OrderBottomSheetOrdersList extends ConsumerWidget {
       ),
       error: (error, _) => ErrorScreen(
         title: 'Ocurrió un error al cargar tus órdenes',
-        message: error.toString(),
+        message: ErrorHandler.getErrorMessage(error),
         onRetry: () => ref.invalidate(dispatcherHomeProvider),
       ),
     );

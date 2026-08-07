@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/srmc_hq.dart';
+import 'package:packlead/core/errors/error_handler.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
@@ -107,7 +108,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => ErrorScreen(
           title: 'Error al cargar tus órdenes',
-          message: error.toString(),
+          message: ErrorHandler.getErrorMessage(error),
           onRetry: () => ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(widget.dispatcherId),
         ),
       ),

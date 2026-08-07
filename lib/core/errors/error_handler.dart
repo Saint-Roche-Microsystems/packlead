@@ -2,10 +2,15 @@ import 'dart:io';
 import 'dart:async';
 import 'auth_exceptions.dart';
 import 'package:dio/dio.dart';
+import 'package:packlead/services/api/base/api_exception.dart';
 
 class ErrorHandler {
   static String getErrorMessage(dynamic error) {
     if (error is AuthException) {
+      return error.message;
+    }
+
+    if (error is ApiException) {
       return error.message;
     }
 

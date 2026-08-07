@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/errors/error_handler.dart';
+import 'package:packlead/core/utils/app_logger.dart';
 import 'package:packlead/features/auth/data/datasources/auth_datasource.dart';
 import 'package:packlead/features/auth/data/datasources/firebase_auth_datasource.dart';
 import 'package:packlead/features/auth/data/repositories/auth_repository.dart';
@@ -62,8 +64,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     try {
       await _repository.logout();
       state = AuthState.unauthenticated();
-    } catch (error, _) {
-      state = AuthState.error(error.toString());
+    } catch (error, stackTrace) {
+      AppLogger.error('Error al cerrar sesión', error: error, stackTrace: stackTrace);
+      state = AuthState.error(ErrorHandler.getErrorMessage(error));
     }
   }
 }

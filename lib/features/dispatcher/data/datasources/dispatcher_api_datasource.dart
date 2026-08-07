@@ -1,5 +1,6 @@
 import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
+import 'package:packlead/core/utils/app_logger.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasource.dart';
 import 'package:packlead/services/api/clients/dispatchers_api_client.dart';
 
@@ -12,8 +13,9 @@ class DispatcherApiDataSource implements DispatcherDatasource {
   Future<List<Dispatcher>> getAllDispatchers() async {
     try {
       return await _apiClient.getDispatchers();
-    } catch (e) {
-      throw Exception('Error al obtener todos los dispatchers: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al obtener todos los repartidores', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -22,8 +24,9 @@ class DispatcherApiDataSource implements DispatcherDatasource {
     try {
       final dispatchers = await _apiClient.getDispatchers();
       return dispatchers.where((dispatcher) => dispatcher.state == state).toList();
-    } catch (e) {
-      throw Exception('Error al obtener dispatchers por estado: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al obtener repartidores por estado', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -31,8 +34,9 @@ class DispatcherApiDataSource implements DispatcherDatasource {
   Future<Dispatcher> getDispatcherById(String id) async {
     try {
       return await _apiClient.getDispatcher(id);
-    } catch (e) {
-      throw Exception('Error al obtener dispatcher por ID: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al obtener repartidor por ID', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -42,8 +46,9 @@ class DispatcherApiDataSource implements DispatcherDatasource {
       final payload = dispatcher.toJson();
       final data = await _apiClient.createDispatcher(payload);
       return Dispatcher.fromJson(data);
-    } catch (e) {
-      throw Exception('Error al crear dispatcher: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al crear repartidor', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -52,8 +57,9 @@ class DispatcherApiDataSource implements DispatcherDatasource {
     try {
       final payload = dispatcher.toJson();
       return await _apiClient.updateDispatcher(dispatcher.id, payload);
-    } catch (e) {
-      throw Exception('Error al actualizar dispatcher: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al actualizar repartidor', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -61,8 +67,9 @@ class DispatcherApiDataSource implements DispatcherDatasource {
   Future<void> deleteDispatcher(String id) async {
     try {
       await _apiClient.deleteDispatcher(id);
-    } catch (e) {
-      throw Exception('Error al eliminar dispatcher: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al eliminar repartidor', error: e, stackTrace: st);
+      rethrow;
     }
   }
 }

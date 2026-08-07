@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/errors/error_handler.dart';
 import 'package:packlead/core/widgets/empty_screen.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/admin/presentation/providers/live_tracking_provider.dart';
@@ -28,7 +29,7 @@ class AdminTrackingScreen extends ConsumerWidget {
         child: CircularProgressIndicator(),
       ),
       error: (error, _) => ErrorScreen(
-          message: error.toString(),
+          message: ErrorHandler.getErrorMessage(error),
           onRetry: () => ref.invalidate(liveTrackingProvider),
       ),
     );
