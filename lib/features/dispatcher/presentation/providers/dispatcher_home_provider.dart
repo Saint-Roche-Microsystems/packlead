@@ -18,7 +18,7 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
   final Ref _ref;
 
   DispatcherHomeNotifier(this._ref)
-      : super(const AsyncValue.data(DispatcherHomeState()));
+      : super(const AsyncValue.loading());
 
   OrderRepository get _orderRepository => _ref.read(orderRepositoryProvider);
 

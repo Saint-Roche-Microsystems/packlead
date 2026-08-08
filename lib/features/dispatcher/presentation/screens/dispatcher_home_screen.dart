@@ -41,38 +41,29 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  // Start GPS tracking and register the dispatcher's location in RTDB
+  // Only meant to run once, and only after today's orders have loaded
+  Future<void> _initializeTracking() async {
+    if (!mounted) return;
 
-    // Initiate tracking only for once
-    if (!_hasInitializedTracking) {
-      _hasInitializedTracking = true;
+    _trackingService = ref.read(locationTrackingServiceProvider);
+    _trackingService!.startTracking();
 
-      // Start traking with the provider service
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        if (mounted) {
-          _trackingService = ref.read(locationTrackingServiceProvider);
-          _trackingService!.startTracking();
+    ref.read(isTrackingActiveProvider.notifier).state = true;
 
-          ref.read(isTrackingActiveProvider.notifier).state = true;
+    // Get initial location (could be null)
+    final currentLocation = ref.read(dispatcherCurrentLocationProvider);
 
-          // Get initial location (could be null)
-          final currentLocation = ref.read(dispatcherCurrentLocationProvider);
+    // If current location is null, use SRMC HQ as default initial location
+    final initialLocation = currentLocation ?? SRMCHQ;
 
-          // If current location is null, use SRMC HQ as default initial location
-          final initialLocation = currentLocation ?? SRMCHQ;
+    _locationNotifier = ref.read(dispatcherLocationProvider.notifier);
 
-          _locationNotifier = ref.read(dispatcherLocationProvider.notifier);
-
-          await _locationNotifier!.register(
-            dispatcherId: widget.dispatcherId,
-            name: widget.dispatcherName,
-            initialLocation: initialLocation,
-          );
-        }
-      });
-    }
+    await _locationNotifier!.register(
+      dispatcherId: widget.dispatcherId,
+      name: widget.dispatcherName,
+      initialLocation: initialLocation,
+    );
   }
 
   @override
@@ -90,6 +81,15 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final homeState = ref.watch(dispatcherHomeProvider);
+
+    // Start tracking/RTDB registration exactly once, and only once today's
+    // orders have actually loaded successfully.
+    ref.listen<AsyncValue<dynamic>>(dispatcherHomeProvider, (previous, next) {
+      if (!_hasInitializedTracking && next.hasValue) {
+        _hasInitializedTracking = true;
+        _initializeTracking();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
