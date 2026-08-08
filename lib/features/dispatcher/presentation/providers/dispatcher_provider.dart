@@ -7,6 +7,7 @@ import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasou
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_mock_datasource.dart';
 import 'package:packlead/features/dispatcher/data/repositories/dispatcher_repository.dart';
 import 'package:packlead/features/dispatcher/data/repositories/dispatcher_repository_imp.dart';
+import 'package:packlead/features/dispatcher/models/dispatcher_creation_result.dart';
 import 'package:packlead/services/api/api_config.dart';
 import 'package:packlead/services/api/base/base_api_client.dart';
 import 'package:packlead/services/api/clients/dispatchers_api_client.dart';
@@ -67,6 +68,12 @@ final dispatcherByIdProvider = FutureProvider.family<Dispatcher, String>(
   },
 );
 
+/// The signed-in dispatcher's own backend profile (GET /dispatchers/me).
+final dispatcherMeProvider = FutureProvider<Dispatcher>((ref) async {
+  final repository = ref.watch(dispatcherRepositoryProvider);
+  return await repository.getMyProfile();
+});
+
 /// *******************
 ///   CUD PROVIDERS
 /// *******************
@@ -84,17 +91,22 @@ class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
 
   DispatcherRepository get _repository => _ref.read(dispatcherRepositoryProvider);
 
+  /// Result of the most recent `createDispatcher()` call - holds the
+  /// `passwordResetLink` the form needs to show, since `state` above only
+  /// carries loading/error/void for all CUD operations.
+  DispatcherCreationResult? lastCreationResult;
 
   Future<void> createDispatcher(Dispatcher dispatcher) async {
     state = const AsyncValue.loading();
     try {
-      await _repository.createDispatcher(dispatcher);
+      lastCreationResult = await _repository.createDispatcher(dispatcher);
 
       // Invalidate to refresh data
       _ref.invalidate(dispatchersByStateProvider);
 
       state = const AsyncValue.data(null);
     } catch (e, st) {
+      lastCreationResult = null;
       state = AsyncValue.error(e, st);
     }
   }

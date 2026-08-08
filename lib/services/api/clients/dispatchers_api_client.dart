@@ -39,6 +39,19 @@ class DispatchersApiClient {
     }
   }
 
+  /// GET /dispatchers/me (dispatcher)
+  Future<Dispatcher> getMyProfile() async {
+    try {
+      final response = await _client.get<Map<String, dynamic>>('/dispatchers/me');
+      return _parseDispatcher(response);
+    } on ApiException {
+      rethrow;
+    } catch (e, st) {
+      AppLogger.error(DispatchersApiErrors.getMyProfile, error: e, stackTrace: st);
+      throw ApiException(DispatchersApiErrors.getMyProfile);
+    }
+  }
+
   /// POST /dispatchers (admin)
   Future<Map<String, dynamic>> createDispatcher(Map<String, dynamic> payload) async {
     try {

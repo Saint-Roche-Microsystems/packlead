@@ -16,6 +16,7 @@ class DispatchersApiErrors {
 
   static const getDispatchers = 'Error al obtener repartidores';
   static const getDispatcher = 'Error al obtener repartidor';
+  static const getMyProfile = 'Error al obtener tu perfil';
   static const createDispatcher = 'Error al crear repartidor';
   static const updateDispatcher = 'Error al actualizar repartidor';
   static const deleteDispatcher = 'Error al eliminar repartidor';

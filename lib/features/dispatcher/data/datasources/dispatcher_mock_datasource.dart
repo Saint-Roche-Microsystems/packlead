@@ -1,6 +1,7 @@
 import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasource.dart';
+import 'package:packlead/features/dispatcher/models/dispatcher_creation_result.dart';
 import 'package:packlead/mocks/dispatcher_mock_data.dart';
 
 
@@ -35,7 +36,18 @@ class DispatcherMockDataSource implements DispatcherDatasource {
   }
 
   @override
-  Future<Dispatcher> createDispatcher(Dispatcher dispatcher) async {
+  Future<Dispatcher> getMyProfile() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    if (_dispatchers.isEmpty) {
+      throw Exception('No hay repartidores disponibles');
+    }
+
+    return _dispatchers.first;
+  }
+
+  @override
+  Future<DispatcherCreationResult> createDispatcher(Dispatcher dispatcher) async {
     await Future.delayed(const Duration(milliseconds: 600));
 
     final newDispatcher = Dispatcher(
@@ -48,7 +60,9 @@ class DispatcherMockDataSource implements DispatcherDatasource {
     );
 
     _dispatchers.add(newDispatcher);
-    return newDispatcher;
+
+    // The mock has no Firebase-backed invite flow, so there's no real link.
+    return DispatcherCreationResult(dispatcher: newDispatcher, passwordResetLink: null);
   }
 
   @override

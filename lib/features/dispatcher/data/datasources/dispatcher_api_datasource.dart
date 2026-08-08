@@ -2,6 +2,7 @@ import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
 import 'package:packlead/core/utils/app_logger.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasource.dart';
+import 'package:packlead/features/dispatcher/models/dispatcher_creation_result.dart';
 import 'package:packlead/services/api/clients/dispatchers_api_client.dart';
 
 class DispatcherApiDataSource implements DispatcherDatasource {
@@ -41,11 +42,25 @@ class DispatcherApiDataSource implements DispatcherDatasource {
   }
 
   @override
-  Future<Dispatcher> createDispatcher(Dispatcher dispatcher) async {
+  Future<Dispatcher> getMyProfile() async {
+    try {
+      return await _apiClient.getMyProfile();
+    } catch (e, st) {
+      AppLogger.error('Error al obtener el perfil del repartidor', error: e, stackTrace: st);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<DispatcherCreationResult> createDispatcher(Dispatcher dispatcher) async {
     try {
       final payload = dispatcher.toJson();
       final data = await _apiClient.createDispatcher(payload);
-      return Dispatcher.fromJson(data);
+
+      return DispatcherCreationResult(
+        dispatcher: Dispatcher.fromJson(data),
+        passwordResetLink: data['passwordResetLink'] as String?,
+      );
     } catch (e, st) {
       AppLogger.error('Error al crear repartidor', error: e, stackTrace: st);
       rethrow;

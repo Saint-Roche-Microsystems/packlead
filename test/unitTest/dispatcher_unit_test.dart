@@ -82,8 +82,8 @@ void main() {
       final result = await dataSource.createDispatcher(newDispatcher);
 
       // ================= ASSERT =================
-      expect(result.id.startsWith('disp-'), true);
-      expect(result.state, DispatcherState.available);
+      expect(result.dispatcher.id.startsWith('disp-'), true);
+      expect(result.dispatcher.state, DispatcherState.available);
 
       print('Test 5 PASÓ: createDispatcher crea dispatcher con estado available');
     });

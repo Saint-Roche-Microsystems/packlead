@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
@@ -48,17 +49,72 @@ class _CreateDispatcherForm extends ConsumerState<CreateDispatcherForm> {
     await ref.read(dispatcherMutationProvider.notifier).createDispatcher(newDispatcher);
   }
 
+  /// POST /dispatchers only generates an invite link.
+  Future<void> _showInviteLinkDialog(String passwordResetLink) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Repartidor invitado'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Se generó un enlace de invitación. Compártelo con el repartidor '
+              'para que establezca su contraseña e inicie sesión.',
+            ),
+            const SizedBox(height: 16),
+            SelectableText(
+              passwordResetLink,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton.icon(
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: passwordResetLink));
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SuccessSnackBar(message: 'Enlace copiado al portapapeles'),
+                );
+              }
+            },
+            icon: const Icon(Icons.copy),
+            label: const Text('Copiar enlace'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Entendido'),
+          ),
+        ],
+      ),
+    );
+
+    if (mounted) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Secondary event listeners
     ref.listen<AsyncValue<void>>(dispatcherMutationProvider, (previous, next) {
 
       if(previous?.isLoading == true && next.hasValue) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SuccessSnackBar(message: 'Se ha agregado un nuevo repartidor'),
-        );
+        final passwordResetLink =
+            ref.read(dispatcherMutationProvider.notifier).lastCreationResult?.passwordResetLink;
 
-        Navigator.pop(context);
+        if (passwordResetLink != null) {
+          _showInviteLinkDialog(passwordResetLink);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SuccessSnackBar(message: 'Se ha agregado un nuevo repartidor'),
+          );
+
+          Navigator.pop(context);
+        }
       }
 
       if(next.hasError && previous?.hasError != true) {
