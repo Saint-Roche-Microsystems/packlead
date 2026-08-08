@@ -10,7 +10,7 @@ class DispatcherLocationService {
 
   DispatcherLocationService(this._rtdbService);
 
-  /// Register dispatcher en RTDB
+  /// Register dispatcher in RTDB
   /// happens when dispatcher enters in 'DispatcherHomeScreen' (after login)
   Future<void> registerDispatcher({
     required String dispatcherId,
@@ -25,10 +25,10 @@ class DispatcherLocationService {
       updatedAt: DateTime.now(),
     );
 
-    await _rtdbService.set(
-      '$_locationsPath/$dispatcherId',
-      dispatcherLocation.toJson(),
-    );
+    final path = '$_locationsPath/$dispatcherId';
+
+    await _rtdbService.set(path, dispatcherLocation.toJson());
+    await _rtdbService.removeOnDisconnect(path);
   }
 
   /// Update only the location (lat/lng)
@@ -50,7 +50,10 @@ class DispatcherLocationService {
   /// Delete dispatcher register in RTDB
   /// happens when 'DispatcherHomeScreen' is disposed (logout/app closed)
   Future<void> unregisterDispatcher(String dispatcherId) async {
-    await _rtdbService.remove('$_locationsPath/$dispatcherId');
+    final path = '$_locationsPath/$dispatcherId';
+
+    await _rtdbService.cancelOnDisconnect(path);
+    await _rtdbService.remove(path);
   }
 
   /// Listen changes from ALL dispatchers locations (admin feature)

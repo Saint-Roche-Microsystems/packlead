@@ -34,8 +34,27 @@ class DispatcherHomeScreen extends ConsumerStatefulWidget {
 class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
   bool _hasLoadedOrders = false;
   bool _hasInitializedTracking = false;
+  bool _isLoggingOut = false;
   LocationTrackingService? _trackingService;
   DispatcherLocationNotifier? _locationNotifier;
+
+  // The RTDB node must be removed while the dispatcher is still authenticated
+  Future<void> _handleLogout() async {
+    if (_isLoggingOut) return;
+    setState(() => _isLoggingOut = true);
+
+    if (_trackingService != null) {
+      _trackingService!.stopTracking();
+    }
+
+    if (_locationNotifier != null) {
+      await _locationNotifier!.unregister();
+    }
+
+    if (mounted) {
+      await ref.read(authStateProvider.notifier).logout();
+    }
+  }
 
   // Start GPS tracking and register the dispatcher's location in RTDB
   // Only meant to run once, and only after today's orders have loaded
@@ -104,8 +123,14 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
         actions: [
           IconButton(
             tooltip: 'Salir',
-            icon: const Icon(Icons.logout),
-            onPressed: () => ref.read(authStateProvider.notifier).logout(),
+            icon: _isLoggingOut
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.logout),
+            onPressed: _isLoggingOut ? null : _handleLogout,
           ),
         ],
       ),

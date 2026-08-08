@@ -17,13 +17,13 @@ void main() async {
 
   runApp(
     const ProviderScope(
-      child: MyApp(),
+      child: PackleadApp(),
     ),
   );
 }
 
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+class PackleadApp extends ConsumerWidget {
+  const PackleadApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
