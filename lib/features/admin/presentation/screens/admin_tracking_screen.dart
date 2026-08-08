@@ -11,7 +11,7 @@ class AdminTrackingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final liveLocationsAsync = ref.watch(liveTrackingProvider);
+    final liveLocationsAsync = ref.watch(enrichedLiveLocationsProvider);
 
     return liveLocationsAsync.when(
       data: (locations) {

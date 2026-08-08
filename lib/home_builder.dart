@@ -19,7 +19,7 @@ class HomeBuilder extends StatelessWidget {
         UserRole.admin => AdminBottomNavLayout(),
         UserRole.dispatcher => DispatcherHomeScreen(
           dispatcherId: authState.user!.id,
-          dispatcherName: authState.user!.name,
+          dispatcherEmail: authState.user!.email,
         ),
         UserRole.none => const LoginScreen(),
       };

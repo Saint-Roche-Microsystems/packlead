@@ -14,12 +14,12 @@ class DispatcherLocationService {
   /// happens when dispatcher enters in 'DispatcherHomeScreen' (after login)
   Future<void> registerDispatcher({
     required String dispatcherId,
-    required String name,
+    required String email,
     required Location initialLocation,
   }) async {
     final dispatcherLocation = DispatcherLocation(
       dispatcherId: dispatcherId,
-      name: name,
+      email: email,
       lat: initialLocation.lat,
       lng: initialLocation.lng,
       updatedAt: DateTime.now(),

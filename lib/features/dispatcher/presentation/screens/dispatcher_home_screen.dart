@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/srmc_hq.dart';
 import 'package:packlead/core/errors/error_handler.dart';
+import 'package:packlead/core/models/dispatcher.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_home_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_location_provider.dart';
+import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_route_provider.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/order_bottom_sheet.dart';
 import 'package:packlead/features/dispatcher/presentation/widgets/route_tracking_map.dart';
@@ -13,13 +15,16 @@ import 'package:packlead/features/dispatcher/presentation/widgets/status_trackin
 import 'package:packlead/services/location/location_tracking_service.dart';
 
 class DispatcherHomeScreen extends ConsumerStatefulWidget {
+  // Firebase UID - used only for RTDB tracking (locations/{firebaseUid}).
+  // Order-related backend calls need the domain dispatcher id instead,
+  // resolved below via GET /dispatchers/me.
   final String dispatcherId;
-  final String dispatcherName;
+  final String dispatcherEmail;
 
   const DispatcherHomeScreen({
     super.key,
     required this.dispatcherId,
-    required this.dispatcherName
+    required this.dispatcherEmail
   });
 
   @override
@@ -27,19 +32,10 @@ class DispatcherHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
+  bool _hasLoadedOrders = false;
   bool _hasInitializedTracking = false;
   LocationTrackingService? _trackingService;
   DispatcherLocationNotifier? _locationNotifier;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // fetch today's orders when screen is first loaded
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(widget.dispatcherId);
-    });
-  }
 
   // Start GPS tracking and register the dispatcher's location in RTDB
   // Only meant to run once, and only after today's orders have loaded
@@ -61,7 +57,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
 
     await _locationNotifier!.register(
       dispatcherId: widget.dispatcherId,
-      name: widget.dispatcherName,
+      email: widget.dispatcherEmail,
       initialLocation: initialLocation,
     );
   }
@@ -80,7 +76,17 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final homeState = ref.watch(dispatcherHomeProvider);
+    final meAsync = ref.watch(dispatcherMeProvider);
+
+    // Load today's orders using the backend dispatcher id (GET /dispatchers/me)
+    // - not the Firebase UID - exactly once, as soon as the profile resolves.
+    ref.listen<AsyncValue<Dispatcher>>(dispatcherMeProvider, (previous, next) {
+      final me = next.value;
+      if (me != null && !_hasLoadedOrders) {
+        _hasLoadedOrders = true;
+        ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(me.id);
+      }
+    });
 
     // Start tracking/RTDB registration exactly once, and only once today's
     // orders have actually loaded successfully.
@@ -103,19 +109,33 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
           ),
         ],
       ),
-      body: homeState.when(
-        data: (state) => _buildContent(context, state),
+      body: meAsync.when(
+        data: (me) => _buildBody(context, me.id),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => ErrorScreen(
-          title: 'Error al cargar tus órdenes',
+          title: 'Error al cargar tu perfil',
           message: ErrorHandler.getErrorMessage(error),
-          onRetry: () => ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(widget.dispatcherId),
+          onRetry: () => ref.invalidate(dispatcherMeProvider),
         ),
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context, dynamic state) {
+  Widget _buildBody(BuildContext context, String domainDispatcherId) {
+    final homeState = ref.watch(dispatcherHomeProvider);
+
+    return homeState.when(
+      data: (state) => _buildContent(context, state, domainDispatcherId),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => ErrorScreen(
+        title: 'Error al cargar tus órdenes',
+        message: ErrorHandler.getErrorMessage(error),
+        onRetry: () => ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(domainDispatcherId),
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, dynamic state, String domainDispatcherId) {
     final currentLocation = ref.watch(dispatcherCurrentLocationProvider);
 
     return Stack(
@@ -140,7 +160,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
         ),
 
         // BOTTOM SHEET
-        OrderBottomSheet(dispatcherId: widget.dispatcherId),
+        OrderBottomSheet(dispatcherId: domainDispatcherId),
       ],
     );
   }

@@ -15,7 +15,7 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
   /// Register dispatcher when login
   Future<void> register({
     required String dispatcherId,
-    required String name,
+    required String email,
     required Location initialLocation,
   }) async {
     state = const AsyncValue.loading();
@@ -23,7 +23,7 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
     try {
       await _locationService.registerDispatcher(
         dispatcherId: dispatcherId,
-        name: name,
+        email: email,
         initialLocation: initialLocation,
       );
 

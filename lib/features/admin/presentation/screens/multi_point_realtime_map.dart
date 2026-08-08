@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:packlead/core/models/dispatcher_location.dart';
 import 'package:packlead/core/utils/date_formatter.dart';
 import 'package:packlead/core/utils/map_utils.dart';
 import 'package:packlead/core/utils/marker_builder.dart';
+import 'package:packlead/features/admin/viewmodels/admin_tracking_view_model.dart';
 
 class MultiPointRealtimeMap extends StatefulWidget {
-  final List<DispatcherLocation> locations;
+  final List<AdminTrackingViewModel> locations;
 
   const MultiPointRealtimeMap({
     super.key,
@@ -58,15 +58,21 @@ class _MultiPointRealtimeMapState extends State<MultiPointRealtimeMap> {
 
     // Iterate over each location and create/update markers
     for(final location in widget.locations) {
-      final markerIcon = await _getOrCreateIcon(location.dispatcherId, location.name);
+      final markerIcon = await _getOrCreateIcon(location.firebaseUid, location.name);
+
+      final snippetParts = [
+        'Última actualización: ${DateFormatter.formatRelativeTime(location.updatedAt)}',
+        if (location.vehicle != null) location.vehicle!,
+        if (location.licensePlate != null) location.licensePlate!,
+      ];
 
       final marker = Marker(
         // Include new lat/lng to force update
-        markerId: MarkerId('${location.dispatcherId}_${location.lat.toStringAsFixed(6)}_${location.lng.toStringAsFixed(6)}'),
+        markerId: MarkerId('${location.firebaseUid}_${location.lat.toStringAsFixed(6)}_${location.lng.toStringAsFixed(6)}'),
         position: LatLng(location.lat, location.lng),
         infoWindow: InfoWindow(
           title: location.name,
-          snippet: 'Última actualización: ${DateFormatter.formatRelativeTime(location.updatedAt)}',
+          snippet: snippetParts.join(' · '),
         ),
         icon: markerIcon,
         anchor: const Offset(0.5, 0.5),
@@ -82,25 +88,25 @@ class _MultiPointRealtimeMapState extends State<MultiPointRealtimeMap> {
     }
   }
 
-  Future<BitmapDescriptor> _getOrCreateIcon(String dispatcherId, String name) async {
-    if (_iconCache.containsKey(dispatcherId)) {
-      return _iconCache[dispatcherId]!;
+  Future<BitmapDescriptor> _getOrCreateIcon(String firebaseUid, String name) async {
+    if (_iconCache.containsKey(firebaseUid)) {
+      return _iconCache[firebaseUid]!;
     }
 
-    if(_iconGenerationLocks.containsKey(dispatcherId)) {
-      return await _iconGenerationLocks[dispatcherId]!;
+    if(_iconGenerationLocks.containsKey(firebaseUid)) {
+      return await _iconGenerationLocks[firebaseUid]!;
     }
 
     // Generate new icon
     final iconFuture = MarkerBuilder.createMarkerIconInitials(name);
-    _iconGenerationLocks[dispatcherId] = iconFuture;
+    _iconGenerationLocks[firebaseUid] = iconFuture;
 
     try {
       final icon = await iconFuture;
-      _iconCache[dispatcherId] = icon;
+      _iconCache[firebaseUid] = icon;
       return icon;
     } finally {
-      _iconGenerationLocks.remove(dispatcherId);
+      _iconGenerationLocks.remove(firebaseUid);
     }
   }
 
@@ -118,7 +124,7 @@ class _MultiPointRealtimeMapState extends State<MultiPointRealtimeMap> {
       return Center(child: CircularProgressIndicator());
     }
 
-    final bounds = MapUtils.calculateBounds(DispatcherLocation.toLocations(widget.locations));
+    final bounds = MapUtils.calculateBounds(AdminTrackingViewModel.toLocations(widget.locations));
 
     return GoogleMap(
       initialCameraPosition: CameraPosition(
