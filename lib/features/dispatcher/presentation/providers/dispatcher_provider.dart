@@ -69,7 +69,8 @@ final dispatcherByIdProvider = FutureProvider.family<Dispatcher, String>(
 );
 
 /// The signed-in dispatcher's own backend profile (GET /dispatchers/me).
-final dispatcherMeProvider = FutureProvider<Dispatcher>((ref) async {
+/// autoDispose: must be re-fetched fresh on every login
+final dispatcherMeProvider = FutureProvider.autoDispose<Dispatcher>((ref) async {
   final repository = ref.watch(dispatcherRepositoryProvider);
   return await repository.getMyProfile();
 });
