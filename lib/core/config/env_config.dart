@@ -14,6 +14,8 @@ class EnvConfig {
 
   static String get apiBaseUrl => dotenv.env['API_BASE_URL'] ?? '';
 
+  static String get localService => dotenv.env['LOCAL_SERVICE'] ?? 'API';
+
   static Future<void> load() async {
     await dotenv.load(fileName: ".env");
     _validate();
