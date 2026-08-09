@@ -90,12 +90,14 @@ Follow these steps to run the project locally. Copy `.env.example` to `.env` and
 cp .env.example .env
 ```
 
-### Option 1 — Real API (Firebase + backend)
+### Option 1 — Real API service
 
-Use this path to run against a real backend and Firebase project from [Packlead API](https://github.com/devdiagon/packlead-api).
+Use this path to run against the real backend integration project from [Packlead API](https://github.com/devdiagon/packlead-api).
 
 - Fill in `.env` with real Firebase, Google Maps, and API values.
 - Set `LOCAL_SERVICE=API` in `.env`.
+
+> *Note: Follow the steps from the API repository ro run the backend correctly* 
 
 ### Option 2 — DEMO / offline mode (mock data)
 
