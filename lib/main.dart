@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/config/env_config.dart';
+import 'package:packlead/core/config/service_mode.dart';
 import 'package:packlead/core/themes/index.dart';
 import 'package:packlead/core/widgets/screen_not_found.dart';
 import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
@@ -39,6 +40,16 @@ class PackleadApp extends ConsumerWidget {
       onUnknownRoute: (settings) => MaterialPageRoute(
         builder: (_) => ScreenNotFound(),
       ),
+      builder: (context, child) {
+        if (!AppServiceMode.isMock || child == null) return child ?? const SizedBox.shrink();
+
+        return Banner(
+          message: 'DEMO',
+          location: BannerLocation.topEnd,
+          color: Colors.deepOrange,
+          child: child,
+        );
+      },
     );
   }
 }

@@ -6,6 +6,9 @@ import 'package:packlead/mocks/dispatcher_mock_data.dart';
 
 
 class DispatcherMockDataSource implements DispatcherDatasource {
+  DispatcherMockDataSource({String? currentUserId}) : _currentUserId = currentUserId;
+
+  final String? _currentUserId;
   final _dispatchers = DispatcherMockData().dispatchers;
 
   @override
@@ -39,11 +42,11 @@ class DispatcherMockDataSource implements DispatcherDatasource {
   Future<Dispatcher> getMyProfile() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
-    if (_dispatchers.isEmpty) {
-      throw Exception('No hay repartidores disponibles');
+    if (_currentUserId == null) {
+      throw Exception('No hay un usuario autenticado');
     }
 
-    return _dispatchers.first;
+    return getDispatcherById(_currentUserId);
   }
 
   @override
