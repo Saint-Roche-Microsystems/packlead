@@ -84,10 +84,31 @@ lib/
 
 ## Setup
 
-Follow these steps to run the project locally:
+Follow these steps to run the project locally. Copy `.env.example` to `.env` and pick one of the two paths below depending on how you want to run the app, then continue with the common steps.
+
+```bash
+cp .env.example .env
+```
+
+### Option 1 — Real API (Firebase + backend)
+
+Use this path to run against a real backend and Firebase project from [Packlead API](https://github.com/devdiagon/packlead-api).
+
+- Fill in `.env` with real Firebase, Google Maps, and API values.
+- Set `LOCAL_SERVICE=API` in `.env`.
+
+### Option 2 — DEMO / offline mode (mock data)
+
+Use this path to try the app without a backend or a real Firebase project — auth, orders, and dispatchers are served from in-memory mock data, and the admin Dashboard/Tracking Map show fake demo data. Live RTDB-based dispatcher location tracking is not available in this mode.
+
+- Set `LOCAL_SERVICE=MOCK` in `.env`.
+- Firebase/Google Maps/API values in `.env` are not required to log in or browse mock data, but Firebase must still initialize on app startup, so keep the placeholder values (or real ones, if you have them) — do not leave them empty.
+- Quick-login buttons for demo admin/dispatcher accounts appear on the login screen automatically in this mode.
+
+### Common steps
 
 1. Configure environment variables and generate config files.
-	- Create or update the `.env` file with Firebase, Google Maps, and API values.
+	- Create or update the `.env` file with Firebase, Google Maps, and API values (see options above).
 	- Run the setup script:
 
 ```bash
