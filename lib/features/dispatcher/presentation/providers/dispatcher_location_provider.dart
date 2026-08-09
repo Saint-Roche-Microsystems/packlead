@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/models/location.dart';
+import 'package:packlead/core/utils/app_logger.dart';
 import 'package:packlead/services/firebase/dispatcher_location_service.dart';
 import 'package:packlead/services/firebase/firebase_providers.dart';
 
@@ -15,7 +15,7 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
   /// Register dispatcher when login
   Future<void> register({
     required String dispatcherId,
-    required String name,
+    required String email,
     required Location initialLocation,
   }) async {
     state = const AsyncValue.loading();
@@ -23,13 +23,14 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
     try {
       await _locationService.registerDispatcher(
         dispatcherId: dispatcherId,
-        name: name,
+        email: email,
         initialLocation: initialLocation,
       );
 
       _currentDispatcherId = dispatcherId;
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {
+      AppLogger.error('Error al registrar ubicación en RTDB', error: error, stackTrace: stackTrace);
       state = AsyncValue.error(error, stackTrace);
     }
   }
@@ -43,8 +44,8 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
         dispatcherId: _currentDispatcherId!,
         location: location,
       );
-    } catch (error) {
-      debugPrint('Error al actualizar ubicación en RTDB: $error');
+    } catch (error, stackTrace) {
+      AppLogger.warning('Error al actualizar ubicación en RTDB', error: error, stackTrace: stackTrace);
     }
   }
 
@@ -57,6 +58,7 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
       _currentDispatcherId = null;
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {
+      AppLogger.error('Error al eliminar registro de ubicación en RTDB', error: error, stackTrace: stackTrace);
       state = AsyncValue.error(error, stackTrace);
     }
   }

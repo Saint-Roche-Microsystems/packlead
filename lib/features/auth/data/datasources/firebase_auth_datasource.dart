@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:packlead/core/constants/user_roles.dart';
 import 'package:packlead/core/errors/auth_exceptions.dart';
@@ -7,20 +6,17 @@ import 'package:packlead/features/auth/data/datasources/auth_datasource.dart';
 
 class FirebaseAuthDataSource implements AuthDataSource {
   final fba.FirebaseAuth _fbAuth;
-  final FirebaseFirestore _firestore;
 
   FirebaseAuthDataSource({
     fba.FirebaseAuth? firebaseAuth,
-    FirebaseFirestore? firestore,
-  })  : _fbAuth = firebaseAuth ?? fba.FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance;
+  }) : _fbAuth = firebaseAuth ?? fba.FirebaseAuth.instance;
 
   @override
   Future<User?> getCurrentUser() async {
     final fbUser = _fbAuth.currentUser;
     if (fbUser == null) return null;
 
-    return _fetchUserFromFirestore(fbUser.uid);
+    return _fetchUserFromClaims(fbUser);
   }
 
   @override
@@ -33,7 +29,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
     final firebaseUser = credential.user;
     if (firebaseUser == null) throw const InvalidCredentialsException();
 
-    return _fetchUserFromFirestore(firebaseUser.uid);
+    return _fetchUserFromClaims(firebaseUser);
   }
 
   @override
@@ -41,19 +37,16 @@ class FirebaseAuthDataSource implements AuthDataSource {
     await _fbAuth.signOut();
   }
 
-  Future<User> _fetchUserFromFirestore(String uid) async {
-    final doc = await _firestore.collection('users').doc(uid).get();
-
-    if (!doc.exists) throw const InvalidCredentialsException();
-
-    final data = doc.data()!;
+  Future<User> _fetchUserFromClaims(fba.User fbUser) async {
+    final tokenResult = await fbUser.getIdTokenResult();
+    final role = tokenResult.claims?['role'] as String?;
 
     return User(
-      id: uid,
-      email: data['email'] as String,
+      id: fbUser.uid,
+      email: fbUser.email ?? '',
       password: '',
-      name: data['name'] as String,
-      role: UserRole.values.byName(data['role'] as String? ?? 'none'),
+      name: fbUser.displayName ?? fbUser.email ?? '',
+      role: UserRole.values.byName(role ?? 'none'),
     );
   }
 }

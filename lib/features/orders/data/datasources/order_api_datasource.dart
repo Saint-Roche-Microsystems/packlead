@@ -1,5 +1,6 @@
 import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
+import 'package:packlead/core/utils/app_logger.dart';
 import 'package:packlead/core/utils/date_formatter.dart';
 import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
 import 'package:packlead/services/api/clients/orders_api_client.dart';
@@ -13,8 +14,9 @@ class OrderApiDataSource implements OrderDataSource {
   Future<List<Order>> getAllOrders() async {
     try {
       return await _apiClient.getOrders();
-    } catch (e) {
-      throw Exception('Error al obtener todas las órdenes: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al obtener todos los pedidos', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -22,8 +24,9 @@ class OrderApiDataSource implements OrderDataSource {
   Future<Order> getOrderById(String id) async {
     try {
       return await _apiClient.getOrder(id);
-    } catch (e) {
-      throw Exception('Error al obtener orden por ID: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al obtener pedido por ID', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -31,8 +34,9 @@ class OrderApiDataSource implements OrderDataSource {
   Future<List<Order>> getOrdersByDispatcher(String dispatcherId, DateTime forDate) async {
     try {
       return await _apiClient.getOrders(dispatcherId: dispatcherId);
-    } catch (e) {
-      throw Exception('Error al obtener órdenes por dispatcher: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al obtener pedidos por repartidor', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -40,8 +44,9 @@ class OrderApiDataSource implements OrderDataSource {
   Future<List<Order>> getOrdersByState(OrderState state) async {
     try {
       return await _apiClient.getOrders(state: state.name);
-    } catch (e) {
-      throw Exception('Error al obtener órdenes por estado: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al obtener pedidos por estado', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -49,13 +54,14 @@ class OrderApiDataSource implements OrderDataSource {
   Future<List<Order>> getOrdersByDate(DateTime date) async {
     try {
       // Format date to YYYY-MM-DD
-      final dateString = DateFormatter.formatForBackend(date);
+      final dateString = DateFormatter.formatDateUTC(date);
 
       return await _apiClient.getOrders(
         deliveryDate: dateString,
       );
-    } catch (e) {
-      throw Exception('Error al obtener órdenes por fecha: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al obtener pedidos por fecha', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -64,8 +70,9 @@ class OrderApiDataSource implements OrderDataSource {
     try {
       final payload = order.toJson();
       return await _apiClient.createOrder(payload);
-    } catch (e) {
-      throw Exception('Error al crear orden: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al crear pedido', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -74,8 +81,9 @@ class OrderApiDataSource implements OrderDataSource {
     try {
       final payload = order.toJson();
       return await _apiClient.updateOrder(order.id, payload);
-    } catch (e) {
-      throw Exception('Error al actualizar orden: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al actualizar pedido', error: e, stackTrace: st);
+      rethrow;
     }
   }
 
@@ -83,8 +91,9 @@ class OrderApiDataSource implements OrderDataSource {
   Future<void> deleteOrder(String id) async {
     try {
       await _apiClient.deleteOrder(id);
-    } catch (e) {
-      throw Exception('Error al eliminar orden: $e');
+    } catch (e, st) {
+      AppLogger.error('Error al eliminar pedido', error: e, stackTrace: st);
+      rethrow;
     }
   }
 }

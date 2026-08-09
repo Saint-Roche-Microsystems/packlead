@@ -20,8 +20,21 @@ class DateFormatter {
   }
 
   /// example: 2026-02-10
-  static String formatForBackend(DateTime date) {
+  static String formatDateUTC(DateTime date) {
     return _dateOnlyFormat.format(date);
+  }
+
+  /// example: 2026-02-10T23:59:59.000Z
+  static String formatDateTimeUTC(DateTime date) {
+    final utcDate = date.toUtc();
+    return DateTime.utc(
+      utcDate.year,
+      utcDate.month,
+      utcDate.day,
+      23,
+      59,
+      59,
+    ).toIso8601String();
   }
 
   // example: "Hace 5m", "Hace 2h", "Hace 3d"

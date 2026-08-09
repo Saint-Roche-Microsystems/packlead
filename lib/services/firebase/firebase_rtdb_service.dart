@@ -26,6 +26,17 @@ class FirebaseRTDBService {
     await _database.ref(path).remove();
   }
 
+  /// Register a server-side removal to run automatically when the client's
+  /// connection drops (crash, force-kill, network loss)
+  Future<void> removeOnDisconnect(String path) async {
+    await _database.ref(path).onDisconnect().remove();
+  }
+
+  /// Cancel a previously registered onDisconnect operation for a path.
+  Future<void> cancelOnDisconnect(String path) async {
+    await _database.ref(path).onDisconnect().cancel();
+  }
+
   /// Listen changes in a path
   Stream<DatabaseEvent> watch(String path) {
     return _database.ref(path).onValue;

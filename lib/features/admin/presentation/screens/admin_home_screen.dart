@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/errors/error_handler.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/admin/presentation/providers/admin_dashboard_provider.dart';
 import 'package:packlead/features/admin/presentation/widgets/kpi_card.dart';
@@ -76,7 +77,7 @@ class AdminHomeScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => ErrorScreen(
             title: 'Oops! Ocurrió un error al obtener los datos del dashboard',
-            message: error.toString(),
+            message: ErrorHandler.getErrorMessage(error),
             onRetry: () => ref.read(adminDashboardProvider.notifier).refresh(),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/dispatcher_state.dart';
+import 'package:packlead/core/errors/error_handler.dart';
 import 'package:packlead/core/widgets/empty_screen.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/admin/presentation/screens/forms/create_dispatcher_form.dart';
@@ -111,7 +112,7 @@ class _DispatcherListByState extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => ErrorScreen(
           title: 'No se pudieron cargar los repartidores',
-          message: error.toString(),
+          message: ErrorHandler.getErrorMessage(error),
           onRetry: () => ref.read(dispatcherMutationProvider.notifier).refresh(),
       ),
     );

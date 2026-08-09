@@ -7,6 +7,7 @@ class Dispatcher {
   final String vehicle;
   final String licensePlate;
   final DispatcherState state;
+  final String? firebaseUid;
 
   Dispatcher({
     required this.id,
@@ -15,6 +16,7 @@ class Dispatcher {
     required this.vehicle,
     required this.licensePlate,
     required this.state,
+    this.firebaseUid,
   });
 
   /// Constructor para procesos de creación (ej: formularios)
@@ -24,7 +26,8 @@ class Dispatcher {
     required this.vehicle,
     required this.licensePlate,
   })  : id = '',                           // Temporal, backend lo asigna
-        state = DispatcherState.available; // Estado por default en la creación
+        state = DispatcherState.available, // Estado por default en la creación
+        firebaseUid = null;
 
   /// Deserialización JSON
   factory Dispatcher.fromJson(Map<String, dynamic> json) {
@@ -35,6 +38,7 @@ class Dispatcher {
       vehicle: json['vehicle'] as String,
       licensePlate: json['licensePlate'] as String,
       state: DispatcherStateExtension.fromJson(json['state'] as String),
+      firebaseUid: json['firebaseUid'] as String?,
     );
   }
 
@@ -58,6 +62,7 @@ class Dispatcher {
     String? vehicle,
     String? licensePlate,
     DispatcherState? state,
+    String? firebaseUid,
   }) {
     return Dispatcher(
       id: id ?? this.id,
@@ -66,6 +71,7 @@ class Dispatcher {
       vehicle: vehicle ?? this.vehicle,
       licensePlate: licensePlate ?? this.licensePlate,
       state: state ?? this.state,
+      firebaseUid: firebaseUid ?? this.firebaseUid,
     );
   }
 
@@ -85,7 +91,8 @@ class Dispatcher {
         other.email == email &&
         other.vehicle == vehicle &&
         other.licensePlate == licensePlate &&
-        other.state == state;
+        other.state == state &&
+        other.firebaseUid == firebaseUid;
   }
 
   @override
@@ -95,6 +102,7 @@ class Dispatcher {
     email.hashCode ^
     vehicle.hashCode ^
     licensePlate.hashCode ^
-    state.hashCode;
+    state.hashCode ^
+    firebaseUid.hashCode;
   }
 }

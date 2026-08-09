@@ -12,7 +12,9 @@ class EnvConfig {
 
   static String get googleMapsApiKey => dotenv.env['GOOGLE_MAPS_API_KEY_ANDROID'] ?? '';
 
-  static String get ordersApiBaseUrl => dotenv.env['ORDERS_API_BASE_URL'] ?? '';
+  static String get apiBaseUrl => dotenv.env['API_BASE_URL'] ?? '';
+
+  static String get localService => dotenv.env['LOCAL_SERVICE'] ?? 'API';
 
   static Future<void> load() async {
     await dotenv.load(fileName: ".env");
@@ -28,6 +30,6 @@ class EnvConfig {
     assert(firebaseMessagingSenderId.isNotEmpty, 'FIREBASE_MESSAGING_SENDER_ID is not set in .env');
     assert(firebaseStorageBucket.isNotEmpty, 'FIREBASE_STORAGE_BUCKET is not set in .env');
     assert(googleMapsApiKey.isNotEmpty, 'GOOGLE_MAPS_API_KEY is not set in .env');
-    assert(ordersApiBaseUrl.isNotEmpty, 'ORDERS_API_BASE_URL is not set in .env');
+    assert(apiBaseUrl.isNotEmpty, 'API_BASE_URL is not set in .env');
   }
 }

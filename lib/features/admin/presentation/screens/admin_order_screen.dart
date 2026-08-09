@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/constants/order_state.dart';
+import 'package:packlead/core/errors/error_handler.dart';
 import 'package:packlead/core/widgets/empty_screen.dart';
 import 'package:packlead/core/widgets/error_screen.dart';
 import 'package:packlead/features/admin/presentation/providers/admin_orders_provider.dart';
@@ -114,7 +115,7 @@ class _OrderListByState extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => ErrorScreen(
           title: 'No se pudieron cargar los pedidos',
-          message: error.toString(),
+          message: ErrorHandler.getErrorMessage(error),
           onRetry: () => ref.read(orderMutationProvider.notifier).refresh(),
       ),
     );

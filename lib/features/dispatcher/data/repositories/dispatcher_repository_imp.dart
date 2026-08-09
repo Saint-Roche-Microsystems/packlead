@@ -2,6 +2,7 @@ import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasource.dart';
 import 'package:packlead/features/dispatcher/data/repositories/dispatcher_repository.dart';
+import 'package:packlead/features/dispatcher/models/dispatcher_creation_result.dart';
 
 class DispatcherRepositoryImp implements DispatcherRepository {
   final DispatcherDatasource _dataSource;
@@ -36,7 +37,16 @@ class DispatcherRepositoryImp implements DispatcherRepository {
   }
 
   @override
-  Future<Dispatcher> createDispatcher(Dispatcher dispatcher) async {
+  Future<Dispatcher> getMyProfile() async {
+    try {
+      return await _dataSource.getMyProfile();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<DispatcherCreationResult> createDispatcher(Dispatcher dispatcher) async {
     try{
       return await _dataSource.createDispatcher(dispatcher);
     } catch(e) {

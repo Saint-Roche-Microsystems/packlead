@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/config/service_mode.dart';
 import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/models/order.dart';
-//import 'package:packlead/features/orders/data/datasources/order_api_datasource.dart';
+import 'package:packlead/features/orders/data/datasources/order_api_datasource.dart';
 import 'package:packlead/features/orders/data/datasources/order_datasource.dart';
 import 'package:packlead/features/orders/data/datasources/order_mock_datasource.dart';
 import 'package:packlead/features/orders/data/repositories/order_repository.dart';
@@ -18,7 +19,7 @@ import 'package:packlead/services/api/clients/orders_api_client.dart';
 // API service related
 final ordersBaseApiClientProvider = Provider<BaseApiClient>((ref) {
   return BaseApiClient(
-    baseUrl: ApiConfig.ordersBaseUrl,
+    baseUrl: ApiConfig.apiBaseUrl,
     connectTimeout: ApiConfig.connectTimeout,
     receiveTimeout: ApiConfig.receiveTimeout,
     headers: ApiConfig.defaultHeaders,
@@ -33,12 +34,10 @@ final ordersApiClientProvider = Provider<OrdersApiClient>((ref) {
 
 // Datasource related
 final orderDataSourceProvider = Provider<OrderDataSource>((ref) {
-  // Dev ONY - use mock data
-  return OrderMockDataSource();
+  if (AppServiceMode.isMock) return OrderMockDataSource();
 
-  // Use real API service
-  // final apiClient = ref.watch(ordersApiClientProvider);
-  // return OrderApiDataSource(apiClient);
+  final apiClient = ref.watch(ordersApiClientProvider);
+  return OrderApiDataSource(apiClient);
 });
 
 // Repository related

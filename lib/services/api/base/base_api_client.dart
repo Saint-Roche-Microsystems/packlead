@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:packlead/services/api/base/api_exception.dart';
 
@@ -22,6 +23,8 @@ class BaseApiClient {
         validateStatus: (status) => status != null && status >= 200 && status < 300,
       ),
     );
+
+    _dio.interceptors.add(_AuthInterceptor(_dio));
 
     // Add interceptor for logging in debug mode
     if (kDebugMode) {
@@ -123,6 +126,49 @@ class BaseApiClient {
           statusCode: null,
         );
     }
+  }
+}
+
+/// Attaches the current Firebase ID token to every request and retries
+/// once with a force-refreshed token on a 401.
+class _AuthInterceptor extends Interceptor {
+  _AuthInterceptor(this._dio);
+
+  final Dio _dio;
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    final token = await FirebaseAuth.instance.currentUser?.getIdToken();
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+    handler.next(options);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    final requestOptions = err.requestOptions;
+    final alreadyRetried = requestOptions.extra['authRetried'] == true;
+
+    if (err.response?.statusCode == 401 &&
+        !alreadyRetried &&
+        FirebaseAuth.instance.currentUser != null) {
+      try {
+        final refreshedToken = await FirebaseAuth.instance.currentUser?.getIdToken(true);
+        if (refreshedToken != null) {
+          requestOptions.headers['Authorization'] = 'Bearer $refreshedToken';
+          requestOptions.extra['authRetried'] = true;
+          final response = await _dio.fetch(requestOptions);
+          handler.resolve(response);
+          return;
+        }
+      } on DioException catch (retryError) {
+        handler.next(retryError);
+        return;
+      }
+    }
+
+    handler.next(err);
   }
 }
 

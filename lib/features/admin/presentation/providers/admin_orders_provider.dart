@@ -6,13 +6,9 @@ import 'package:packlead/features/orders/presentation/providers/orders_provider.
 
 // Provider for list view & dtails for admin orders Screen
 final enrichedOrdersByStateProvider = FutureProvider.family<List<AdminOrdersViewModel>, OrderState>((ref, state) async {
-  // Watch base domain providers
-  final ordersAsync = ref.watch(ordersByStateProvider(state)); // Always fetch by state
-  final dispatchersAsync = ref.watch(dispatchersProvider);
-
-  // Retreive data
-  final orders = ordersAsync.requireValue;
-  final dispatchers = dispatchersAsync.requireValue;
+  // Await both base domain providers to show corresponding data
+  final orders = await ref.watch(ordersByStateProvider(state).future);
+  final dispatchers = await ref.watch(dispatchersProvider.future);
 
   // Create a map for dispatchers ----> easy access
   final dispatcherMap = {

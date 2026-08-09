@@ -3,14 +3,14 @@ import 'package:packlead/core/models/location.dart';
 // model specific for RTDB
 class DispatcherLocation {
   final String dispatcherId;
-  final String name;
+  final String email;
   final double lat;
   final double lng;
   final DateTime updatedAt;
 
   DispatcherLocation({
     required this.dispatcherId,
-    required this.name,
+    required this.email,
     required this.lat,
     required this.lng,
     required this.updatedAt,
@@ -28,7 +28,7 @@ class DispatcherLocation {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
+      'email': email,
       'lat': lat,
       'lng': lng,
       'updatedAt': updatedAt.millisecondsSinceEpoch,
@@ -38,7 +38,7 @@ class DispatcherLocation {
   factory DispatcherLocation.fromJson(Map<String, dynamic> json) {
     return DispatcherLocation(
       dispatcherId: json['dispatcherId'] as String? ?? '',
-      name: json['name'] as String,
+      email: json['email'] as String,
       lat: (json['lat'] as num).toDouble(),
       lng: (json['lng'] as num).toDouble(),
       updatedAt: DateTime.fromMillisecondsSinceEpoch(
@@ -49,6 +49,6 @@ class DispatcherLocation {
 
   @override
   String toString() {
-    return 'DispatcherLocation(id: $dispatcherId, name: $name, lat: $lat, lng: $lng)';
+    return 'DispatcherLocation(id: $dispatcherId, email: $email, lat: $lat, lng: $lng)';
   }
 }
