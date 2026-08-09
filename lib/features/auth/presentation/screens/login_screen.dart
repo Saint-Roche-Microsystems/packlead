@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:packlead/core/config/service_mode.dart';
 import 'package:packlead/core/constants/user_status.dart';
 import 'package:packlead/core/themes/core/color_schema.dart';
 import 'package:packlead/core/widgets/form_fields/email_field.dart';
@@ -140,11 +141,12 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                       ),
                     ),
 
-                    // Devloper ONLY. Remove on production.
-                    QuickLoginButtons(
-                      onAdminLogin: _fillAdminCredentials,
-                      onDispatcherLogin: _fillDispatcherCredentials,
-                    ),
+                    // Quick buttons ONLY when app is set to use MOCK data
+                    if (AppServiceMode.isMock)
+                      QuickLoginButtons(
+                        onAdminLogin: _fillAdminCredentials,
+                        onDispatcherLogin: _fillDispatcherCredentials,
+                      ),
                   ],
                 ),
               ),
