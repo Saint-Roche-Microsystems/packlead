@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/config/service_mode.dart';
 import 'package:packlead/core/constants/dispatcher_state.dart';
 import 'package:packlead/core/models/dispatcher.dart';
+import 'package:packlead/features/auth/presentation/providers/auth_provider.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_api_datasource.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasource.dart';
 import 'package:packlead/features/dispatcher/data/datasources/dispatcher_mock_datasource.dart';
@@ -32,7 +33,10 @@ final dispatchersApiClientProvider = Provider<DispatchersApiClient>((ref) {
 });
 
 final dispatcherDataSourceProvider = Provider<DispatcherDatasource>((ref) {
-  if (AppServiceMode.isMock) return DispatcherMockDataSource();
+  if (AppServiceMode.isMock) {
+    final currentUserId = ref.watch(authStateProvider).user?.id;
+    return DispatcherMockDataSource(currentUserId: currentUserId);
+  }
 
   final apiClient = ref.watch(dispatchersApiClientProvider);
   return DispatcherApiDataSource(apiClient);
