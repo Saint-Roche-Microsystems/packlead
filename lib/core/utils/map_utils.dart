@@ -11,7 +11,8 @@ class MapUtils {
 
   /// Open Google Maps with a query for the given location
   static Future<void> openInGoogleMaps(Location location) async {
-    final url = 'https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}';
+    final url =
+        'https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     }
@@ -38,7 +39,8 @@ class MapUtils {
         final data = json.decode(response.body);
 
         if (data['status'] == 'OK') {
-          final polylinePoints = data['routes'][0]['overview_polyline']['points'];
+          final polylinePoints =
+              data['routes'][0]['overview_polyline']['points'];
           return PolylineBuilder.decodePolyline(polylinePoints);
         } else {
           throw Exception('Error in response: ${data['status']}');
@@ -52,27 +54,18 @@ class MapUtils {
   }
 
   // Adjust camera to focus on a location with a specific zoom level
-  static CameraUpdate focusOnLocation(
-      Location location, {
-        double zoom = 14.0,
-      }) {
-    return CameraUpdate.newLatLngZoom(
-      location.toLatLng(),
-      zoom,
-    );
+  static CameraUpdate focusOnLocation(Location location, {double zoom = 14.0}) {
+    return CameraUpdate.newLatLngZoom(location.toLatLng(), zoom);
   }
 
   /// Adjust the camera to show multiple locations with appropriate zoom and padding
   static CameraUpdate focusOnMultipleLocations(
-      List<Location> locations, {
-        double padding = 80.0,
-      }) {
+    List<Location> locations, {
+    double padding = 80.0,
+  }) {
     if (locations.isEmpty) {
       // If no locations, center aroound default coordinates
-      return CameraUpdate.newLatLngZoom(
-        const LatLng(-0.1807, -78.4678),
-        12.0,
-      );
+      return CameraUpdate.newLatLngZoom(const LatLng(-0.1807, -78.4678), 12.0);
     }
 
     if (locations.length == 1) {
@@ -109,10 +102,7 @@ class MapUtils {
     if (locations.isEmpty) {
       // Default bounds if no locations are provided
       const defaultPoint = LatLng(-0.1807, -78.4678);
-      return LatLngBounds(
-        southwest: defaultPoint,
-        northeast: defaultPoint,
-      );
+      return LatLngBounds(southwest: defaultPoint, northeast: defaultPoint);
     }
 
     if (locations.length == 1) {

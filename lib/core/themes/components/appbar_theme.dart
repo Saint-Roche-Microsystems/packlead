@@ -12,13 +12,7 @@ AppBarTheme getAppBarTheme() {
       fontWeight: FontWeight.bold,
       color: SaintColors.background,
     ),
-    iconTheme: IconThemeData(
-      color: SaintColors.background,
-      size: 24.0,
-    ),
-    actionsIconTheme: IconThemeData(
-      color: SaintColors.background,
-      size: 24.0,
-    ),
+    iconTheme: IconThemeData(color: SaintColors.background, size: 24.0),
+    actionsIconTheme: IconThemeData(color: SaintColors.background, size: 24.0),
   );
 }

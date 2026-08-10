@@ -15,7 +15,11 @@ class DispatcherApiDataSource implements DispatcherDatasource {
     try {
       return await _apiClient.getDispatchers();
     } catch (e, st) {
-      AppLogger.error('Error al obtener todos los repartidores', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener todos los repartidores',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
@@ -24,9 +28,15 @@ class DispatcherApiDataSource implements DispatcherDatasource {
   Future<List<Dispatcher>> getDispatchersByState(DispatcherState state) async {
     try {
       final dispatchers = await _apiClient.getDispatchers();
-      return dispatchers.where((dispatcher) => dispatcher.state == state).toList();
+      return dispatchers
+          .where((dispatcher) => dispatcher.state == state)
+          .toList();
     } catch (e, st) {
-      AppLogger.error('Error al obtener repartidores por estado', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener repartidores por estado',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
@@ -36,7 +46,11 @@ class DispatcherApiDataSource implements DispatcherDatasource {
     try {
       return await _apiClient.getDispatcher(id);
     } catch (e, st) {
-      AppLogger.error('Error al obtener repartidor por ID', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener repartidor por ID',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
@@ -46,13 +60,19 @@ class DispatcherApiDataSource implements DispatcherDatasource {
     try {
       return await _apiClient.getMyProfile();
     } catch (e, st) {
-      AppLogger.error('Error al obtener el perfil del repartidor', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener el perfil del repartidor',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
 
   @override
-  Future<DispatcherCreationResult> createDispatcher(Dispatcher dispatcher) async {
+  Future<DispatcherCreationResult> createDispatcher(
+    Dispatcher dispatcher,
+  ) async {
     try {
       final payload = dispatcher.toJson();
       final data = await _apiClient.createDispatcher(payload);
@@ -73,7 +93,11 @@ class DispatcherApiDataSource implements DispatcherDatasource {
       final payload = dispatcher.toJson();
       return await _apiClient.updateDispatcher(dispatcher.id, payload);
     } catch (e, st) {
-      AppLogger.error('Error al actualizar repartidor', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al actualizar repartidor',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }

@@ -43,7 +43,9 @@ void main() {
     Widget createTestWidget() {
       return ProviderScope(
         overrides: [
-          dispatcherRepositoryProvider.overrideWithValue(mockDispatcherRepository),
+          dispatcherRepositoryProvider.overrideWithValue(
+            mockDispatcherRepository,
+          ),
           orderRepositoryProvider.overrideWithValue(mockOrderRepository),
         ],
         child: const MaterialApp(
@@ -55,10 +57,13 @@ void main() {
       );
     }
 
-    testWidgets('Muestra loading mientras se carga el perfil del dispatcher', (tester) async {
+    testWidgets('Muestra loading mientras se carga el perfil del dispatcher', (
+      tester,
+    ) async {
       final completer = Completer<Dispatcher>();
-      when(() => mockDispatcherRepository.getMyProfile())
-          .thenAnswer((_) => completer.future);
+      when(
+        () => mockDispatcherRepository.getMyProfile(),
+      ).thenAnswer((_) => completer.future);
 
       await tester.pumpWidget(createTestWidget());
       await tester.pump();
@@ -71,9 +76,12 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('Muestra error cuando falla la carga del perfil', (tester) async {
-      when(() => mockDispatcherRepository.getMyProfile())
-          .thenThrow(Exception('Error de prueba'));
+    testWidgets('Muestra error cuando falla la carga del perfil', (
+      tester,
+    ) async {
+      when(
+        () => mockDispatcherRepository.getMyProfile(),
+      ).thenThrow(Exception('Error de prueba'));
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -81,9 +89,12 @@ void main() {
       expect(find.text('Error al cargar tu perfil'), findsOneWidget);
     });
 
-    testWidgets('Muestra el botón de cerrar sesión en el AppBar', (tester) async {
-      when(() => mockDispatcherRepository.getMyProfile())
-          .thenThrow(Exception('Error de prueba'));
+    testWidgets('Muestra el botón de cerrar sesión en el AppBar', (
+      tester,
+    ) async {
+      when(
+        () => mockDispatcherRepository.getMyProfile(),
+      ).thenThrow(Exception('Error de prueba'));
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -92,11 +103,15 @@ void main() {
       expect(find.byTooltip('Salir'), findsOneWidget);
     });
 
-    testWidgets('Muestra error cuando falla la carga de pedidos del día', (tester) async {
-      when(() => mockDispatcherRepository.getMyProfile())
-          .thenAnswer((_) async => dispatcher);
-      when(() => mockOrderRepository.getOrdersByDispatcher(any(), any()))
-          .thenThrow(Exception('Error de prueba'));
+    testWidgets('Muestra error cuando falla la carga de pedidos del día', (
+      tester,
+    ) async {
+      when(
+        () => mockDispatcherRepository.getMyProfile(),
+      ).thenAnswer((_) async => dispatcher);
+      when(
+        () => mockOrderRepository.getOrdersByDispatcher(any(), any()),
+      ).thenThrow(Exception('Error de prueba'));
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();

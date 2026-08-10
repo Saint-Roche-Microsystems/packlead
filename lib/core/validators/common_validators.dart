@@ -10,7 +10,11 @@ class CommonValidators {
   }
 
   /// Min length validator
-  static String? minLength(String? value, int min, [String fieldName = 'Este campo']) {
+  static String? minLength(
+    String? value,
+    int min, [
+    String fieldName = 'Este campo',
+  ]) {
     if (value == null || value.trim().isEmpty) {
       return '$fieldName es requerido';
     }

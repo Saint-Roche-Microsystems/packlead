@@ -10,7 +10,7 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
   String? _currentDispatcherId;
 
   DispatcherLocationNotifier(this._locationService)
-      : super(const AsyncValue.data(null));
+    : super(const AsyncValue.data(null));
 
   /// Register dispatcher when login
   Future<void> register({
@@ -30,7 +30,11 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
       _currentDispatcherId = dispatcherId;
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {
-      AppLogger.error('Error al registrar ubicación en RTDB', error: error, stackTrace: stackTrace);
+      AppLogger.error(
+        'Error al registrar ubicación en RTDB',
+        error: error,
+        stackTrace: stackTrace,
+      );
       state = AsyncValue.error(error, stackTrace);
     }
   }
@@ -45,7 +49,11 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
         location: location,
       );
     } catch (error, stackTrace) {
-      AppLogger.warning('Error al actualizar ubicación en RTDB', error: error, stackTrace: stackTrace);
+      AppLogger.warning(
+        'Error al actualizar ubicación en RTDB',
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
   }
 
@@ -58,7 +66,11 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
       _currentDispatcherId = null;
       state = const AsyncValue.data(null);
     } catch (error, stackTrace) {
-      AppLogger.error('Error al eliminar registro de ubicación en RTDB', error: error, stackTrace: stackTrace);
+      AppLogger.error(
+        'Error al eliminar registro de ubicación en RTDB',
+        error: error,
+        stackTrace: stackTrace,
+      );
       state = AsyncValue.error(error, stackTrace);
     }
   }
@@ -67,15 +79,19 @@ class DispatcherLocationNotifier extends StateNotifier<AsyncValue<void>> {
   bool get isRegistered => _currentDispatcherId != null;
 }
 
-final dispatcherLocationProvider = StateNotifierProvider.autoDispose<DispatcherLocationNotifier, AsyncValue<void>>((ref) {
-  final locationService = ref.watch(dispatcherLocationServiceProvider);
-  final notifier = DispatcherLocationNotifier(locationService);
+final dispatcherLocationProvider =
+    StateNotifierProvider.autoDispose<
+      DispatcherLocationNotifier,
+      AsyncValue<void>
+    >((ref) {
+      final locationService = ref.watch(dispatcherLocationServiceProvider);
+      final notifier = DispatcherLocationNotifier(locationService);
 
-  ref.onDispose(() {
-    notifier.unregister();
-  });
+      ref.onDispose(() {
+        notifier.unregister();
+      });
 
-  ref.keepAlive();
+      ref.keepAlive();
 
-  return notifier;
-});
+      return notifier;
+    });

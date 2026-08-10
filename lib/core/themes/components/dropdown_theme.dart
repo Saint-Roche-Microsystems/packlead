@@ -8,15 +8,10 @@ DropdownMenuThemeData getDropdownMenuTheme() {
       surfaceTintColor: WidgetStateProperty.all(Colors.transparent),
       elevation: WidgetStateProperty.all(4),
       shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     ),
-    textStyle: TextStyle(
-      color: SaintColors.foreground,
-      fontSize: 14,
-    ),
+    textStyle: TextStyle(color: SaintColors.foreground, fontSize: 14),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: SaintColors.surface,

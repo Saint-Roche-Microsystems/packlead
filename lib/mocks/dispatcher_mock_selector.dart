@@ -7,16 +7,15 @@ class DispatcherCredentials {
   final String email;
   final String password;
 
-  DispatcherCredentials({
-    required this.email,
-    required this.password,
-  });
+  DispatcherCredentials({required this.email, required this.password});
 }
 
 DispatcherCredentials? getRandomMockDispatcher() {
   final users = UsersMockData().users;
 
-  final dispatchers = users.where((user) => user.role == UserRole.dispatcher).toList();
+  final dispatchers = users
+      .where((user) => user.role == UserRole.dispatcher)
+      .toList();
 
   if (dispatchers.isEmpty) {
     return null;

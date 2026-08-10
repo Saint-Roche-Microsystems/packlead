@@ -5,14 +5,10 @@ import 'package:packlead/core/themes/index.dart';
 import 'package:packlead/core/widgets/state_bagde.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_provider.dart';
 
-
 class DispatcherStateControl extends ConsumerWidget {
   final String dispatcherId;
 
-  const DispatcherStateControl({
-    super.key,
-    required this.dispatcherId,
-  });
+  const DispatcherStateControl({super.key, required this.dispatcherId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,9 +42,9 @@ class DispatcherStateControl extends ConsumerWidget {
                   ref
                       .read(dispatcherMutationProvider.notifier)
                       .updateDispatcherState(
-                    dispatcherId,
-                    DispatcherState.available,
-                  );
+                        dispatcherId,
+                        DispatcherState.available,
+                      );
                 },
               ),
 
@@ -56,17 +52,16 @@ class DispatcherStateControl extends ConsumerWidget {
 
               StateBadge(
                 label: DispatcherState.inactive.label,
-                isActive:
-                currentState == DispatcherState.inactive,
+                isActive: currentState == DispatcherState.inactive,
                 color: SaintColors.primary,
                 isLoading: mutationState.isLoading,
                 onTap: () {
                   ref
                       .read(dispatcherMutationProvider.notifier)
                       .updateDispatcherState(
-                    dispatcherId,
-                    DispatcherState.inactive,
-                  );
+                        dispatcherId,
+                        DispatcherState.inactive,
+                      );
                 },
               ),
             ],

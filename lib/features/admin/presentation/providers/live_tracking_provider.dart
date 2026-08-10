@@ -21,37 +21,45 @@ final liveTrackingProvider = StreamProvider<List<DispatcherLocation>>((ref) {
 
 /// Joins the live RTDB locations (keyed by Firebase UID) to the backend
 /// `GET /dispatchers` results via `Dispatcher.firebaseUid`
-final enrichedLiveLocationsProvider = Provider<AsyncValue<List<AdminTrackingViewModel>>>((ref) {
-  final locationsAsync = ref.watch(liveTrackingProvider);
-  final dispatchersAsync = ref.watch(dispatchersProvider);
+final enrichedLiveLocationsProvider =
+    Provider<AsyncValue<List<AdminTrackingViewModel>>>((ref) {
+      final locationsAsync = ref.watch(liveTrackingProvider);
+      final dispatchersAsync = ref.watch(dispatchersProvider);
 
-  if (locationsAsync.isLoading || dispatchersAsync.isLoading) {
-    return const AsyncValue.loading();
-  }
+      if (locationsAsync.isLoading || dispatchersAsync.isLoading) {
+        return const AsyncValue.loading();
+      }
 
-  if (locationsAsync.hasError) {
-    return AsyncValue.error(locationsAsync.error!, locationsAsync.stackTrace!);
-  }
+      if (locationsAsync.hasError) {
+        return AsyncValue.error(
+          locationsAsync.error!,
+          locationsAsync.stackTrace!,
+        );
+      }
 
-  if (dispatchersAsync.hasError) {
-    return AsyncValue.error(dispatchersAsync.error!, dispatchersAsync.stackTrace!);
-  }
+      if (dispatchersAsync.hasError) {
+        return AsyncValue.error(
+          dispatchersAsync.error!,
+          dispatchersAsync.stackTrace!,
+        );
+      }
 
-  final locations = locationsAsync.value!;
-  final dispatchers = dispatchersAsync.value!;
+      final locations = locationsAsync.value!;
+      final dispatchers = dispatchersAsync.value!;
 
-  final dispatcherByFirebaseUid = {
-    for (final dispatcher in dispatchers)
-      if (dispatcher.firebaseUid != null) dispatcher.firebaseUid!: dispatcher,
-  };
+      final dispatcherByFirebaseUid = {
+        for (final dispatcher in dispatchers)
+          if (dispatcher.firebaseUid != null)
+            dispatcher.firebaseUid!: dispatcher,
+      };
 
-  final enriched = locations.map((location) {
-    final dispatcher = dispatcherByFirebaseUid[location.dispatcherId];
-    return AdminTrackingViewModel.fromLocation(location, dispatcher);
-  }).toList();
+      final enriched = locations.map((location) {
+        final dispatcher = dispatcherByFirebaseUid[location.dispatcherId];
+        return AdminTrackingViewModel.fromLocation(location, dispatcher);
+      }).toList();
 
-  return AsyncValue.data(enriched);
-});
+      return AsyncValue.data(enriched);
+    });
 
 /// Provider to only get available dispatchers
 final onlineDispatchersProvider = Provider<List<DispatcherLocation>>((ref) {

@@ -59,9 +59,9 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
 
     ref.listen<AuthState>(authStateProvider, (previous, next) {
       if (next.status == AuthStatus.error && next.errorMessage != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          ErrorSnackBar(message: next.errorMessage!),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(ErrorSnackBar(message: next.errorMessage!));
       }
     });
 
@@ -112,7 +112,9 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: authState.status == AuthStatus.loading ? null : _handleLogin,
+                        onPressed: authState.status == AuthStatus.loading
+                            ? null
+                            : _handleLogin,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
@@ -121,23 +123,23 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                         ),
                         child: authState.status == AuthStatus.loading
                             ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        )
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
                             : const Text(
-                          'Iniciar Sesión',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: SaintColors.surface
-                          ),
-                        ),
+                                'Iniciar Sesión',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: SaintColors.surface,
+                                ),
+                              ),
                       ),
                     ),
 
@@ -157,4 +159,3 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
     );
   }
 }
-

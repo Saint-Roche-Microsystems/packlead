@@ -61,7 +61,9 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
     // Check for all fields at the same time
     final isValidForm = _formKey.currentState!.validate();
     final locationValidMsg = _checkLocationError();
-    final dateValidMsg = OrderFormValidators.validateDeliveryDate(_selectedDeliveryDate);
+    final dateValidMsg = OrderFormValidators.validateDeliveryDate(
+      _selectedDeliveryDate,
+    );
 
     setState(() {
       _locationError = locationValidMsg;
@@ -71,7 +73,8 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
       _dateError = dateValidMsg;
     });
 
-    if(!isValidForm || locationValidMsg != null || dateValidMsg != null) return;
+    if (!isValidForm || locationValidMsg != null || dateValidMsg != null)
+      return;
 
     _submit();
   }
@@ -79,7 +82,9 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
   Future<void> _submit() async {
     final lat = double.parse(_latCtrl.text.trim());
     final lng = double.parse(_lngCtrl.text.trim());
-    final formatedPhone = PhoneValidators.formatEC(_clientPhoneCtrl.text.trim());
+    final formatedPhone = PhoneValidators.formatEC(
+      _clientPhoneCtrl.text.trim(),
+    );
 
     final newOrder = Order(
       id: '',
@@ -91,7 +96,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
       zone: _zoneCtrl.text.trim(),
       address: _addressCtrl.text.trim(),
       deliveryDate: _selectedDeliveryDate!,
-      createdAt: DateTime.now()
+      createdAt: DateTime.now(),
     );
 
     await ref.read(orderMutationProvider.notifier).createOrder(newOrder);
@@ -99,19 +104,17 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
 
   @override
   Widget build(BuildContext context) {
-
     // Secondary event listeners
     ref.listen<AsyncValue<void>>(orderMutationProvider, (previous, next) {
-
-      if(previous?.isLoading == true && next.hasValue) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SuccessSnackBar(message: 'Pedido creado exitosamente'),
-        );
+      if (previous?.isLoading == true && next.hasValue) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SuccessSnackBar(message: 'Pedido creado exitosamente'));
 
         Navigator.pop(context);
       }
 
-      if(next.hasError && previous?.hasError != true) {
+      if (next.hasError && previous?.hasError != true) {
         ScaffoldMessenger.of(context).showSnackBar(
           ErrorSnackBar(message: 'Ha ocurrido un error al crear el pedido'),
         );
@@ -123,9 +126,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
 
     // UI render
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Crear Pedido'),
-      ),
+      appBar: AppBar(title: const Text('Crear Pedido')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -177,7 +178,7 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
                     _selectedDeliveryDate = date;
                   });
 
-                  if(_dateError != null) {
+                  if (_dateError != null) {
                     setState(() {
                       _dateError = null;
                     });

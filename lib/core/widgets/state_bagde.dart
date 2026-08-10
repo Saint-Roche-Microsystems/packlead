@@ -18,17 +18,15 @@ class StateBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor =
-    isActive ? color : Colors.grey.withValues(alpha: 0.4);
+    final effectiveColor = isActive
+        ? color
+        : Colors.grey.withValues(alpha: 0.4);
 
     return InkWell(
       borderRadius: BorderRadius.circular(20),
       onTap: isLoading || isActive ? null : onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 6,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: effectiveColor.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(20),

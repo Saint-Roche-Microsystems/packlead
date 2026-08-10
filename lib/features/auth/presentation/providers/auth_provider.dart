@@ -27,7 +27,9 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 /// AUTH STATE PROVIDER
 /// *******************
 
-final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
+final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((
+  ref,
+) {
   final repository = ref.watch(authRepositoryProvider);
   return AuthStateNotifier(repository);
 });
@@ -41,7 +43,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
   Future<void> _checkStatus() async {
     final currentUser = await _repository.getCurrentUser();
-    if(currentUser != null) {
+    if (currentUser != null) {
       state = AuthState.authenticated(currentUser);
     } else {
       state = AuthState.unauthenticated();
@@ -54,8 +56,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     final result = await _repository.login(email, password);
 
     result.fold(
-       (error) => state = AuthState.error(error),
-       (user) => state = AuthState.authenticated(user),
+      (error) => state = AuthState.error(error),
+      (user) => state = AuthState.authenticated(user),
     );
   }
 
@@ -64,7 +66,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       await _repository.logout();
       state = AuthState.unauthenticated();
     } catch (error, stackTrace) {
-      AppLogger.error('Error al cerrar sesión', error: error, stackTrace: stackTrace);
+      AppLogger.error(
+        'Error al cerrar sesión',
+        error: error,
+        stackTrace: stackTrace,
+      );
       state = AuthState.error(ErrorHandler.getErrorMessage(error));
     }
   }

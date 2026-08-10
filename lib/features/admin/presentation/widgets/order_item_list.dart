@@ -30,7 +30,9 @@ class OrderItemList extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   border: Border.all(
-                    color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
+                    color: Theme.of(
+                      context,
+                    ).primaryColor.withValues(alpha: 0.3),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(12),
@@ -57,9 +59,9 @@ class OrderItemList extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       'Zona: ${orderVM.zone}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -74,10 +76,7 @@ class OrderItemList extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: orderVM.state.color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: orderVM.state.color,
-                    width: 1,
-                  ),
+                  border: Border.all(color: orderVM.state.color, width: 1),
                 ),
                 child: Text(
                   orderVM.state.label,

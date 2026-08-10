@@ -8,7 +8,7 @@ class UsersMockData {
       email: 'admin@packlead.com',
       password: 'admin123',
       role: UserRole.admin,
-      name: 'Santiago Moreno'
+      name: 'Santiago Moreno',
     ),
 
     User(

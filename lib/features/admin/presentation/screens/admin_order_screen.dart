@@ -18,7 +18,7 @@ class AdminOrderScreen extends ConsumerStatefulWidget {
 
 class _AdminOrderScreenState extends ConsumerState<AdminOrderScreen>
     with SingleTickerProviderStateMixin {
-    late TabController _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -34,7 +34,6 @@ class _AdminOrderScreenState extends ConsumerState<AdminOrderScreen>
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Padding(
@@ -114,9 +113,9 @@ class _OrderListByState extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => ErrorScreen(
-          title: 'No se pudieron cargar los pedidos',
-          message: ErrorHandler.getErrorMessage(error),
-          onRetry: () => ref.read(orderMutationProvider.notifier).refresh(),
+        title: 'No se pudieron cargar los pedidos',
+        message: ErrorHandler.getErrorMessage(error),
+        onRetry: () => ref.read(orderMutationProvider.notifier).refresh(),
       ),
     );
   }

@@ -17,7 +17,11 @@ class DispatchersApiClient {
     } on ApiException {
       rethrow;
     } catch (e, st) {
-      AppLogger.error(DispatchersApiErrors.getDispatchers, error: e, stackTrace: st);
+      AppLogger.error(
+        DispatchersApiErrors.getDispatchers,
+        error: e,
+        stackTrace: st,
+      );
       throw ApiException(DispatchersApiErrors.getDispatchers);
     }
   }
@@ -29,12 +33,18 @@ class DispatchersApiClient {
     }
 
     try {
-      final response = await _client.get<Map<String, dynamic>>('/dispatchers/$dispatcherId');
+      final response = await _client.get<Map<String, dynamic>>(
+        '/dispatchers/$dispatcherId',
+      );
       return _parseDispatcher(response);
     } on ApiException {
       rethrow;
     } catch (e, st) {
-      AppLogger.error(DispatchersApiErrors.getDispatcher, error: e, stackTrace: st);
+      AppLogger.error(
+        DispatchersApiErrors.getDispatcher,
+        error: e,
+        stackTrace: st,
+      );
       throw ApiException(DispatchersApiErrors.getDispatcher);
     }
   }
@@ -42,18 +52,26 @@ class DispatchersApiClient {
   /// GET /dispatchers/me (dispatcher)
   Future<Dispatcher> getMyProfile() async {
     try {
-      final response = await _client.get<Map<String, dynamic>>('/dispatchers/me');
+      final response = await _client.get<Map<String, dynamic>>(
+        '/dispatchers/me',
+      );
       return _parseDispatcher(response);
     } on ApiException {
       rethrow;
     } catch (e, st) {
-      AppLogger.error(DispatchersApiErrors.getMyProfile, error: e, stackTrace: st);
+      AppLogger.error(
+        DispatchersApiErrors.getMyProfile,
+        error: e,
+        stackTrace: st,
+      );
       throw ApiException(DispatchersApiErrors.getMyProfile);
     }
   }
 
   /// POST /dispatchers (admin)
-  Future<Map<String, dynamic>> createDispatcher(Map<String, dynamic> payload) async {
+  Future<Map<String, dynamic>> createDispatcher(
+    Map<String, dynamic> payload,
+  ) async {
     try {
       final response = await _client.post<Map<String, dynamic>>(
         '/dispatchers',
@@ -64,13 +82,20 @@ class DispatchersApiClient {
     } on ApiException {
       rethrow;
     } catch (e, st) {
-      AppLogger.error(DispatchersApiErrors.createDispatcher, error: e, stackTrace: st);
+      AppLogger.error(
+        DispatchersApiErrors.createDispatcher,
+        error: e,
+        stackTrace: st,
+      );
       throw ApiException(DispatchersApiErrors.createDispatcher);
     }
   }
 
   /// PUT /dispatchers/:id (admin)
-  Future<Dispatcher> updateDispatcher(String dispatcherId, Map<String, dynamic> payload) async {
+  Future<Dispatcher> updateDispatcher(
+    String dispatcherId,
+    Map<String, dynamic> payload,
+  ) async {
     if (dispatcherId.isEmpty) {
       throw ArgumentError(DispatchersApiErrors.dispatcherIdRequired);
     }
@@ -84,7 +109,11 @@ class DispatchersApiClient {
     } on ApiException {
       rethrow;
     } catch (e, st) {
-      AppLogger.error(DispatchersApiErrors.updateDispatcher, error: e, stackTrace: st);
+      AppLogger.error(
+        DispatchersApiErrors.updateDispatcher,
+        error: e,
+        stackTrace: st,
+      );
       throw ApiException(DispatchersApiErrors.updateDispatcher);
     }
   }
@@ -100,7 +129,11 @@ class DispatchersApiClient {
     } on ApiException {
       rethrow;
     } catch (e, st) {
-      AppLogger.error(DispatchersApiErrors.deleteDispatcher, error: e, stackTrace: st);
+      AppLogger.error(
+        DispatchersApiErrors.deleteDispatcher,
+        error: e,
+        stackTrace: st,
+      );
       throw ApiException(DispatchersApiErrors.deleteDispatcher);
     }
   }

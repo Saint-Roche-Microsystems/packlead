@@ -20,7 +20,8 @@ class BaseApiClient {
         connectTimeout: connectTimeout ?? const Duration(seconds: 30),
         receiveTimeout: receiveTimeout ?? const Duration(seconds: 30),
         headers: headers ?? {'Content-Type': 'application/json'},
-        validateStatus: (status) => status != null && status >= 200 && status < 300,
+        validateStatus: (status) =>
+            status != null && status >= 200 && status < 300,
       ),
     );
 
@@ -33,15 +34,9 @@ class BaseApiClient {
   }
 
   /// GET request
-  Future<T> get<T>(
-      String path, {
-        Map<String, dynamic>? queryParameters,
-      }) async {
+  Future<T> get<T>(String path, {Map<String, dynamic>? queryParameters}) async {
     try {
-      final response = await _dio.get(
-        path,
-        queryParameters: queryParameters,
-      );
+      final response = await _dio.get(path, queryParameters: queryParameters);
       return response.data as T;
     } on DioException catch (e) {
       throw _handleDioException(e);
@@ -49,15 +44,9 @@ class BaseApiClient {
   }
 
   /// POST request
-  Future<T> post<T>(
-      String path, {
-        required Map<String, dynamic> data,
-      }) async {
+  Future<T> post<T>(String path, {required Map<String, dynamic> data}) async {
     try {
-      final response = await _dio.post(
-        path,
-        data: data,
-      );
+      final response = await _dio.post(path, data: data);
       return response.data as T;
     } on DioException catch (e) {
       throw _handleDioException(e);
@@ -65,15 +54,9 @@ class BaseApiClient {
   }
 
   /// PUT request
-  Future<T> put<T>(
-      String path, {
-        required Map<String, dynamic> data,
-      }) async {
+  Future<T> put<T>(String path, {required Map<String, dynamic> data}) async {
     try {
-      final response = await _dio.put(
-        path,
-        data: data,
-      );
+      final response = await _dio.put(path, data: data);
       return response.data as T;
     } on DioException catch (e) {
       throw _handleDioException(e);
@@ -107,7 +90,8 @@ class BaseApiClient {
         // Try to extract message from the backend
         String message = 'Error del servidor';
         if (responseData is Map<String, dynamic>) {
-          message = responseData['message'] as String? ??
+          message =
+              responseData['message'] as String? ??
               responseData['error'] as String? ??
               message;
         }
@@ -137,7 +121,10 @@ class _AuthInterceptor extends Interceptor {
   final Dio _dio;
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     final token = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -154,7 +141,8 @@ class _AuthInterceptor extends Interceptor {
         !alreadyRetried &&
         FirebaseAuth.instance.currentUser != null) {
       try {
-        final refreshedToken = await FirebaseAuth.instance.currentUser?.getIdToken(true);
+        final refreshedToken = await FirebaseAuth.instance.currentUser
+            ?.getIdToken(true);
         if (refreshedToken != null) {
           requestOptions.headers['Authorization'] = 'Bearer $refreshedToken';
           requestOptions.extra['authRetried'] = true;
@@ -185,14 +173,18 @@ class _LoggingInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    debugPrint('[RESPONSE]: ${response.statusCode} ${response.requestOptions.uri}');
+    debugPrint(
+      '[RESPONSE]: ${response.statusCode} ${response.requestOptions.uri}',
+    );
     debugPrint('Data: ${response.data}');
     super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    debugPrint('[ERROR]: ${err.response?.statusCode} ${err.requestOptions.uri}');
+    debugPrint(
+      '[ERROR]: ${err.response?.statusCode} ${err.requestOptions.uri}',
+    );
     debugPrint('Message: ${err.message}');
     super.onError(err, handler);
   }

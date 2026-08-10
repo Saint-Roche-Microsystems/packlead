@@ -10,7 +10,8 @@ class AdminBottomNavLayout extends ConsumerStatefulWidget {
   const AdminBottomNavLayout({super.key});
 
   @override
-  ConsumerState<AdminBottomNavLayout> createState() => _AdminBottomNavLayoutState();
+  ConsumerState<AdminBottomNavLayout> createState() =>
+      _AdminBottomNavLayoutState();
 }
 
 class _AdminBottomNavLayoutState extends ConsumerState<AdminBottomNavLayout> {
@@ -43,33 +44,21 @@ class _AdminBottomNavLayoutState extends ConsumerState<AdminBottomNavLayout> {
           ),
         ],
       ),
-      body: Center(
-        child: _screens[_selectedIndex],
-      ),
+      body: Center(child: _screens[_selectedIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt),
-            label: 'Pedidos',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Pedidos'),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Repartidores',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Mapa',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Mapa'),
         ],
       ),
     );
   }
 }
-

@@ -14,7 +14,10 @@ void main() {
     });
 
     test('Debe usar el nombre de campo provisto en el mensaje', () {
-      expect(CommonValidators.required('', 'El correo'), 'El correo es requerido');
+      expect(
+        CommonValidators.required('', 'El correo'),
+        'El correo es requerido',
+      );
     });
 
     test('Debe retornar null si el valor es válido', () {
@@ -41,7 +44,10 @@ void main() {
 
   group('CommonValidators.notBlank', () {
     test('Debe retornar error si el valor está vacío', () {
-      expect(CommonValidators.notBlank('', 'El vehículo'), 'El vehículo no puede estar vacío');
+      expect(
+        CommonValidators.notBlank('', 'El vehículo'),
+        'El vehículo no puede estar vacío',
+      );
     });
 
     test('Debe retornar null si el valor no está vacío', () {
@@ -59,7 +65,10 @@ void main() {
     });
 
     test('Debe retornar error si el formato es inválido', () {
-      expect(EmailValidators.validateFormat('correo-invalido'), 'Ingrese un correo válido');
+      expect(
+        EmailValidators.validateFormat('correo-invalido'),
+        'Ingrese un correo válido',
+      );
     });
 
     test('Debe retornar null si el correo tiene formato válido', () {
@@ -69,7 +78,10 @@ void main() {
 
   group('DispatcherFormValidators.validateName', () {
     test('Debe retornar error si el nombre es null', () {
-      expect(DispatcherFormValidators.validateName(null), 'El nombre es requerido');
+      expect(
+        DispatcherFormValidators.validateName(null),
+        'El nombre es requerido',
+      );
     });
 
     test('Debe retornar error si el nombre no alcanza la longitud mínima', () {
@@ -86,7 +98,10 @@ void main() {
 
   group('DispatcherFormValidators.validateVehicle', () {
     test('Debe retornar error si el vehículo está vacío', () {
-      expect(DispatcherFormValidators.validateVehicle(''), 'El vehículo no puede estar vacío');
+      expect(
+        DispatcherFormValidators.validateVehicle(''),
+        'El vehículo no puede estar vacío',
+      );
     });
 
     test('Debe retornar null si el vehículo es válido', () {
@@ -96,11 +111,17 @@ void main() {
 
   group('DispatcherFormValidators.validateLicensePlate', () {
     test('Debe retornar error si la placa es null', () {
-      expect(DispatcherFormValidators.validateLicensePlate(null), 'La placa es requerida');
+      expect(
+        DispatcherFormValidators.validateLicensePlate(null),
+        'La placa es requerida',
+      );
     });
 
     test('Debe retornar error si la placa está vacía', () {
-      expect(DispatcherFormValidators.validateLicensePlate('   '), 'La placa es requerida');
+      expect(
+        DispatcherFormValidators.validateLicensePlate('   '),
+        'La placa es requerida',
+      );
     });
 
     test('Debe retornar error si el formato no coincide con ABC-1234', () {

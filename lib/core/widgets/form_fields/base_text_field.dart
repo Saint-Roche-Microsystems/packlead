@@ -45,7 +45,9 @@ class BaseTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 8),
@@ -79,17 +81,11 @@ class BaseTextField extends StatelessWidget {
   }) {
     return InputDecoration(
       hintText: hint,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       suffixIcon: suffixIcon,
       prefixIcon: prefixIcon,
       counterText: maxLength != null ? null : '',
     );
   }
 }
-

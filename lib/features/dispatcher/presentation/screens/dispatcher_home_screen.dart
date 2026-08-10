@@ -24,11 +24,12 @@ class DispatcherHomeScreen extends ConsumerStatefulWidget {
   const DispatcherHomeScreen({
     super.key,
     required this.dispatcherId,
-    required this.dispatcherEmail
+    required this.dispatcherEmail,
   });
 
   @override
-  ConsumerState<DispatcherHomeScreen> createState() => _DispatcherHomeScreenState();
+  ConsumerState<DispatcherHomeScreen> createState() =>
+      _DispatcherHomeScreenState();
 }
 
 class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
@@ -83,11 +84,11 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
 
   @override
   void dispose() {
-    if(_trackingService != null) {
+    if (_trackingService != null) {
       _trackingService!.stopTracking();
     }
 
-    if(_locationNotifier != null) {
+    if (_locationNotifier != null) {
       _locationNotifier!.unregister();
     }
     super.dispose();
@@ -155,12 +156,18 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
       error: (error, stackTrace) => ErrorScreen(
         title: 'Error al cargar tus órdenes',
         message: ErrorHandler.getErrorMessage(error),
-        onRetry: () => ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(domainDispatcherId),
+        onRetry: () => ref
+            .read(dispatcherHomeProvider.notifier)
+            .loadTodayOrders(domainDispatcherId),
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context, dynamic state, String domainDispatcherId) {
+  Widget _buildContent(
+    BuildContext context,
+    dynamic state,
+    String domainDispatcherId,
+  ) {
     final currentLocation = ref.watch(dispatcherCurrentLocationProvider);
 
     return Stack(

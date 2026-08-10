@@ -4,9 +4,7 @@ import 'package:packlead/core/models/order.dart';
 import 'package:packlead/core/models/location.dart';
 
 void main() {
-
   group('Order Model - Unit Tests (AAA)', () {
-
     late Location location;
     late DateTime deliveryDate;
     late DateTime createdAt;
@@ -129,11 +127,9 @@ void main() {
       // =============== ASSERT ===============
       expect(isEqual, true);
     });
-
   });
 
   group('Location Model - Unit Tests (AAA)', () {
-
     test('6️ toJson debe serializar Location correctamente', () {
       // =============== ARRANGE ===============
       final location = Location(lat: -0.18, lng: -78.48);
@@ -169,6 +165,5 @@ void main() {
       // =============== ASSERT ===============
       expect(isEqual, true);
     });
-
   });
 }

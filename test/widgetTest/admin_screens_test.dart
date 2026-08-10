@@ -53,27 +53,27 @@ void main() {
       mockOrderRepository = MockOrderRepository();
       mockDispatcherRepository = MockDispatcherRepository();
 
-      when(() => mockDispatcherRepository.getAllDispatchers())
-          .thenAnswer((_) async => []);
+      when(
+        () => mockDispatcherRepository.getAllDispatchers(),
+      ).thenAnswer((_) async => []);
     });
 
     Widget createTestWidget() {
       return ProviderScope(
         overrides: [
           orderRepositoryProvider.overrideWithValue(mockOrderRepository),
-          dispatcherRepositoryProvider.overrideWithValue(mockDispatcherRepository),
-        ],
-        child: const MaterialApp(
-          home: Scaffold(
-            body: AdminOrderScreen(),
+          dispatcherRepositoryProvider.overrideWithValue(
+            mockDispatcherRepository,
           ),
-        ),
+        ],
+        child: const MaterialApp(home: Scaffold(body: AdminOrderScreen())),
       );
     }
 
     testWidgets('Renderiza botón y tabs por estado', (tester) async {
-      when(() => mockOrderRepository.getOrdersByState(any()))
-          .thenAnswer((_) async => []);
+      when(
+        () => mockOrderRepository.getOrdersByState(any()),
+      ).thenAnswer((_) async => []);
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -85,8 +85,9 @@ void main() {
     });
 
     testWidgets('Navega a CreateOrderForm', (tester) async {
-      when(() => mockOrderRepository.getOrdersByState(any()))
-          .thenAnswer((_) async => []);
+      when(
+        () => mockOrderRepository.getOrdersByState(any()),
+      ).thenAnswer((_) async => []);
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -98,8 +99,9 @@ void main() {
     });
 
     testWidgets('Muestra mensaje vacío en la pestaña activa', (tester) async {
-      when(() => mockOrderRepository.getOrdersByState(any()))
-          .thenAnswer((_) async => []);
+      when(
+        () => mockOrderRepository.getOrdersByState(any()),
+      ).thenAnswer((_) async => []);
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -107,13 +109,20 @@ void main() {
       expect(find.textContaining('No hay pedidos'), findsOneWidget);
     });
 
-    testWidgets('Muestra lista de pedidos pendientes cuando hay datos', (tester) async {
-      when(() => mockOrderRepository.getOrdersByState(OrderState.pending))
-          .thenAnswer((_) async => [buildOrder(id: 'ORD-1', state: OrderState.pending)]);
-      when(() => mockOrderRepository.getOrdersByState(OrderState.shipped))
-          .thenAnswer((_) async => []);
-      when(() => mockOrderRepository.getOrdersByState(OrderState.delivered))
-          .thenAnswer((_) async => []);
+    testWidgets('Muestra lista de pedidos pendientes cuando hay datos', (
+      tester,
+    ) async {
+      when(
+        () => mockOrderRepository.getOrdersByState(OrderState.pending),
+      ).thenAnswer(
+        (_) async => [buildOrder(id: 'ORD-1', state: OrderState.pending)],
+      );
+      when(
+        () => mockOrderRepository.getOrdersByState(OrderState.shipped),
+      ).thenAnswer((_) async => []);
+      when(
+        () => mockOrderRepository.getOrdersByState(OrderState.delivered),
+      ).thenAnswer((_) async => []);
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -122,14 +131,20 @@ void main() {
       expect(find.text('Zona: Zona 1'), findsOneWidget);
     });
 
-    testWidgets('Muestra error cuando falla la carga de pedidos', (tester) async {
-      when(() => mockOrderRepository.getOrdersByState(any()))
-          .thenThrow(Exception('Error de prueba'));
+    testWidgets('Muestra error cuando falla la carga de pedidos', (
+      tester,
+    ) async {
+      when(
+        () => mockOrderRepository.getOrdersByState(any()),
+      ).thenThrow(Exception('Error de prueba'));
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('No se pudieron cargar los pedidos'), findsOneWidget);
+      expect(
+        find.textContaining('No se pudieron cargar los pedidos'),
+        findsOneWidget,
+      );
     });
   });
 
@@ -150,18 +165,18 @@ void main() {
       return ProviderScope(
         overrides: [
           orderRepositoryProvider.overrideWithValue(mockOrderRepository),
-          liveTrackingProvider.overrideWith((ref) => Stream.value(<DispatcherLocation>[])),
-        ],
-        child: const MaterialApp(
-          home: Scaffold(
-            body: AdminHomeScreen(),
+          liveTrackingProvider.overrideWith(
+            (ref) => Stream.value(<DispatcherLocation>[]),
           ),
-        ),
+        ],
+        child: const MaterialApp(home: Scaffold(body: AdminHomeScreen())),
       );
     }
 
     testWidgets('Muestra KPIs y gráfico cuando no hay pedidos', (tester) async {
-      when(() => mockOrderRepository.getOrdersByDate(any())).thenAnswer((_) async => []);
+      when(
+        () => mockOrderRepository.getOrdersByDate(any()),
+      ).thenAnswer((_) async => []);
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
@@ -173,7 +188,9 @@ void main() {
       expect(find.textContaining('No hay pedidos registrados'), findsOneWidget);
     });
 
-    testWidgets('Muestra el conteo correcto de pedidos del día por estado', (tester) async {
+    testWidgets('Muestra el conteo correcto de pedidos del día por estado', (
+      tester,
+    ) async {
       when(() => mockOrderRepository.getOrdersByDate(any())).thenAnswer(
         (_) async => [
           buildOrder(id: 'ORD-1', state: OrderState.pending),
@@ -189,15 +206,20 @@ void main() {
       expect(find.text('0'), findsOneWidget); // online dispatchers
     });
 
-    testWidgets('Muestra error cuando falla la carga del dashboard', (tester) async {
-      when(() => mockOrderRepository.getOrdersByDate(any()))
-          .thenThrow(Exception('Error de prueba'));
+    testWidgets('Muestra error cuando falla la carga del dashboard', (
+      tester,
+    ) async {
+      when(
+        () => mockOrderRepository.getOrdersByDate(any()),
+      ).thenThrow(Exception('Error de prueba'));
 
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
       expect(
-        find.textContaining('Oops! Ocurrió un error al obtener los datos del dashboard'),
+        find.textContaining(
+          'Oops! Ocurrió un error al obtener los datos del dashboard',
+        ),
         findsOneWidget,
       );
     });

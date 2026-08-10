@@ -16,10 +16,18 @@ class AuthRepositoryImp implements AuthRepository {
       final user = await _dataSource.login(email, password);
       return Right(user);
     } on AuthException catch (e, st) {
-      AppLogger.warning('Login rechazado: ${e.message}', error: e, stackTrace: st);
+      AppLogger.warning(
+        'Login rechazado: ${e.message}',
+        error: e,
+        stackTrace: st,
+      );
       return Left(e.message);
     } catch (e, st) {
-      AppLogger.error('Error inesperado durante el login', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error inesperado durante el login',
+        error: e,
+        stackTrace: st,
+      );
       return const Left('Ocurrió un error inesperado');
     }
   }
@@ -39,7 +47,11 @@ class AuthRepositoryImp implements AuthRepository {
     try {
       return await _dataSource.getCurrentUser();
     } catch (e, st) {
-      AppLogger.error('Error al restaurar la sesión actual', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al restaurar la sesión actual',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }

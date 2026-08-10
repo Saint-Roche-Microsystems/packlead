@@ -13,7 +13,7 @@ class HomeBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(authState.status == AuthStatus.authenticated) {
+    if (authState.status == AuthStatus.authenticated) {
       final role = authState.user?.role ?? UserRole.none;
       return switch (role) {
         UserRole.admin => AdminBottomNavLayout(),

@@ -21,16 +21,12 @@ class AdminTrackingScreen extends ConsumerWidget {
             message: 'No hay repartidores activos',
           );
         }
-       return MultiPointRealtimeMap(
-          locations: locations,
-        );
+        return MultiPointRealtimeMap(locations: locations);
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => ErrorScreen(
-          message: ErrorHandler.getErrorMessage(error),
-          onRetry: () => ref.invalidate(liveTrackingProvider),
+        message: ErrorHandler.getErrorMessage(error),
+        onRetry: () => ref.invalidate(liveTrackingProvider),
       ),
     );
   }

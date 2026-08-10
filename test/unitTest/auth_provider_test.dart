@@ -57,8 +57,9 @@ void main() {
   group('AuthStateNotifier - login', () {
     test('Debe quedar authenticated cuando el login es exitoso', () async {
       final notifier = await createNotifier();
-      when(() => mockRepository.login(user.email, user.password))
-          .thenAnswer((_) async => Right(user));
+      when(
+        () => mockRepository.login(user.email, user.password),
+      ).thenAnswer((_) async => Right(user));
 
       await notifier.login(user.email, user.password);
 
@@ -69,8 +70,9 @@ void main() {
 
     test('Debe quedar en error cuando el login falla', () async {
       final notifier = await createNotifier();
-      when(() => mockRepository.login('wrong@packlead.com', 'bad'))
-          .thenAnswer((_) async => const Left('Credenciales inválidas'));
+      when(
+        () => mockRepository.login('wrong@packlead.com', 'bad'),
+      ).thenAnswer((_) async => const Left('Credenciales inválidas'));
 
       await notifier.login('wrong@packlead.com', 'bad');
 

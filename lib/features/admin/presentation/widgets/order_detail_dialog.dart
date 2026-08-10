@@ -24,8 +24,14 @@ class OrderDetailDialog extends StatelessWidget {
             _buildDetailRow('Teléfono', orderVM.clientPhoneNumber),
             _buildDetailRow('Estado', orderVM.state.label),
             _buildDetailRow('Zona', orderVM.zone),
-            _buildDetailRow('Fecha de entrega', DateFormatter.formatDate(orderVM.deliveryDate)),
-            _buildDetailRow('Repartidor', orderVM.dispatcherName ?? 'No asignado'),
+            _buildDetailRow(
+              'Fecha de entrega',
+              DateFormatter.formatDate(orderVM.deliveryDate),
+            ),
+            _buildDetailRow(
+              'Repartidor',
+              orderVM.dispatcherName ?? 'No asignado',
+            ),
             _buildMapPreview(orderVM.location),
           ],
         ),
@@ -54,12 +60,7 @@ class OrderDetailDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-            ),
-          ),
+          Text(value, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
@@ -85,7 +86,7 @@ class OrderDetailDialog extends StatelessWidget {
             zoom: 16,
             height: 250,
             onTap: () => MapUtils.openInGoogleMaps(location),
-          )
+          ),
         ],
       ),
     );

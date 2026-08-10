@@ -11,7 +11,6 @@ void main() {
   });
 
   group('DispatcherMockDataSource - Unit Tests (AAA)', () {
-
     test('Debe retornar todos los dispatchers', () async {
       // ================= ARRANGE =================
       // DataSource ya inicializado en setUp()
@@ -54,7 +53,7 @@ void main() {
 
       // ================= ACT & ASSERT =================
       await expectLater(
-            () => dataSource.getDispatcherById(invalidId),
+        () => dataSource.getDispatcherById(invalidId),
         throwsException,
       );
     });
@@ -78,26 +77,29 @@ void main() {
       expect(result.dispatcher.state, DispatcherState.available);
     });
 
-    test('6️ Debe actualizar dispatcher cambiando su estado a inactive', () async {
-      // ================= ARRANGE =================
-      final all = await dataSource.getAllDispatchers();
-      final dispatcher = all.first;
+    test(
+      '6️ Debe actualizar dispatcher cambiando su estado a inactive',
+      () async {
+        // ================= ARRANGE =================
+        final all = await dataSource.getAllDispatchers();
+        final dispatcher = all.first;
 
-      final updatedDispatcher = Dispatcher(
-        id: dispatcher.id,
-        name: dispatcher.name,
-        email: dispatcher.email,
-        vehicle: dispatcher.vehicle,
-        licensePlate: dispatcher.licensePlate,
-        state: DispatcherState.inactive,
-      );
+        final updatedDispatcher = Dispatcher(
+          id: dispatcher.id,
+          name: dispatcher.name,
+          email: dispatcher.email,
+          vehicle: dispatcher.vehicle,
+          licensePlate: dispatcher.licensePlate,
+          state: DispatcherState.inactive,
+        );
 
-      // ================= ACT =================
-      final result = await dataSource.updateDispatcher(updatedDispatcher);
+        // ================= ACT =================
+        final result = await dataSource.updateDispatcher(updatedDispatcher);
 
-      // ================= ASSERT =================
-      expect(result.state, DispatcherState.inactive);
-    });
+        // ================= ASSERT =================
+        expect(result.state, DispatcherState.inactive);
+      },
+    );
 
     test('7️ Debe eliminar dispatcher correctamente', () async {
       // ================= ARRANGE =================
@@ -111,6 +113,5 @@ void main() {
       // ================= ASSERT =================
       expect(updatedList.any((d) => d.id == dispatcher.id), false);
     });
-
   });
 }

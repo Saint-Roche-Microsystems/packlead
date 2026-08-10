@@ -34,12 +34,7 @@ class OrdersDonutChart extends StatelessWidget {
           color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
           width: 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 2,
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2)],
       ),
       child: Column(
         children: [
@@ -49,7 +44,9 @@ class OrdersDonutChart extends StatelessWidget {
               PieChartData(
                 centerSpaceRadius: 55,
                 sectionsSpace: 2,
-                sections: isEmpty ? _buildEmptySections() : _buildDataSections(total),
+                sections: isEmpty
+                    ? _buildEmptySections()
+                    : _buildDataSections(total),
               ),
             ),
           ),
@@ -120,7 +117,7 @@ class OrdersDonutChart extends StatelessWidget {
   }
 
   Widget _buildLegend(bool isEmpty) {
-    if(isEmpty) {
+    if (isEmpty) {
       return const Text(
         'No hay pedidos registrados aún',
         style: TextStyle(

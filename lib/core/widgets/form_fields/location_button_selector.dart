@@ -39,7 +39,9 @@ class LocationButtonSelector extends StatelessWidget {
               // We know for sure that the user selected a location
               // we can update the controller values safely
               latitudeController.text = selectedLocation.lat.toStringAsFixed(6);
-              longitudeController.text = selectedLocation.lng.toStringAsFixed(6);
+              longitudeController.text = selectedLocation.lng.toStringAsFixed(
+                6,
+              );
               // Notify the change to the parent (in this case it refresh the error message)
               onLocationChanged?.call();
             },
@@ -58,7 +60,7 @@ class LocationButtonSelector extends StatelessWidget {
           label: Text('Seleccionar ubicación en el mapa'),
           style: ElevatedButton.styleFrom(
             backgroundColor: SaintColors.primary,
-            foregroundColor: Colors.white
+            foregroundColor: Colors.white,
           ),
         ),
 
@@ -68,9 +70,9 @@ class LocationButtonSelector extends StatelessWidget {
             padding: const EdgeInsets.only(top: 8.0, left: 12.0),
             child: Text(
               errorText!,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: SaintColors.error,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: SaintColors.error),
             ),
           ),
       ],

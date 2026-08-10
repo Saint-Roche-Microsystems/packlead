@@ -8,9 +8,7 @@ class EmailValidators {
 
     final email = value.trim();
 
-    final emailRegex = RegExp(
-      r'^[\w.-]+@([\w-]+\.)+[a-zA-Z]{2,}$',
-    );
+    final emailRegex = RegExp(r'^[\w.-]+@([\w-]+\.)+[a-zA-Z]{2,}$');
 
     if (!emailRegex.hasMatch(email)) {
       return 'Ingrese un correo válido';

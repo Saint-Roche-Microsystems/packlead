@@ -11,10 +11,10 @@ class OrdersByDispatcherParams {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is OrdersByDispatcherParams &&
-              runtimeType == other.runtimeType &&
-              dispatcherId == other.dispatcherId &&
-              forDate == other.forDate;
+      other is OrdersByDispatcherParams &&
+          runtimeType == other.runtimeType &&
+          dispatcherId == other.dispatcherId &&
+          forDate == other.forDate;
 
   @override
   int get hashCode => dispatcherId.hashCode ^ forDate.hashCode;

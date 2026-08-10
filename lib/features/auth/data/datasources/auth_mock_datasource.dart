@@ -6,7 +6,6 @@ import 'package:packlead/features/auth/data/datasources/auth_datasource.dart';
 import 'package:packlead/mocks/dispatcher_mock_data.dart';
 import 'package:packlead/mocks/users_mock_data.dart';
 
-
 class AuthMockDataSource implements AuthDataSource {
   final _users = UsersMockData().users;
   User? _currentUser;
@@ -14,7 +13,7 @@ class AuthMockDataSource implements AuthDataSource {
   User? getUserByEmail(String email) {
     try {
       return _users.firstWhere(
-            (user) => user.email.toLowerCase() == email.toLowerCase(),
+        (user) => user.email.toLowerCase() == email.toLowerCase(),
       );
     } catch (e) {
       return null;
@@ -34,9 +33,7 @@ class AuthMockDataSource implements AuthDataSource {
     // Check if the user is an inactive dispatcher
     if (user.role == UserRole.dispatcher) {
       final dispatchers = DispatcherMockData().dispatchers;
-      final dispatcher = dispatchers.firstWhere(
-            (d) => d.id == user.id,
-      );
+      final dispatcher = dispatchers.firstWhere((d) => d.id == user.id);
 
       if (dispatcher.state == DispatcherState.inactive) {
         throw const InactiveDispatcherException();

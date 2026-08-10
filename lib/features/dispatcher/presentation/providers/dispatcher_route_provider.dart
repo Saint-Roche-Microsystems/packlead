@@ -12,18 +12,19 @@ Location _getHQOrigin() {
   return srmchq;
 }
 
-final routeProvider = FutureProvider.family<List<Location>, Order>(
-      (ref, order) async {
-    final origin = _getHQOrigin();
+final routeProvider = FutureProvider.family<List<Location>, Order>((
+  ref,
+  order,
+) async {
+  final origin = _getHQOrigin();
 
-    final route = await MapUtils.getRoute(
-      origin: origin,
-      destination: order.location,
-    );
+  final route = await MapUtils.getRoute(
+    origin: origin,
+    destination: order.location,
+  );
 
-    return route;
-  },
-);
+  return route;
+});
 
 final dispatcherCurrentLocationProvider = StateProvider<Location?>((ref) {
   // Initially set to NULL until we get the actual location from the device's GPS.
@@ -33,7 +34,9 @@ final dispatcherCurrentLocationProvider = StateProvider<Location?>((ref) {
 // Provider to track if the location tracking is active or not.
 final isTrackingActiveProvider = StateProvider<bool>((ref) => false);
 
-final locationTrackingServiceProvider = Provider.autoDispose<LocationTrackingService>((ref) {
+final locationTrackingServiceProvider = Provider.autoDispose<LocationTrackingService>((
+  ref,
+) {
   // The service has implemented a lifecycle
   // onLocationUpdate only calls every 5 seconds and if the distance difference
   // is about 10 meters. ONLY when this conditions are met, the location is updated
@@ -57,7 +60,6 @@ final locationTrackingServiceProvider = Provider.autoDispose<LocationTrackingSer
   ref.onDispose(() {
     service.dispose();
   });
-
 
   return service;
 });

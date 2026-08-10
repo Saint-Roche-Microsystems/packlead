@@ -4,8 +4,8 @@ import 'package:packlead/core/constants/order_state.dart';
 class DispatcherHomeState {
   final List<Order> todayOrders;
   final Order? selectedOrder;
-  final Order? activeShippedOrder;  // Only one at a time
-  final bool isUpdatingOrder;       // for loading in action button
+  final Order? activeShippedOrder; // Only one at a time
+  final bool isUpdatingOrder; // for loading in action button
 
   const DispatcherHomeState({
     this.todayOrders = const [],
@@ -48,8 +48,12 @@ class DispatcherHomeState {
   }) {
     return DispatcherHomeState(
       todayOrders: todayOrders ?? this.todayOrders,
-      selectedOrder: clearSelectedOrder ? null : (selectedOrder ?? this.selectedOrder),
-      activeShippedOrder: clearActiveShippedOrder ? null : (activeShippedOrder ?? this.activeShippedOrder),
+      selectedOrder: clearSelectedOrder
+          ? null
+          : (selectedOrder ?? this.selectedOrder),
+      activeShippedOrder: clearActiveShippedOrder
+          ? null
+          : (activeShippedOrder ?? this.activeShippedOrder),
       isUpdatingOrder: isUpdatingOrder ?? this.isUpdatingOrder,
     );
   }
@@ -67,12 +71,12 @@ class DispatcherHomeState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is DispatcherHomeState &&
-              runtimeType == other.runtimeType &&
-              todayOrders == other.todayOrders &&
-              selectedOrder == other.selectedOrder &&
-              activeShippedOrder == other.activeShippedOrder &&
-              isUpdatingOrder == other.isUpdatingOrder;
+      other is DispatcherHomeState &&
+          runtimeType == other.runtimeType &&
+          todayOrders == other.todayOrders &&
+          selectedOrder == other.selectedOrder &&
+          activeShippedOrder == other.activeShippedOrder &&
+          isUpdatingOrder == other.isUpdatingOrder;
 
   @override
   int get hashCode =>

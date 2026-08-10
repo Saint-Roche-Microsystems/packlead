@@ -31,9 +31,9 @@ class _DateFieldState extends State<DateField> {
       children: [
         Text(
           widget.label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 8),
@@ -72,9 +72,9 @@ class _DateFieldState extends State<DateField> {
             padding: const EdgeInsets.only(top: 8.0, left: 12.0),
             child: Text(
               widget.errorText!,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: SaintColors.error,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: SaintColors.error),
             ),
           ),
       ],
@@ -88,7 +88,7 @@ class _DateFieldState extends State<DateField> {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: widget.selectedDate ?? today,
-      firstDate: today,                   // Don't allow selecting past dates
+      firstDate: today, // Don't allow selecting past dates
       lastDate: DateTime(today.year + 1), // Select up to one year in the future
       helpText: 'Seleccionar fecha de entrega',
       cancelText: 'Cancelar',
@@ -110,13 +110,8 @@ class _DateFieldState extends State<DateField> {
   InputDecoration _inputDecoration() {
     return InputDecoration(
       hintText: 'Seleccionar fecha',
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       enabled: widget.enabled,
     );
   }

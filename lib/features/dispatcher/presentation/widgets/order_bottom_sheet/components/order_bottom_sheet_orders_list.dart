@@ -8,7 +8,6 @@ import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_s
 import 'package:packlead/features/dispatcher/presentation/widgets/order_bottom_sheet/utils/order_list_helpers.dart';
 
 class OrderBottomSheetOrdersList extends ConsumerWidget {
-
   const OrderBottomSheetOrdersList({super.key});
 
   @override
@@ -20,10 +19,10 @@ class OrderBottomSheetOrdersList extends ConsumerWidget {
         if (state.todayOrders.isEmpty) {
           return SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
-             child: EmptyScreen(
-                 icon: Icons.receipt_long,
-                 message: 'No tienes órdenes para hoy'
-             ),
+            child: EmptyScreen(
+              icon: Icons.receipt_long,
+              message: 'No tienes órdenes para hoy',
+            ),
           );
         }
 
@@ -33,7 +32,7 @@ class OrderBottomSheetOrdersList extends ConsumerWidget {
         return OrderListView(
           orders: sortedOrders,
           selectedOrderId: state.selectedOrder?.id,
-          isOrderSelectable:(order) => isOrderSelectable(order, state),
+          isOrderSelectable: (order) => isOrderSelectable(order, state),
           onOrderTap: (order) {
             // Deselect if previously selected
             if (state.selectedOrder?.id == order.id) {

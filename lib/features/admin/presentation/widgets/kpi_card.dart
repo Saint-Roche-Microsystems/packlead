@@ -15,7 +15,7 @@ class KPICard extends StatelessWidget {
     required this.value,
     this.cardColor = Colors.white,
     this.subtitle,
-    this.cardSize = 160
+    this.cardSize = 160,
   });
 
   @override
@@ -30,12 +30,7 @@ class KPICard extends StatelessWidget {
           color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
           width: 1,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 2,
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2)],
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -45,9 +40,7 @@ class KPICard extends StatelessWidget {
           children: [
             // Title
             Container(
-              constraints: BoxConstraints(
-                minHeight: 40,
-              ),
+              constraints: BoxConstraints(minHeight: 40),
               child: Text(
                 title,
                 style: TextStyle(
@@ -88,7 +81,9 @@ class KPICard extends StatelessWidget {
                         ),
                         child: Icon(
                           icon,
-                          color: Theme.of(context).primaryColor.withValues(alpha: 0.5),
+                          color: Theme.of(
+                            context,
+                          ).primaryColor.withValues(alpha: 0.5),
                           size: 30,
                         ),
                       ),
@@ -101,10 +96,7 @@ class KPICard extends StatelessWidget {
             if (subtitle != null)
               Text(
                 subtitle!,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
           ],
         ),

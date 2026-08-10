@@ -15,7 +15,11 @@ class OrderApiDataSource implements OrderDataSource {
     try {
       return await _apiClient.getOrders();
     } catch (e, st) {
-      AppLogger.error('Error al obtener todos los pedidos', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener todos los pedidos',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
@@ -25,17 +29,28 @@ class OrderApiDataSource implements OrderDataSource {
     try {
       return await _apiClient.getOrder(id);
     } catch (e, st) {
-      AppLogger.error('Error al obtener pedido por ID', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener pedido por ID',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
 
   @override
-  Future<List<Order>> getOrdersByDispatcher(String dispatcherId, DateTime forDate) async {
+  Future<List<Order>> getOrdersByDispatcher(
+    String dispatcherId,
+    DateTime forDate,
+  ) async {
     try {
       return await _apiClient.getOrders(dispatcherId: dispatcherId);
     } catch (e, st) {
-      AppLogger.error('Error al obtener pedidos por repartidor', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener pedidos por repartidor',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
@@ -45,7 +60,11 @@ class OrderApiDataSource implements OrderDataSource {
     try {
       return await _apiClient.getOrders(state: state.name);
     } catch (e, st) {
-      AppLogger.error('Error al obtener pedidos por estado', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener pedidos por estado',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
@@ -56,11 +75,13 @@ class OrderApiDataSource implements OrderDataSource {
       // Format date to YYYY-MM-DD
       final dateString = DateFormatter.formatDateUTC(date);
 
-      return await _apiClient.getOrders(
-        deliveryDate: dateString,
-      );
+      return await _apiClient.getOrders(deliveryDate: dateString);
     } catch (e, st) {
-      AppLogger.error('Error al obtener pedidos por fecha', error: e, stackTrace: st);
+      AppLogger.error(
+        'Error al obtener pedidos por fecha',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }

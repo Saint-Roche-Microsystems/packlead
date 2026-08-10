@@ -47,7 +47,8 @@ class OrderBottomSheetHeader extends ConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.refresh),
                 onPressed: () {
-                  ref.read(dispatcherHomeProvider.notifier)
+                  ref
+                      .read(dispatcherHomeProvider.notifier)
                       .loadTodayOrders(dispatcherId);
                 },
                 tooltip: 'Actualizar',
@@ -61,20 +62,14 @@ class OrderBottomSheetHeader extends ConsumerWidget {
         padding: EdgeInsets.all(16.0),
         child: Text(
           'Órdenes de Hoy',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
       error: (_, __) => const Padding(
         padding: EdgeInsets.all(16.0),
         child: Text(
           'Órdenes de Hoy',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
     );

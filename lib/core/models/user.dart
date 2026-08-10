@@ -54,15 +54,16 @@ class User {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is User &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              email == other.email &&
-              name == other.name &&
-              role == other.role;
+      other is User &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          email == other.email &&
+          name == other.name &&
+          role == other.role;
 
   @override
-  int get hashCode => id.hashCode ^ email.hashCode ^ name.hashCode ^ role.hashCode;
+  int get hashCode =>
+      id.hashCode ^ email.hashCode ^ name.hashCode ^ role.hashCode;
 
   @override
   String toString() {

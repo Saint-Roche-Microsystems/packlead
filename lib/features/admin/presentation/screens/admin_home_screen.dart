@@ -7,7 +7,6 @@ import 'package:packlead/features/admin/presentation/widgets/kpi_card.dart';
 import 'package:packlead/features/admin/presentation/widgets/order_donut_chart.dart';
 
 class AdminHomeScreen extends ConsumerWidget {
-
   const AdminHomeScreen({super.key});
 
   @override
@@ -21,17 +20,16 @@ class AdminHomeScreen extends ConsumerWidget {
         data: (dashboard) => Consumer(
           builder: (context, ref, child) {
             return RefreshIndicator(
-              onRefresh: () => ref.read(adminDashboardProvider.notifier).refresh(),
+              onRefresh: () =>
+                  ref.read(adminDashboardProvider.notifier).refresh(),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-
                         // Orders from Today Card
                         KPICard(
                           title: "Pedidos del día",
@@ -61,7 +59,7 @@ class AdminHomeScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    SizedBox(height: 12,),
+                    SizedBox(height: 12),
 
                     OrdersDonutChart(
                       pending: dashboard.pendingOrders,
@@ -76,9 +74,9 @@ class AdminHomeScreen extends ConsumerWidget {
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => ErrorScreen(
-            title: 'Oops! Ocurrió un error al obtener los datos del dashboard',
-            message: ErrorHandler.getErrorMessage(error),
-            onRetry: () => ref.read(adminDashboardProvider.notifier).refresh(),
+          title: 'Oops! Ocurrió un error al obtener los datos del dashboard',
+          message: ErrorHandler.getErrorMessage(error),
+          onRetry: () => ref.read(adminDashboardProvider.notifier).refresh(),
         ),
       ),
     );

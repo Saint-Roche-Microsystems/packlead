@@ -32,7 +32,5 @@ class ServerException extends AuthException {
 }
 
 class UnknownException extends AuthException {
-  const UnknownException([
-    super.message = 'Ocurrió un error inesperado.',
-  ]);
+  const UnknownException([super.message = 'Ocurrió un error inesperado.']);
 }

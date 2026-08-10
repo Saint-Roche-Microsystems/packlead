@@ -22,10 +22,10 @@ class AdminDashboardState {
   AdminDashboardState({
     required this.todayOrders,
     required this.onlineDispatchers,
-  })  : _randomTotalOrders = null,
-        _randomPendingOrders = null,
-        _randomShippedOrders = null,
-        _randomDeliveredOrders = null;
+  }) : _randomTotalOrders = null,
+       _randomPendingOrders = null,
+       _randomShippedOrders = null,
+       _randomDeliveredOrders = null;
 
   AdminDashboardState._random({
     required this.onlineDispatchers,
@@ -33,13 +33,15 @@ class AdminDashboardState {
     required int pendingOrders,
     required int shippedOrders,
     required int deliveredOrders,
-  })  : todayOrders = const [],
-        _randomTotalOrders = totalOrders,
-        _randomPendingOrders = pendingOrders,
-        _randomShippedOrders = shippedOrders,
-        _randomDeliveredOrders = deliveredOrders;
+  }) : todayOrders = const [],
+       _randomTotalOrders = totalOrders,
+       _randomPendingOrders = pendingOrders,
+       _randomShippedOrders = shippedOrders,
+       _randomDeliveredOrders = deliveredOrders;
 
-  factory AdminDashboardState.randomMock(List<DispatcherLocation> onlineDispatchers) {
+  factory AdminDashboardState.randomMock(
+    List<DispatcherLocation> onlineDispatchers,
+  ) {
     final random = Random();
     final total = 6 + random.nextInt(25);
 
@@ -63,21 +65,22 @@ class AdminDashboardState {
   int get totalOrders => _randomTotalOrders ?? todayOrders.length;
   int get totalOnlineDispatchers => onlineDispatchers.length;
 
-  int get pendingOrders => _randomPendingOrders ?? todayOrders
-      .where((order) => order.state == OrderState.pending)
-      .length;
+  int get pendingOrders =>
+      _randomPendingOrders ??
+      todayOrders.where((order) => order.state == OrderState.pending).length;
 
-  int get shippedOrders => _randomShippedOrders ?? todayOrders
-      .where((order) => order.state == OrderState.shipped)
-      .length;
+  int get shippedOrders =>
+      _randomShippedOrders ??
+      todayOrders.where((order) => order.state == OrderState.shipped).length;
 
-  int get deliveredOrders => _randomDeliveredOrders ?? todayOrders
-      .where((order) => order.state == OrderState.delivered)
-      .length;
+  int get deliveredOrders =>
+      _randomDeliveredOrders ??
+      todayOrders.where((order) => order.state == OrderState.delivered).length;
 }
 
 /// Dashboard Notifier
-class AdminDashboardNotifier extends StateNotifier<AsyncValue<AdminDashboardState>> {
+class AdminDashboardNotifier
+    extends StateNotifier<AsyncValue<AdminDashboardState>> {
   final Ref _ref;
 
   AdminDashboardNotifier(this._ref) : super(const AsyncValue.loading()) {
@@ -99,7 +102,9 @@ class AdminDashboardNotifier extends StateNotifier<AsyncValue<AdminDashboardStat
     try {
       if (AppServiceMode.isMock) {
         final onlineDispatchers = await _ref.read(liveTrackingProvider.future);
-        state = AsyncValue.data(AdminDashboardState.randomMock(onlineDispatchers));
+        state = AsyncValue.data(
+          AdminDashboardState.randomMock(onlineDispatchers),
+        );
         return;
       }
 
@@ -133,8 +138,10 @@ class AdminDashboardNotifier extends StateNotifier<AsyncValue<AdminDashboardStat
 }
 
 /// Dashboard provider
-final adminDashboardProvider = StateNotifierProvider<
-    AdminDashboardNotifier, AsyncValue<AdminDashboardState>
->((ref) {
-  return AdminDashboardNotifier(ref);
-});
+final adminDashboardProvider =
+    StateNotifierProvider<
+      AdminDashboardNotifier,
+      AsyncValue<AdminDashboardState>
+    >((ref) {
+      return AdminDashboardNotifier(ref);
+    });

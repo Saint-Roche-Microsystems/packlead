@@ -35,7 +35,13 @@ class AppLogger {
     StackTrace? stackTrace,
     String name = 'packlead',
   }) {
-    log(message, level: LogLevel.warning, error: error, stackTrace: stackTrace, name: name);
+    log(
+      message,
+      level: LogLevel.warning,
+      error: error,
+      stackTrace: stackTrace,
+      name: name,
+    );
   }
 
   static void error(
@@ -44,6 +50,12 @@ class AppLogger {
     StackTrace? stackTrace,
     String name = 'packlead',
   }) {
-    log(message, level: LogLevel.error, error: error, stackTrace: stackTrace, name: name);
+    log(
+      message,
+      level: LogLevel.error,
+      error: error,
+      stackTrace: stackTrace,
+      name: name,
+    );
   }
 }
