@@ -34,9 +34,9 @@ class PackleadApp extends ConsumerWidget {
       onUnknownRoute: (settings) =>
           MaterialPageRoute(builder: (_) => ScreenNotFound()),
       builder: (context, child) {
-        if (!AppServiceMode.isMock || child == null)
+        if (!AppServiceMode.isMock || child == null) {
           return child ?? const SizedBox.shrink();
-
+        }
         return Banner(
           message: 'DEMO',
           location: BannerLocation.topEnd,

@@ -73,9 +73,9 @@ class _CreateOrderFormState extends ConsumerState<CreateOrderForm> {
       _dateError = dateValidMsg;
     });
 
-    if (!isValidForm || locationValidMsg != null || dateValidMsg != null)
+    if (!isValidForm || locationValidMsg != null || dateValidMsg != null) {
       return;
-
+    }
     _submit();
   }
 
