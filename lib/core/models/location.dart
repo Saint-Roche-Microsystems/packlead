@@ -14,10 +14,7 @@ class Location {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'lat': lat,
-      'lng': lng,
-    };
+    return {'lat': lat, 'lng': lng};
   }
 
   LatLng toLatLng() => LatLng(lat, lng);

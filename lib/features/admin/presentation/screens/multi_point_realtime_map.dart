@@ -8,10 +8,7 @@ import 'package:packlead/features/admin/viewmodels/admin_tracking_view_model.dar
 class MultiPointRealtimeMap extends StatefulWidget {
   final List<AdminTrackingViewModel> locations;
 
-  const MultiPointRealtimeMap({
-    super.key,
-    required this.locations,
-  });
+  const MultiPointRealtimeMap({super.key, required this.locations});
 
   @override
   State<MultiPointRealtimeMap> createState() => _MultiPointRealtimeMapState();
@@ -57,8 +54,11 @@ class _MultiPointRealtimeMapState extends State<MultiPointRealtimeMap> {
     final newMarkers = <Marker>{};
 
     // Iterate over each location and create/update markers
-    for(final location in widget.locations) {
-      final markerIcon = await _getOrCreateIcon(location.firebaseUid, location.name);
+    for (final location in widget.locations) {
+      final markerIcon = await _getOrCreateIcon(
+        location.firebaseUid,
+        location.name,
+      );
 
       final snippetParts = [
         'Última actualización: ${DateFormatter.formatRelativeTime(location.updatedAt)}',
@@ -68,7 +68,9 @@ class _MultiPointRealtimeMapState extends State<MultiPointRealtimeMap> {
 
       final marker = Marker(
         // Include new lat/lng to force update
-        markerId: MarkerId('${location.firebaseUid}_${location.lat.toStringAsFixed(6)}_${location.lng.toStringAsFixed(6)}'),
+        markerId: MarkerId(
+          '${location.firebaseUid}_${location.lat.toStringAsFixed(6)}_${location.lng.toStringAsFixed(6)}',
+        ),
         position: LatLng(location.lat, location.lng),
         infoWindow: InfoWindow(
           title: location.name,
@@ -88,12 +90,15 @@ class _MultiPointRealtimeMapState extends State<MultiPointRealtimeMap> {
     }
   }
 
-  Future<BitmapDescriptor> _getOrCreateIcon(String firebaseUid, String name) async {
+  Future<BitmapDescriptor> _getOrCreateIcon(
+    String firebaseUid,
+    String name,
+  ) async {
     if (_iconCache.containsKey(firebaseUid)) {
       return _iconCache[firebaseUid]!;
     }
 
-    if(_iconGenerationLocks.containsKey(firebaseUid)) {
+    if (_iconGenerationLocks.containsKey(firebaseUid)) {
       return await _iconGenerationLocks[firebaseUid]!;
     }
 
@@ -124,7 +129,9 @@ class _MultiPointRealtimeMapState extends State<MultiPointRealtimeMap> {
       return Center(child: CircularProgressIndicator());
     }
 
-    final bounds = MapUtils.calculateBounds(AdminTrackingViewModel.toLocations(widget.locations));
+    final bounds = MapUtils.calculateBounds(
+      AdminTrackingViewModel.toLocations(widget.locations),
+    );
 
     return GoogleMap(
       initialCameraPosition: CameraPosition(
@@ -135,9 +142,7 @@ class _MultiPointRealtimeMapState extends State<MultiPointRealtimeMap> {
       onMapCreated: (controller) {
         _mapController = controller;
         if (widget.locations.length > 1) {
-          controller.animateCamera(
-            CameraUpdate.newLatLngBounds(bounds, 50),
-          );
+          controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
         }
       },
     );

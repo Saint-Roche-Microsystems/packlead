@@ -34,11 +34,10 @@ class OrderBottomSheetActionButton extends ConsumerWidget {
 
   /// Show a button based on the selected order's state:
   Widget _getActionButtonForState(
-      BuildContext context,
-      WidgetRef ref,
-      DispatcherHomeState state,
-      ) {
-
+    BuildContext context,
+    WidgetRef ref,
+    DispatcherHomeState state,
+  ) {
     if (!state.hasSelection) {
       return OrderActionButtonPresets.noSelection();
     }
@@ -67,16 +66,13 @@ class OrderBottomSheetActionButton extends ConsumerWidget {
 
   /// ON PRESSED HANDLERS
   /// Begins delivery (pending --> shipped)
-  void _handleStartDelivery(
-      BuildContext context,
-      WidgetRef ref,
-      Order order,
-      ) {
+  void _handleStartDelivery(BuildContext context, WidgetRef ref, Order order) {
     showDialog(
       context: context,
       builder: (context) => ConfirmationDialog(
         title: 'Iniciar Entrega',
-        content: '¿Confirma que desea iniciar la entrega de la orden para ${order.clientName}?',
+        content:
+            '¿Confirma que desea iniciar la entrega de la orden para ${order.clientName}?',
         onConfirm: () {
           Navigator.of(context).pop();
           ref.read(dispatcherHomeProvider.notifier).startDelivery(order);
@@ -87,15 +83,16 @@ class OrderBottomSheetActionButton extends ConsumerWidget {
 
   /// Ends delivery (shipped --> delivered)
   void _handleCompleteDelivery(
-      BuildContext context,
-      WidgetRef ref,
-      Order order,
-      ) {
+    BuildContext context,
+    WidgetRef ref,
+    Order order,
+  ) {
     showDialog(
       context: context,
       builder: (context) => ConfirmationDialog(
         title: 'Completar Entrega',
-        content: '¿Confirma que la orden para ${order.clientName} ha sido entregada exitosamente?',
+        content:
+            '¿Confirma que la orden para ${order.clientName} ha sido entregada exitosamente?',
         onConfirm: () {
           Navigator.of(context).pop();
           ref.read(dispatcherHomeProvider.notifier).completeDelivery(order);

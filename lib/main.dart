@@ -12,15 +12,9 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EnvConfig.load();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(
-    const ProviderScope(
-      child: PackleadApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: PackleadApp()));
 }
 
 class PackleadApp extends ConsumerWidget {
@@ -37,12 +31,12 @@ class PackleadApp extends ConsumerWidget {
       darkTheme: getGeneralTheme(Brightness.dark),
       themeMode: ThemeMode.system,
       home: HomeBuilder(authState: authState),
-      onUnknownRoute: (settings) => MaterialPageRoute(
-        builder: (_) => ScreenNotFound(),
-      ),
+      onUnknownRoute: (settings) =>
+          MaterialPageRoute(builder: (_) => ScreenNotFound()),
       builder: (context, child) {
-        if (!AppServiceMode.isMock || child == null) return child ?? const SizedBox.shrink();
-
+        if (!AppServiceMode.isMock || child == null) {
+          return child ?? const SizedBox.shrink();
+        }
         return Banner(
           message: 'DEMO',
           location: BannerLocation.topEnd,

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import 'package:packlead/core/models/location.dart';
 
-
 class LocationTrackingService {
   StreamSubscription<Position>? _positionStreamSubscription;
   Timer? _periodicTimer;
@@ -10,10 +9,7 @@ class LocationTrackingService {
   final void Function(Location location) onLocationUpdate;
   final void Function(String error)? onError;
 
-  LocationTrackingService({
-    required this.onLocationUpdate,
-    this.onError,
-  });
+  LocationTrackingService({required this.onLocationUpdate, this.onError});
 
   Future<void> startTracking() async {
     if (_positionStreamSubscription != null || _periodicTimer != null) {
@@ -32,7 +28,7 @@ class LocationTrackingService {
       // Periodic location updates every 5 seconds
       _periodicTimer = Timer.periodic(
         const Duration(seconds: 5),
-            (_) => _getCurrentLocation(),
+        (_) => _getCurrentLocation(),
       );
     } catch (e) {
       onError?.call('Error al iniciar tracking: $e');

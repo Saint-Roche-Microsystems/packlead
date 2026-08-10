@@ -26,7 +26,9 @@ class PasswordField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500)
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 8),
@@ -38,9 +40,7 @@ class PasswordField extends StatelessWidget {
             hintText: '••••••••',
             suffixIcon: IconButton(
               icon: Icon(
-                obscurePassword
-                  ? Icons.visibility
-                  : Icons.visibility_off,
+                obscurePassword ? Icons.visibility : Icons.visibility_off,
               ),
               onPressed: onIconPressed,
             ),
@@ -59,4 +59,3 @@ class PasswordField extends StatelessWidget {
     return null;
   }
 }
-

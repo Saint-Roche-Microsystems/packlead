@@ -3,7 +3,6 @@ import 'package:packlead/core/models/dispatcher_location.dart';
 import 'package:packlead/core/models/location.dart';
 import 'package:packlead/services/firebase/firebase_rtdb_service.dart';
 
-
 class DispatcherLocationService {
   final FirebaseRTDBService _rtdbService;
   static const String _locationsPath = 'locations';
@@ -37,14 +36,11 @@ class DispatcherLocationService {
     required String dispatcherId,
     required Location location,
   }) async {
-    await _rtdbService.update(
-      '$_locationsPath/$dispatcherId',
-      {
-        'lat': location.lat,
-        'lng': location.lng,
-        'updatedAt': ServerValue.timestamp,
-      },
-    );
+    await _rtdbService.update('$_locationsPath/$dispatcherId', {
+      'lat': location.lat,
+      'lng': location.lng,
+      'updatedAt': ServerValue.timestamp,
+    });
   }
 
   /// Delete dispatcher register in RTDB
@@ -65,7 +61,9 @@ class DispatcherLocationService {
 
       return data.entries.map((entry) {
         final locationData = entry.value as Map<dynamic, dynamic>;
-        final Map<String, dynamic> locationMap = Map<String,dynamic>.from(locationData);
+        final Map<String, dynamic> locationMap = Map<String, dynamic>.from(
+          locationData,
+        );
 
         locationMap['dispatcherId'] = entry.key as String;
 
@@ -76,7 +74,9 @@ class DispatcherLocationService {
 
   /// Obtain the location from an specific dispatcher
   Future<DispatcherLocation?> getDispatcherLocation(String dispatcherId) async {
-    final snapshot = await _rtdbService.getOnce('$_locationsPath/$dispatcherId');
+    final snapshot = await _rtdbService.getOnce(
+      '$_locationsPath/$dispatcherId',
+    );
 
     if (!snapshot.exists || snapshot.value == null) {
       return null;

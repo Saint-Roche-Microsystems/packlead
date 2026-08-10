@@ -25,9 +25,9 @@ class Dispatcher {
     required this.email,
     required this.vehicle,
     required this.licensePlate,
-  })  : id = '',                           // Temporal, backend lo asigna
-        state = DispatcherState.available, // Estado por default en la creación
-        firebaseUid = null;
+  }) : id = '', // Temporal, backend lo asigna
+       state = DispatcherState.available, // Estado por default en la creación
+       firebaseUid = null;
 
   /// Deserialización JSON
   factory Dispatcher.fromJson(Map<String, dynamic> json) {
@@ -98,11 +98,11 @@ class Dispatcher {
   @override
   int get hashCode {
     return id.hashCode ^
-    name.hashCode ^
-    email.hashCode ^
-    vehicle.hashCode ^
-    licensePlate.hashCode ^
-    state.hashCode ^
-    firebaseUid.hashCode;
+        name.hashCode ^
+        email.hashCode ^
+        vehicle.hashCode ^
+        licensePlate.hashCode ^
+        state.hashCode ^
+        firebaseUid.hashCode;
   }
 }

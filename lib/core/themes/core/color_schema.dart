@@ -31,6 +31,5 @@ ColorScheme getColorScheme(Brightness brightness) {
     onSurface: SaintColors.contrast,
     error: SaintColors.error,
     onError: Colors.white,
-
   );
 }

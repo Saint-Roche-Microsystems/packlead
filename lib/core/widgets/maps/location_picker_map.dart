@@ -6,7 +6,6 @@ import 'package:packlead/core/utils/marker_builder.dart';
 import 'package:packlead/core/widgets/maps/base_map.dart';
 import 'package:packlead/core/widgets/snackbars.dart';
 
-
 class LocationPickerMap extends StatefulWidget {
   final Location? initialLocation;
   final Function(Location) onLocationConfirmed;
@@ -101,9 +100,7 @@ class _LocationPickerMapState extends State<LocationPickerMap> {
   Set<Marker> _buildMarkers() {
     if (_selectedPosition == null) return {};
 
-    return {
-      MarkerBuilder.buildSelectedLocationMarker(_selectedPosition!),
-    };
+    return {MarkerBuilder.buildSelectedLocationMarker(_selectedPosition!)};
   }
 
   @override
@@ -117,60 +114,58 @@ class _LocationPickerMapState extends State<LocationPickerMap> {
         ),
       ),
       body: _selectedPosition == null
-          ? const Center(
-        child: CircularProgressIndicator(),
-      )
+          ? const Center(child: CircularProgressIndicator())
           : Stack(
-        children: [
-          BaseMap(
-            initialPosition: _selectedPosition!,
-            initialZoom: 15,
-            markers: _buildMarkers(),
-            onMapCreated: (controller) {
-              _mapController = controller;
-            },
-            onTap: _onMapTap,
-            isInteractive: true,
-            myLocationEnabled: false,
-            showMyLocationButton: false,
-          ),
-
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: SafeArea(
-                top: false,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _onConfirmLocation,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: const Text('Confirmar'),
-                    ),
-                  ],
+              children: [
+                BaseMap(
+                  initialPosition: _selectedPosition!,
+                  initialZoom: 15,
+                  markers: _buildMarkers(),
+                  onMapCreated: (controller) {
+                    _mapController = controller;
+                  },
+                  onTap: _onMapTap,
+                  isInteractive: true,
+                  myLocationEnabled: false,
+                  showMyLocationButton: false,
                 ),
-              ),
+
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, -2),
+                        ),
+                      ],
+                    ),
+                    child: SafeArea(
+                      top: false,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ElevatedButton(
+                            onPressed: _onConfirmLocation,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: const Text('Confirmar'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:packlead/core/themes/index.dart';
 
-enum DispatcherState {
-  available,
-  inactive,
-}
+enum DispatcherState { available, inactive }
 
 extension DispatcherStateExtension on DispatcherState {
   String toJson() => name;

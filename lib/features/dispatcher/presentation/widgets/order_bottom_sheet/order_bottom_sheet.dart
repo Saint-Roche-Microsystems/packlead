@@ -20,9 +20,7 @@ class OrderBottomSheet extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(20),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.1),
@@ -34,32 +32,29 @@ class OrderBottomSheet extends StatelessWidget {
           ),
           child: Column(
             children: [
-
-            SingleChildScrollView(
-              controller: scrollController,
-              physics: const ClampingScrollPhysics(),
-              child: Column(
-                children: [
-                  // HANDLE
-                  Container(
-                    margin: const EdgeInsets.only(top: 12, bottom: 8),
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(2),
+              SingleChildScrollView(
+                controller: scrollController,
+                physics: const ClampingScrollPhysics(),
+                child: Column(
+                  children: [
+                    // HANDLE
+                    Container(
+                      margin: const EdgeInsets.only(top: 12, bottom: 8),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
-                  ),
 
-                  OrderBottomSheetHeader(dispatcherId: dispatcherId),
-                ],
+                    OrderBottomSheetHeader(dispatcherId: dispatcherId),
+                  ],
+                ),
               ),
-            ),
 
               // Orders List
-              Expanded(
-                child: OrderBottomSheetOrdersList(),
-              ),
+              Expanded(child: OrderBottomSheetOrdersList()),
 
               // Action Button
               OrderBottomSheetActionButton(),

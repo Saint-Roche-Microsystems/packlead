@@ -31,7 +31,6 @@ final ordersApiClientProvider = Provider<OrdersApiClient>((ref) {
   return OrdersApiClient(baseClient);
 });
 
-
 // Datasource related
 final orderDataSourceProvider = Provider<OrderDataSource>((ref) {
   if (AppServiceMode.isMock) return OrderMockDataSource();
@@ -55,26 +54,33 @@ final ordersProvider = FutureProvider<List<Order>>((ref) async {
   return await repository.getAllOrders();
 });
 
-final orderByIdProvider = FutureProvider.family<Order, String>(
-      (ref, orderId) async {
-    final repository = ref.watch(orderRepositoryProvider);
-    return await repository.getOrderById(orderId);
-  },
-);
+final orderByIdProvider = FutureProvider.family<Order, String>((
+  ref,
+  orderId,
+) async {
+  final repository = ref.watch(orderRepositoryProvider);
+  return await repository.getOrderById(orderId);
+});
 
-final ordersByDispatcherProvider = FutureProvider.family<List<Order>, OrdersByDispatcherParams>(
-      (ref, params) async {
-    final repository = ref.watch(orderRepositoryProvider);
-    return await repository.getOrdersByDispatcher(params.dispatcherId, params.forDate);
-  },
-);
+final ordersByDispatcherProvider =
+    FutureProvider.family<List<Order>, OrdersByDispatcherParams>((
+      ref,
+      params,
+    ) async {
+      final repository = ref.watch(orderRepositoryProvider);
+      return await repository.getOrdersByDispatcher(
+        params.dispatcherId,
+        params.forDate,
+      );
+    });
 
-final ordersByStateProvider = FutureProvider.family<List<Order>, OrderState>(
-      (ref, state) async {
-    final repository = ref.watch(orderRepositoryProvider);
-    return await repository.getOrdersByState(state);
-  },
-);
+final ordersByStateProvider = FutureProvider.family<List<Order>, OrderState>((
+  ref,
+  state,
+) async {
+  final repository = ref.watch(orderRepositoryProvider);
+  return await repository.getOrdersByState(state);
+});
 
 final todayOrdersProvider = FutureProvider<List<Order>>((ref) async {
   final repository = ref.watch(orderRepositoryProvider);
@@ -83,20 +89,22 @@ final todayOrdersProvider = FutureProvider<List<Order>>((ref) async {
   return await repository.getOrdersByDate(today);
 });
 
-final ordersByDateProvider = FutureProvider.family<List<Order>, DateTime>(
-      (ref, date) async {
-    final repository = ref.watch(orderRepositoryProvider);
-    return await repository.getOrdersByDate(date);
-  },
-);
+final ordersByDateProvider = FutureProvider.family<List<Order>, DateTime>((
+  ref,
+  date,
+) async {
+  final repository = ref.watch(orderRepositoryProvider);
+  return await repository.getOrdersByDate(date);
+});
 
 /// *******************
 ///   CUD PROVIDERS
 /// *******************
 
-final orderMutationProvider = StateNotifierProvider<OrderMutationNotifier, AsyncValue<void>>(
-  (ref) => OrderMutationNotifier(ref),
-);
+final orderMutationProvider =
+    StateNotifierProvider<OrderMutationNotifier, AsyncValue<void>>(
+      (ref) => OrderMutationNotifier(ref),
+    );
 
 class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
   final Ref _ref;
@@ -115,7 +123,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
     }
   }
@@ -132,7 +140,7 @@ class OrderMutationNotifier extends StateNotifier<AsyncValue<void>> {
       _ref.invalidate(ordersByStateProvider);
 
       state = const AsyncValue.data(null);
-    } catch(error, stackTrace) {
+    } catch (error, stackTrace) {
       state = AsyncValue.error(error, stackTrace);
     }
   }

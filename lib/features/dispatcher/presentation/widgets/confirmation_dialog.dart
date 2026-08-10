@@ -9,7 +9,7 @@ class ConfirmationDialog extends StatelessWidget {
     super.key,
     required this.title,
     required this.content,
-    required this.onConfirm
+    required this.onConfirm,
   });
 
   @override
@@ -22,10 +22,7 @@ class ConfirmationDialog extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancelar'),
         ),
-        FilledButton(
-          onPressed: onConfirm,
-          child: const Text('Confirmar'),
-        ),
+        FilledButton(onPressed: onConfirm, child: const Text('Confirmar')),
       ],
     );
   }

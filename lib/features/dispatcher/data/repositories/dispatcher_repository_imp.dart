@@ -11,27 +11,27 @@ class DispatcherRepositoryImp implements DispatcherRepository {
 
   @override
   Future<List<Dispatcher>> getAllDispatchers() async {
-    try{
+    try {
       return await _dataSource.getAllDispatchers();
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
   Future<List<Dispatcher>> getDispatchersByState(DispatcherState state) async {
-    try{
+    try {
       return await _dataSource.getDispatchersByState(state);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
   Future<Dispatcher> getDispatcherById(String id) async {
-    try{
+    try {
       return await _dataSource.getDispatcherById(id);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -46,28 +46,30 @@ class DispatcherRepositoryImp implements DispatcherRepository {
   }
 
   @override
-  Future<DispatcherCreationResult> createDispatcher(Dispatcher dispatcher) async {
-    try{
+  Future<DispatcherCreationResult> createDispatcher(
+    Dispatcher dispatcher,
+  ) async {
+    try {
       return await _dataSource.createDispatcher(dispatcher);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
   Future<Dispatcher> updateDispatcher(Dispatcher dispatcher) async {
-    try{
+    try {
       return await _dataSource.updateDispatcher(dispatcher);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<void> deleteDispatcher(String id) async{
-    try{
+  Future<void> deleteDispatcher(String id) async {
+    try {
       return await _dataSource.deleteDispatcher(id);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }

@@ -50,7 +50,9 @@ class OrdersApiClient {
     }
 
     try {
-      final response = await _client.get<Map<String, dynamic>>('/orders/$orderId');
+      final response = await _client.get<Map<String, dynamic>>(
+        '/orders/$orderId',
+      );
       return _parseOrder(response);
     } on ApiException {
       rethrow;
@@ -77,7 +79,10 @@ class OrdersApiClient {
   }
 
   /// PUT /orders/:id
-  Future<Order> updateOrder(String orderId, Map<String, dynamic> payload) async {
+  Future<Order> updateOrder(
+    String orderId,
+    Map<String, dynamic> payload,
+  ) async {
     if (orderId.isEmpty) {
       throw ArgumentError(OrdersApiErrors.orderIdRequired);
     }

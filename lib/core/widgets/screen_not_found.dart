@@ -19,11 +19,7 @@ class ScreenNotFound extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 100,
-                color: SaintColors.error,
-              ),
+              Icon(Icons.error_outline, size: 100, color: SaintColors.error),
               const SizedBox(height: 24),
               const Text(
                 '404',
@@ -36,10 +32,7 @@ class ScreenNotFound extends ConsumerWidget {
               const SizedBox(height: 16),
               const Text(
                 'Pantalla no encontrada',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),

@@ -27,7 +27,10 @@ class AdminTrackingViewModel {
     this.licensePlate,
   });
 
-  factory AdminTrackingViewModel.fromLocation(DispatcherLocation location, Dispatcher? dispatcher) {
+  factory AdminTrackingViewModel.fromLocation(
+    DispatcherLocation location,
+    Dispatcher? dispatcher,
+  ) {
     return AdminTrackingViewModel(
       firebaseUid: location.dispatcherId,
       name: dispatcher?.name ?? location.email,

@@ -25,7 +25,10 @@ class OrderMockDataSource implements OrderDataSource {
   }
 
   @override
-  Future<List<Order>> getOrdersByDispatcher(String dispatcherId, DateTime forDate) async {
+  Future<List<Order>> getOrdersByDispatcher(
+    String dispatcherId,
+    DateTime forDate,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 400));
 
     return _orders
@@ -45,9 +48,7 @@ class OrderMockDataSource implements OrderDataSource {
   Future<List<Order>> getOrdersByState(OrderState state) async {
     await Future.delayed(const Duration(milliseconds: 400));
 
-    return _orders
-        .where((order) => order.state == state)
-        .toList();
+    return _orders.where((order) => order.state == state).toList();
   }
 
   @override

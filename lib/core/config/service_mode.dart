@@ -6,7 +6,9 @@ class AppServiceMode {
   AppServiceMode._();
 
   static ServiceMode get current =>
-      EnvConfig.localService.toUpperCase() == 'MOCK' ? ServiceMode.mock : ServiceMode.api;
+      EnvConfig.localService.toUpperCase() == 'MOCK'
+      ? ServiceMode.mock
+      : ServiceMode.api;
 
   static bool get isMock => current == ServiceMode.mock;
 }

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 Future<void> main() async {
-
   if (!File('.env').existsSync()) {
     print('Error: .env file not found');
     exit(1);

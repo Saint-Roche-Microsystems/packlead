@@ -10,9 +10,9 @@ class OrderRepositoryImp implements OrderRepository {
 
   @override
   Future<List<Order>> getAllOrders() async {
-    try{
+    try {
       return await _dataSource.getAllOrders();
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -27,55 +27,58 @@ class OrderRepositoryImp implements OrderRepository {
   }
 
   @override
-  Future<List<Order>> getOrdersByDispatcher(String dispatcherId, DateTime forDate) async {
-    try{
+  Future<List<Order>> getOrdersByDispatcher(
+    String dispatcherId,
+    DateTime forDate,
+  ) async {
+    try {
       return await _dataSource.getOrdersByDispatcher(dispatcherId, forDate);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
   Future<List<Order>> getOrdersByState(OrderState state) async {
-    try{
+    try {
       return await _dataSource.getOrdersByState(state);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
   Future<List<Order>> getOrdersByDate(DateTime date) async {
-    try{
+    try {
       return await _dataSource.getOrdersByDate(date);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
   Future<Order> updateOrder(Order order) async {
-    try{
+    try {
       return await _dataSource.updateOrder(order);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
   Future<Order> createOrder(Order order) async {
-    try{
+    try {
       return await _dataSource.createOrder(order);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }
 
   @override
   Future<void> deleteOrder(String id) async {
-    try{
+    try {
       return await _dataSource.deleteOrder(id);
-    } catch(e) {
+    } catch (e) {
       rethrow;
     }
   }

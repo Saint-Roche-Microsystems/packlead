@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:packlead/core/errors/auth_exceptions.dart';
 import 'package:packlead/core/models/user.dart';
 import 'package:packlead/features/auth/data/datasources/auth_mock_datasource.dart';
-import 'package:packlead/core/constants/user_roles.dart';
 
 void main() {
   late AuthMockDataSource dataSource;
@@ -15,7 +14,9 @@ void main() {
     test('Debe hacer login correctamente con credenciales válidas', () async {
       // Arrange
       final email = dataSource
-          .getUserByEmail(dataSource.getUserByEmail('admin@packlead.com')!.email)!
+          .getUserByEmail(
+            dataSource.getUserByEmail('admin@packlead.com')!.email,
+          )!
           .email;
 
       final user = dataSource.getUserByEmail(email)!;
@@ -30,27 +31,33 @@ void main() {
       expect(result.role, user.role);
     });
 
-    test('Debe lanzar InvalidCredentialsException si el email no existe', () async {
-      expect(
-            () => dataSource.login('noexiste@test.com', '123456'),
-        throwsA(isA<InvalidCredentialsException>()),
-      );
-    });
+    test(
+      'Debe lanzar InvalidCredentialsException si el email no existe',
+      () async {
+        expect(
+          () => dataSource.login('noexiste@test.com', '123456'),
+          throwsA(isA<InvalidCredentialsException>()),
+        );
+      },
+    );
 
-    test('Debe lanzar InvalidCredentialsException si el password es incorrecto', () async {
-      // Arrange
-      final user = dataSource.getUserByEmail('admin@packlead.com');
+    test(
+      'Debe lanzar InvalidCredentialsException si el password es incorrecto',
+      () async {
+        // Arrange
+        final user = dataSource.getUserByEmail('admin@packlead.com');
 
-      if (user == null) {
-        fail('No existe usuario mock para prueba');
-      }
+        if (user == null) {
+          fail('No existe usuario mock para prueba');
+        }
 
-      // Act & Assert
-      expect(
-            () => dataSource.login(user.email, 'wrongPassword'),
-        throwsA(isA<InvalidCredentialsException>()),
-      );
-    });
+        // Act & Assert
+        expect(
+          () => dataSource.login(user.email, 'wrongPassword'),
+          throwsA(isA<InvalidCredentialsException>()),
+        );
+      },
+    );
   });
 
   group('AuthMockDataSource - getCurrentUser', () {
@@ -95,10 +102,8 @@ void main() {
 
   group('AuthMockDataSource - getUserByEmail', () {
     test('Debe encontrar usuario ignorando mayúsculas/minúsculas', () {
-      final userLower =
-      dataSource.getUserByEmail('admin@packlead.com');
-      final userUpper =
-      dataSource.getUserByEmail('ADMIN@PACKLEAD.COM');
+      final userLower = dataSource.getUserByEmail('admin@packlead.com');
+      final userUpper = dataSource.getUserByEmail('ADMIN@PACKLEAD.COM');
 
       expect(userLower, isNotNull);
       expect(userUpper, isNotNull);

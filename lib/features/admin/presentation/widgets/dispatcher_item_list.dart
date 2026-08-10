@@ -16,7 +16,8 @@ class DispatcherItemList extends StatelessWidget {
         onTap: () {
           showDialog(
             context: context,
-            builder: (context) => DispatcherDetailDialog(dispatcher: dispatcher),
+            builder: (context) =>
+                DispatcherDetailDialog(dispatcher: dispatcher),
           );
         },
         borderRadius: BorderRadius.circular(12),
@@ -29,7 +30,9 @@ class DispatcherItemList extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   border: Border.all(
-                    color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
+                    color: Theme.of(
+                      context,
+                    ).primaryColor.withValues(alpha: 0.3),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.circular(32),
@@ -75,10 +78,7 @@ class DispatcherItemList extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: dispatcher.state.color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: dispatcher.state.color,
-                    width: 1,
-                  ),
+                  border: Border.all(color: dispatcher.state.color, width: 1),
                 ),
                 child: Text(
                   dispatcher.state.label,

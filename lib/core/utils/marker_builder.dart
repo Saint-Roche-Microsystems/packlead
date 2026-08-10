@@ -37,18 +37,15 @@ class MarkerBuilder {
       markerId: const MarkerId('srmc_hq'),
       position: location,
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-      infoWindow: const InfoWindow(
-        title: 'SRMC - HQ',
-        snippet: 'Bodega',
-      ),
+      infoWindow: const InfoWindow(title: 'SRMC - HQ', snippet: 'Bodega'),
     );
   }
 
   /// Marker for the current position with direction
   static Marker buildCurrentPositionMarker(
-      Location location, {
-        double? heading,
-      }) {
+    Location location, {
+    double? heading,
+  }) {
     return Marker(
       markerId: const MarkerId('current'),
       position: location.toLatLng(),
@@ -58,13 +55,12 @@ class MarkerBuilder {
     );
   }
 
-
   // Custom marker icon with dispatcher initials
   static Future<BitmapDescriptor> createMarkerIconInitials(
-      String name, {
-        double size = 45,
-        Color? color,
-      }) async {
+    String name, {
+    double size = 45,
+    Color? color,
+  }) async {
     final String initials = _getInitials(name);
     final Color markerColor = color ?? ColorUtils.getRandomColor();
     final Color backgroundColor = markerColor.withValues(alpha: 0.2);
@@ -75,34 +71,20 @@ class MarkerBuilder {
 
     // Background circle with opacity
     paint.color = backgroundColor;
-    canvas.drawCircle(
-      Offset(size / 2, size / 2),
-      size / 2,
-      paint,
-    );
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2, paint);
 
     // Interior circle with solid color
     paint.color = Colors.white;
-    canvas.drawCircle(
-      Offset(size / 2, size / 2),
-      size / 2.5,
-      paint,
-    );
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.5, paint);
 
     // Interior circle border
     paint.color = markerColor;
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 3;
-    canvas.drawCircle(
-      Offset(size / 2, size / 2),
-      size / 2.5,
-      paint,
-    );
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.5, paint);
 
     // Draw initials
-    final textPainter = TextPainter(
-      textDirection: TextDirection.ltr,
-    );
+    final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
     textPainter.text = TextSpan(
       text: initials,
@@ -116,10 +98,7 @@ class MarkerBuilder {
     textPainter.layout();
     textPainter.paint(
       canvas,
-      Offset(
-        (size - textPainter.width) / 2,
-        (size - textPainter.height) / 2,
-      ),
+      Offset((size - textPainter.width) / 2, (size - textPainter.height) / 2),
     );
 
     // Convert into image
@@ -131,7 +110,6 @@ class MarkerBuilder {
 
     return BitmapDescriptor.bytes(data!.buffer.asUint8List());
   }
-
 
   // Get initials helper
   static String _getInitials(String name) {

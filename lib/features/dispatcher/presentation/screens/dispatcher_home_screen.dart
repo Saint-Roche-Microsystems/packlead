@@ -24,11 +24,12 @@ class DispatcherHomeScreen extends ConsumerStatefulWidget {
   const DispatcherHomeScreen({
     super.key,
     required this.dispatcherId,
-    required this.dispatcherEmail
+    required this.dispatcherEmail,
   });
 
   @override
-  ConsumerState<DispatcherHomeScreen> createState() => _DispatcherHomeScreenState();
+  ConsumerState<DispatcherHomeScreen> createState() =>
+      _DispatcherHomeScreenState();
 }
 
 class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
@@ -70,7 +71,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
     final currentLocation = ref.read(dispatcherCurrentLocationProvider);
 
     // If current location is null, use SRMC HQ as default initial location
-    final initialLocation = currentLocation ?? SRMCHQ;
+    final initialLocation = currentLocation ?? srmchq;
 
     _locationNotifier = ref.read(dispatcherLocationProvider.notifier);
 
@@ -83,11 +84,11 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
 
   @override
   void dispose() {
-    if(_trackingService != null) {
+    if (_trackingService != null) {
       _trackingService!.stopTracking();
     }
 
-    if(_locationNotifier != null) {
+    if (_locationNotifier != null) {
       _locationNotifier!.unregister();
     }
     super.dispose();
@@ -100,7 +101,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
     // Load today's orders using the backend dispatcher id (GET /dispatchers/me)
     // - not the Firebase UID - exactly once, as soon as the profile resolves.
     ref.listen<AsyncValue<Dispatcher>>(dispatcherMeProvider, (previous, next) {
-      final me = next.value;
+      final me = next.valueOrNull;
       if (me != null && !_hasLoadedOrders) {
         _hasLoadedOrders = true;
         ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(me.id);
@@ -155,12 +156,18 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
       error: (error, stackTrace) => ErrorScreen(
         title: 'Error al cargar tus órdenes',
         message: ErrorHandler.getErrorMessage(error),
-        onRetry: () => ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(domainDispatcherId),
+        onRetry: () => ref
+            .read(dispatcherHomeProvider.notifier)
+            .loadTodayOrders(domainDispatcherId),
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context, dynamic state, String domainDispatcherId) {
+  Widget _buildContent(
+    BuildContext context,
+    dynamic state,
+    String domainDispatcherId,
+  ) {
     final currentLocation = ref.watch(dispatcherCurrentLocationProvider);
 
     return Stack(
@@ -171,7 +178,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
             destination: state.selectedOrder?.location,
             selectedOrder: state.selectedOrder,
             currentPosition: currentLocation,
-            hqLocation: SRMCHQ,
+            hqLocation: srmchq,
           ),
         ),
 

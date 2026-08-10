@@ -7,9 +7,8 @@ import 'package:packlead/features/auth/data/datasources/auth_datasource.dart';
 class FirebaseAuthDataSource implements AuthDataSource {
   final fba.FirebaseAuth _fbAuth;
 
-  FirebaseAuthDataSource({
-    fba.FirebaseAuth? firebaseAuth,
-  }) : _fbAuth = firebaseAuth ?? fba.FirebaseAuth.instance;
+  FirebaseAuthDataSource({fba.FirebaseAuth? firebaseAuth})
+    : _fbAuth = firebaseAuth ?? fba.FirebaseAuth.instance;
 
   @override
   Future<User?> getCurrentUser() async {

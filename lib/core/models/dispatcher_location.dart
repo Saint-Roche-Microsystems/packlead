@@ -22,7 +22,9 @@ class DispatcherLocation {
   }
 
   // convert a list of DispatcherLocation to a list of Location
-  static List<Location> toLocations(List<DispatcherLocation> dispatcherLocations) {
+  static List<Location> toLocations(
+    List<DispatcherLocation> dispatcherLocations,
+  ) {
     return dispatcherLocations.map((dl) => dl.toLocation()).toList();
   }
 
@@ -41,9 +43,7 @@ class DispatcherLocation {
       email: json['email'] as String,
       lat: (json['lat'] as num).toDouble(),
       lng: (json['lng'] as num).toDouble(),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(
-        json['updatedAt'] as int,
-      ),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(json['updatedAt'] as int),
     );
   }
 

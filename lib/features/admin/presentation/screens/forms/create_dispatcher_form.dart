@@ -46,7 +46,9 @@ class _CreateDispatcherForm extends ConsumerState<CreateDispatcherForm> {
       state: DispatcherState.available,
     );
 
-    await ref.read(dispatcherMutationProvider.notifier).createDispatcher(newDispatcher);
+    await ref
+        .read(dispatcherMutationProvider.notifier)
+        .createDispatcher(newDispatcher);
   }
 
   /// POST /dispatchers only generates an invite link.
@@ -101,10 +103,11 @@ class _CreateDispatcherForm extends ConsumerState<CreateDispatcherForm> {
   Widget build(BuildContext context) {
     // Secondary event listeners
     ref.listen<AsyncValue<void>>(dispatcherMutationProvider, (previous, next) {
-
-      if(previous?.isLoading == true && next.hasValue) {
-        final passwordResetLink =
-            ref.read(dispatcherMutationProvider.notifier).lastCreationResult?.passwordResetLink;
+      if (previous?.isLoading == true && next.hasValue) {
+        final passwordResetLink = ref
+            .read(dispatcherMutationProvider.notifier)
+            .lastCreationResult
+            ?.passwordResetLink;
 
         if (passwordResetLink != null) {
           _showInviteLinkDialog(passwordResetLink);
@@ -117,9 +120,11 @@ class _CreateDispatcherForm extends ConsumerState<CreateDispatcherForm> {
         }
       }
 
-      if(next.hasError && previous?.hasError != true) {
+      if (next.hasError && previous?.hasError != true) {
         ScaffoldMessenger.of(context).showSnackBar(
-          ErrorSnackBar(message: 'Ha ocurrido un error al agregar un nuevo repartidor'),
+          ErrorSnackBar(
+            message: 'Ha ocurrido un error al agregar un nuevo repartidor',
+          ),
         );
       }
     });
@@ -129,9 +134,7 @@ class _CreateDispatcherForm extends ConsumerState<CreateDispatcherForm> {
 
     // UI render
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Agregar Repartidor'),
-      ),
+      appBar: AppBar(title: const Text('Agregar Repartidor')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(

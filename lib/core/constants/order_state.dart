@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:packlead/core/themes/index.dart';
 
-enum OrderState {
-  pending,
-  shipped,
-  delivered,
-}
+enum OrderState { pending, shipped, delivered }
 
 extension OrderStateExtension on OrderState {
   String toJson() => name;
@@ -34,10 +30,7 @@ extension OrderStateUI on OrderState {
 extension OrderStateOptions on OrderState {
   static List<Map<String, String>> get options {
     return OrderState.values.map((state) {
-      return {
-        'label': state.label,
-        'value': state.name,
-      };
+      return {'label': state.label, 'value': state.name};
     }).toList();
   }
 }

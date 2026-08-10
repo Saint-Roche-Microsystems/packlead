@@ -9,9 +9,7 @@ class TestThemeScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Theme Preview'),
-      ),
+      appBar: AppBar(title: const Text('Theme Preview')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -41,26 +39,11 @@ class TestThemeScreen extends StatelessWidget {
             spacing: 12,
             runSpacing: 12,
             children: [
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('Elevated'),
-              ),
-              FilledButton(
-                onPressed: () {},
-                child: const Text('Filled'),
-              ),
-              FilledButton.tonal(
-                onPressed: () {},
-                child: const Text('Tonal'),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                child: const Text('Outlined'),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('Text'),
-              ),
+              ElevatedButton(onPressed: () {}, child: const Text('Elevated')),
+              FilledButton(onPressed: () {}, child: const Text('Filled')),
+              FilledButton.tonal(onPressed: () {}, child: const Text('Tonal')),
+              OutlinedButton(onPressed: () {}, child: const Text('Outlined')),
+              TextButton(onPressed: () {}, child: const Text('Text')),
             ],
           ),
 
@@ -81,9 +64,7 @@ class TestThemeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           TextField(
-            decoration: const InputDecoration(
-              labelText: 'Password',
-            ),
+            decoration: const InputDecoration(labelText: 'Password'),
             obscureText: true,
           ),
           const SizedBox(height: 12),
@@ -93,9 +74,7 @@ class TestThemeScreen extends StatelessWidget {
               DropdownMenuItem(value: '2', child: Text('Option 2')),
             ],
             onChanged: (_) {},
-            decoration: const InputDecoration(
-              labelText: 'Dropdown',
-            ),
+            decoration: const InputDecoration(labelText: 'Dropdown'),
           ),
 
           const SizedBox(height: 24),
@@ -179,9 +158,7 @@ class TestThemeScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('This is a SnackBar'),
-                ),
+                const SnackBar(content: Text('This is a SnackBar')),
               );
             },
             child: const Text('Show SnackBar'),
@@ -226,18 +203,12 @@ class TestThemeScreen extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Favorites',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
 
@@ -260,11 +231,7 @@ class _ColorTile extends StatelessWidget {
   final Color color;
   final Color textColor;
 
-  const _ColorTile(
-      this.label,
-      this.color,
-      this.textColor,
-      );
+  const _ColorTile(this.label, this.color, this.textColor);
 
   @override
   Widget build(BuildContext context) {
@@ -277,10 +244,7 @@ class _ColorTile extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: textColor,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
       ),
     );
   }

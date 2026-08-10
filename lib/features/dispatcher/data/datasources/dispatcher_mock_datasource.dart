@@ -4,9 +4,9 @@ import 'package:packlead/features/dispatcher/data/datasources/dispatcher_datasou
 import 'package:packlead/features/dispatcher/models/dispatcher_creation_result.dart';
 import 'package:packlead/mocks/dispatcher_mock_data.dart';
 
-
 class DispatcherMockDataSource implements DispatcherDatasource {
-  DispatcherMockDataSource({String? currentUserId}) : _currentUserId = currentUserId;
+  DispatcherMockDataSource({String? currentUserId})
+    : _currentUserId = currentUserId;
 
   final String? _currentUserId;
   final _dispatchers = DispatcherMockData().dispatchers;
@@ -50,7 +50,9 @@ class DispatcherMockDataSource implements DispatcherDatasource {
   }
 
   @override
-  Future<DispatcherCreationResult> createDispatcher(Dispatcher dispatcher) async {
+  Future<DispatcherCreationResult> createDispatcher(
+    Dispatcher dispatcher,
+  ) async {
     await Future.delayed(const Duration(milliseconds: 600));
 
     final newDispatcher = Dispatcher(
@@ -65,7 +67,10 @@ class DispatcherMockDataSource implements DispatcherDatasource {
     _dispatchers.add(newDispatcher);
 
     // The mock has no Firebase-backed invite flow, so there's no real link.
-    return DispatcherCreationResult(dispatcher: newDispatcher, passwordResetLink: null);
+    return DispatcherCreationResult(
+      dispatcher: newDispatcher,
+      passwordResetLink: null,
+    );
   }
 
   @override

@@ -5,26 +5,26 @@ void main() {
   final env = Platform.environment;
 
   final firebaseJson = {
-    "flutter":{
-      "platforms":{
-        "android":{
-          "default":{
+    "flutter": {
+      "platforms": {
+        "android": {
+          "default": {
             "projectId": env['FIREBASE_PROJECT_ID'],
             "appId": env['FIREBASE_APP_ID_ANDROID'],
-            "fileOutput":"android/app/google-services.json"
-          }
+            "fileOutput": "android/app/google-services.json",
+          },
         },
-        "dart":{
-          "lib/firebase_options.dart":{
+        "dart": {
+          "lib/firebase_options.dart": {
             "projectId": env['FIREBASE_PROJECT_ID'],
-            "configurations":{
+            "configurations": {
               "android": env['FIREBASE_APP_ID_ANDROID'],
-              "ios": env['FIREBASE_APP_ID_IOS']
-            }
-          }
-        }
-      }
-    }
+              "ios": env['FIREBASE_APP_ID_IOS'],
+            },
+          },
+        },
+      },
+    },
   };
 
   final file = File('firebase.json');

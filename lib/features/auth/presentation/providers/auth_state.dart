@@ -6,39 +6,22 @@ class AuthState {
   final User? user;
   final String? errorMessage;
 
-  const AuthState({
-    required this.status,
-    this.user,
-    this.errorMessage,
-  });
+  const AuthState({required this.status, this.user, this.errorMessage});
 
-  factory AuthState.initial() => AuthState(
-    status: AuthStatus.initial,
-  );
+  factory AuthState.initial() => AuthState(status: AuthStatus.initial);
 
-  factory AuthState.loading() => AuthState(
-    status: AuthStatus.loading,
-  );
+  factory AuthState.loading() => AuthState(status: AuthStatus.loading);
 
-  factory AuthState.authenticated(User user) => AuthState(
-    status: AuthStatus.authenticated,
-    user: user,
-  );
+  factory AuthState.authenticated(User user) =>
+      AuthState(status: AuthStatus.authenticated, user: user);
 
-  factory AuthState.unauthenticated() => AuthState(
-    status: AuthStatus.unauthenticated,
-  );
+  factory AuthState.unauthenticated() =>
+      AuthState(status: AuthStatus.unauthenticated);
 
-  factory AuthState.error(String errMsg) => AuthState(
-    status: AuthStatus.error,
-    errorMessage: errMsg,
-  );
+  factory AuthState.error(String errMsg) =>
+      AuthState(status: AuthStatus.error, errorMessage: errMsg);
 
-  AuthState copyWith({
-    AuthStatus? status,
-    User? user,
-    String? errorMessage,
-  }) {
+  AuthState copyWith({AuthStatus? status, User? user, String? errorMessage}) {
     return AuthState(
       status: status ?? this.status,
       user: user ?? this.user,

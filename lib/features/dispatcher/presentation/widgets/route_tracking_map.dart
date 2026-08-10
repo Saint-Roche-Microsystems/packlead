@@ -70,19 +70,25 @@ class _RouteTrackingMapState extends ConsumerState<RouteTrackingMap> {
     final markers = <Marker>{};
 
     // HQ marker - always visible
-    markers.add(MarkerBuilder.buildHqLocationMarker(widget.hqLocation.toLatLng()));
+    markers.add(
+      MarkerBuilder.buildHqLocationMarker(widget.hqLocation.toLatLng()),
+    );
 
     // Marker de ubicación actual del dispatcher - si está disponible
     if (widget.currentPosition != null) {
-      markers.add(MarkerBuilder.buildCurrentPositionMarker(widget.currentPosition!));
+      markers.add(
+        MarkerBuilder.buildCurrentPositionMarker(widget.currentPosition!),
+      );
     }
 
     // Destionation marker, only show if it is selected
     if (widget.destination != null) {
-      markers.add(MarkerBuilder.buildDestinationMarker(
-        widget.destination!.toLatLng(),
-        widget.selectedOrder?.clientName,
-      ));
+      markers.add(
+        MarkerBuilder.buildDestinationMarker(
+          widget.destination!.toLatLng(),
+          widget.selectedOrder?.clientName,
+        ),
+      );
     }
 
     return markers;
@@ -137,7 +143,10 @@ class _RouteTrackingMapState extends ConsumerState<RouteTrackingMap> {
 
     // Center around destination if order is pending state
     if (!_shouldShowRoute()) {
-      final cameraUpdate = MapUtils.focusOnLocation(widget.destination!, zoom: 14.0);
+      final cameraUpdate = MapUtils.focusOnLocation(
+        widget.destination!,
+        zoom: 14.0,
+      );
       _mapController!.animateCamera(cameraUpdate);
       return;
     }

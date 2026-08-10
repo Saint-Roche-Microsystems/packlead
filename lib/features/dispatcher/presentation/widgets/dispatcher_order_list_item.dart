@@ -4,11 +4,11 @@ import 'package:packlead/core/constants/order_state.dart';
 import 'package:packlead/core/themes/index.dart';
 import 'package:packlead/core/utils/date_formatter.dart';
 
-
 class DispatcherOrderListItem extends StatelessWidget {
   final Order order;
   final bool isSelected; // is current order selected?
-  final bool isEnabled;  // is item enabled for interaction? (can not select if delivered or if there's an active shipped order)
+  final bool
+  isEnabled; // is item enabled for interaction? (can not select if delivered or if there's an active shipped order)
   final VoidCallback? onTap;
 
   const DispatcherOrderListItem({
@@ -27,10 +27,7 @@ class DispatcherOrderListItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: _getBackgroundColor(),
         border: Border(
-          bottom: BorderSide(
-            color: Colors.grey.shade200,
-            width: 1,
-          ),
+          bottom: BorderSide(color: Colors.grey.shade200, width: 1),
         ),
       ),
       child: Material(
@@ -38,21 +35,14 @@ class DispatcherOrderListItem extends StatelessWidget {
         child: InkWell(
           onTap: isEnabled ? onTap : null,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Context Row: Client Name + Status Badge
                 Row(
                   children: [
-                    Icon(
-                      order.state.icon,
-                      color: order.state.color,
-                      size: 20,
-                    ),
+                    Icon(order.state.icon, color: order.state.color, size: 20),
 
                     const SizedBox(width: 8),
 
@@ -160,10 +150,7 @@ class DispatcherOrderListItem extends StatelessWidget {
 
     // Opacity if it is delivered
     if (isDelivered) {
-      content = Opacity(
-        opacity: 0.5,
-        child: content,
-      );
+      content = Opacity(opacity: 0.5, child: content);
     }
 
     return content;
@@ -187,17 +174,11 @@ class DispatcherOrderListItem extends StatelessWidget {
     Color color = order.state.color;
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 4,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-          width: 1,
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
       ),
       child: Text(
         label,

@@ -28,9 +28,7 @@ class PlateField extends StatelessWidget {
       keyboardType: TextInputType.visiblePassword,
       textCapitalization: TextCapitalization.characters,
       textInputAction: textInputAction,
-      inputFormatters: [
-        LicensePlateInputFormatter(),
-      ],
+      inputFormatters: [LicensePlateInputFormatter()],
     );
   }
 }
@@ -39,9 +37,9 @@ class PlateField extends StatelessWidget {
 class LicensePlateInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     String text = newValue.text.toUpperCase();
 
     text = text.replaceAll(RegExp(r'[^A-Z0-9]'), '');

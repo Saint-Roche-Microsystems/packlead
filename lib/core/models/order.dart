@@ -36,9 +36,9 @@ class Order {
     this.dispatcherId,
     required this.zone,
     required this.deliveryDate,
-  })  : id = '',                    // Temporal, backend lo asigna
-        state = OrderState.pending, // Estado por default en la creación
-        createdAt = DateTime.now(); // Temporal, backend lo reemplaza
+  }) : id = '', // Temporal, backend lo asigna
+       state = OrderState.pending, // Estado por default en la creación
+       createdAt = DateTime.now(); // Temporal, backend lo reemplaza
 
   /// Deserialización JSON
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -125,14 +125,14 @@ class Order {
   @override
   int get hashCode {
     return id.hashCode ^
-    dispatcherId.hashCode ^
-    clientName.hashCode ^
-    clientPhoneNumber.hashCode ^
-    location.hashCode ^
-    address.hashCode ^
-    state.hashCode ^
-    zone.hashCode ^
-    deliveryDate.hashCode ^
-    createdAt.hashCode;
+        dispatcherId.hashCode ^
+        clientName.hashCode ^
+        clientPhoneNumber.hashCode ^
+        location.hashCode ^
+        address.hashCode ^
+        state.hashCode ^
+        zone.hashCode ^
+        deliveryDate.hashCode ^
+        createdAt.hashCode;
   }
 }

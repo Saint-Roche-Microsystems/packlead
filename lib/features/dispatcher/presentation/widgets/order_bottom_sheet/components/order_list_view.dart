@@ -13,7 +13,7 @@ class OrderListView extends StatelessWidget {
     required this.orders,
     this.selectedOrderId,
     required this.isOrderSelectable,
-    required this.onOrderTap
+    required this.onOrderTap,
   });
 
   @override

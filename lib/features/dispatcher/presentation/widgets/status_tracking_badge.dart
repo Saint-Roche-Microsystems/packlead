@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:packlead/core/themes/index.dart';
 import 'package:packlead/features/dispatcher/presentation/providers/dispatcher_route_provider.dart';
 
-
 class StatusTrackingBadge extends ConsumerWidget {
   const StatusTrackingBadge({super.key});
 
@@ -11,13 +10,11 @@ class StatusTrackingBadge extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isActive = ref.watch(locationTrackingServiceProvider).isTracking;
 
-    return  Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _StatusBadge(isActive: isActive),
-        ],
-      );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [_StatusBadge(isActive: isActive)],
+    );
   }
 }
 

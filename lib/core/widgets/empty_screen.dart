@@ -6,12 +6,7 @@ class EmptyScreen extends StatelessWidget {
   final String? title;
   final IconData? icon;
 
-  const EmptyScreen({
-    super.key,
-    required this.message,
-    this.title,
-    this.icon,
-  });
+  const EmptyScreen({super.key, required this.message, this.title, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +39,7 @@ class EmptyScreen extends StatelessWidget {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
               ),
             ],
           ),

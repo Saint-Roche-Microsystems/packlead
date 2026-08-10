@@ -56,23 +56,28 @@ final dispatchersProvider = FutureProvider<List<Dispatcher>>((ref) async {
   return await repository.getAllDispatchers();
 });
 
-final dispatchersByStateProvider = FutureProvider.family<List<Dispatcher>, DispatcherState>(
-      (ref, state) async {
-    final repository = ref.watch(dispatcherRepositoryProvider);
-    return await repository.getDispatchersByState(state);
-  },
-);
+final dispatchersByStateProvider =
+    FutureProvider.family<List<Dispatcher>, DispatcherState>((
+      ref,
+      state,
+    ) async {
+      final repository = ref.watch(dispatcherRepositoryProvider);
+      return await repository.getDispatchersByState(state);
+    });
 
-final dispatcherByIdProvider = FutureProvider.family<Dispatcher, String>(
-      (ref, dispatcherId) async {
-    final repository = ref.watch(dispatcherRepositoryProvider);
-    return await repository.getDispatcherById(dispatcherId);
-  },
-);
+final dispatcherByIdProvider = FutureProvider.family<Dispatcher, String>((
+  ref,
+  dispatcherId,
+) async {
+  final repository = ref.watch(dispatcherRepositoryProvider);
+  return await repository.getDispatcherById(dispatcherId);
+});
 
 /// The signed-in dispatcher's own backend profile (GET /dispatchers/me).
 /// autoDispose: must be re-fetched fresh on every login
-final dispatcherMeProvider = FutureProvider.autoDispose<Dispatcher>((ref) async {
+final dispatcherMeProvider = FutureProvider.autoDispose<Dispatcher>((
+  ref,
+) async {
   final repository = ref.watch(dispatcherRepositoryProvider);
   return await repository.getMyProfile();
 });
@@ -81,18 +86,18 @@ final dispatcherMeProvider = FutureProvider.autoDispose<Dispatcher>((ref) async 
 ///   CUD PROVIDERS
 /// *******************
 
-final dispatcherMutationProvider = StateNotifierProvider<DispatcherMutationNotifier, AsyncValue<void>>(
+final dispatcherMutationProvider =
+    StateNotifierProvider<DispatcherMutationNotifier, AsyncValue<void>>(
       (ref) => DispatcherMutationNotifier(ref),
-);
-
-
+    );
 
 class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
   final Ref _ref;
 
   DispatcherMutationNotifier(this._ref) : super(const AsyncValue.data(null));
 
-  DispatcherRepository get _repository => _ref.read(dispatcherRepositoryProvider);
+  DispatcherRepository get _repository =>
+      _ref.read(dispatcherRepositoryProvider);
 
   /// Result of the most recent `createDispatcher()` call - holds the
   /// `passwordResetLink` the form needs to show, since `state` above only
@@ -131,7 +136,10 @@ class DispatcherMutationNotifier extends StateNotifier<AsyncValue<void>> {
     }
   }
 
-  Future<void> updateDispatcherState(String dispatcherId, DispatcherState newState) async {
+  Future<void> updateDispatcherState(
+    String dispatcherId,
+    DispatcherState newState,
+  ) async {
     state = const AsyncValue.loading();
 
     try {

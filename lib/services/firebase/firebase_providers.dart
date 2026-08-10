@@ -8,7 +8,9 @@ final firebaseRTDBServiceProvider = Provider<FirebaseRTDBService>((ref) {
 });
 
 /// Provider for dispatchers location service
-final dispatcherLocationServiceProvider = Provider<DispatcherLocationService>((ref) {
+final dispatcherLocationServiceProvider = Provider<DispatcherLocationService>((
+  ref,
+) {
   final rtdbService = ref.watch(firebaseRTDBServiceProvider);
   return DispatcherLocationService(rtdbService);
 });

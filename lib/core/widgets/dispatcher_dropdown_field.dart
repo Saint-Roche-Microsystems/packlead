@@ -22,7 +22,7 @@ class DispatcherDropdownField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dispatchersAsync = ref.watch(
-        dispatchersByStateProvider(DispatcherState.available)
+      dispatchersByStateProvider(DispatcherState.available),
     );
 
     return Column(
@@ -31,13 +31,15 @@ class DispatcherDropdownField extends ConsumerWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500,),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
         ),
 
         const SizedBox(height: 8),
 
         dispatchersAsync.when(
-          data: (dispatchers) => _buildDropdown(context, dispatchers,),
+          data: (dispatchers) => _buildDropdown(context, dispatchers),
           loading: () => _buildLoadingDropdown(context),
           error: (error, _) => _buildErrorWidget(error),
         ),
@@ -108,13 +110,8 @@ class DispatcherDropdownField extends ConsumerWidget {
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     );
   }
 }

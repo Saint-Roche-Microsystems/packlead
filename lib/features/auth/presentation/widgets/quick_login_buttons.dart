@@ -8,7 +8,7 @@ class QuickLoginButtons extends StatelessWidget {
   const QuickLoginButtons({
     super.key,
     required this.onAdminLogin,
-    required this.onDispatcherLogin
+    required this.onDispatcherLogin,
   });
 
   @override

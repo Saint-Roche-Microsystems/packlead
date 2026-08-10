@@ -6,19 +6,19 @@ import 'package:packlead/features/orders/data/repositories/order_repository.dart
 import 'package:packlead/features/orders/models/order_by_dispatcher_params.dart';
 import 'package:packlead/features/orders/presentation/providers/orders_provider.dart';
 
+final dispatcherHomeProvider =
+    StateNotifierProvider.autoDispose<
+      DispatcherHomeNotifier,
+      AsyncValue<DispatcherHomeState>
+    >((ref) {
+      return DispatcherHomeNotifier(ref);
+    });
 
-final dispatcherHomeProvider = StateNotifierProvider.autoDispose<
-    DispatcherHomeNotifier,
-    AsyncValue<DispatcherHomeState>
->((ref) {
-  return DispatcherHomeNotifier(ref);
-});
-
-class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeState>> {
+class DispatcherHomeNotifier
+    extends StateNotifier<AsyncValue<DispatcherHomeState>> {
   final Ref _ref;
 
-  DispatcherHomeNotifier(this._ref)
-      : super(const AsyncValue.loading());
+  DispatcherHomeNotifier(this._ref) : super(const AsyncValue.loading());
 
   OrderRepository get _orderRepository => _ref.read(orderRepositoryProvider);
 
@@ -38,7 +38,7 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
 
       // Search for active shipped order (should be only one)
       final shippedOrder = orders.firstWhere(
-            (order) => order.state == OrderState.shipped,
+        (order) => order.state == OrderState.shipped,
         orElse: () => orders.first,
       );
 
@@ -73,7 +73,7 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
 
         // Buscar shipped activa
         final shippedOrder = orders.firstWhere(
-              (order) => order.state == OrderState.shipped,
+          (order) => order.state == OrderState.shipped,
           orElse: () => orders.first,
         );
 
@@ -108,18 +108,14 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
         return;
       }
 
-      state = AsyncValue.data(
-        currentState.copyWith(selectedOrder: order),
-      );
+      state = AsyncValue.data(currentState.copyWith(selectedOrder: order));
     });
   }
 
   /// Deselect the currently selected order
   void clearSelection() {
     state.whenData((currentState) {
-      state = AsyncValue.data(
-        currentState.copyWith(clearSelectedOrder: true),
-      );
+      state = AsyncValue.data(currentState.copyWith(clearSelectedOrder: true));
     });
   }
 
@@ -132,9 +128,7 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
       }
 
       // Init process of updating an order state
-      state = AsyncValue.data(
-        currentState.copyWith(isUpdatingOrder: true),
-      );
+      state = AsyncValue.data(currentState.copyWith(isUpdatingOrder: true));
 
       try {
         // Use the repository to update the order state in the backend
@@ -142,12 +136,14 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
         await _orderRepository.updateOrder(updatedOrder);
 
         // Invalidate providers related to the UI
-        _ref.invalidate(ordersByDispatcherProvider(
-          OrdersByDispatcherParams(
-            dispatcherId: order.dispatcherId!,
-            forDate: order.deliveryDate,
+        _ref.invalidate(
+          ordersByDispatcherProvider(
+            OrdersByDispatcherParams(
+              dispatcherId: order.dispatcherId!,
+              forDate: order.deliveryDate,
+            ),
           ),
-        ));
+        );
 
         // Update local state for inmediate UI feedback
         final updatedOrders = currentState.todayOrders.map((o) {
@@ -163,9 +159,7 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
           ),
         );
       } catch (error, stackTrace) {
-        state = AsyncValue.data(
-          currentState.copyWith(isUpdatingOrder: false),
-        );
+        state = AsyncValue.data(currentState.copyWith(isUpdatingOrder: false));
 
         state = AsyncValue.error(error, stackTrace);
       }
@@ -181,9 +175,7 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
       }
 
       // Init process of updating an order state
-      state = AsyncValue.data(
-        currentState.copyWith(isUpdatingOrder: true),
-      );
+      state = AsyncValue.data(currentState.copyWith(isUpdatingOrder: true));
 
       try {
         // Use the repository to update the order state in the backend
@@ -191,12 +183,14 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
         await _orderRepository.updateOrder(updatedOrder);
 
         // Invalidate providers related to the UI
-        _ref.invalidate(ordersByDispatcherProvider(
-          OrdersByDispatcherParams(
-            dispatcherId: order.dispatcherId!,
-            forDate: order.deliveryDate,
+        _ref.invalidate(
+          ordersByDispatcherProvider(
+            OrdersByDispatcherParams(
+              dispatcherId: order.dispatcherId!,
+              forDate: order.deliveryDate,
+            ),
           ),
-        ));
+        );
 
         // Update local state for inmediate UI feedback
         final updatedOrders = currentState.todayOrders.map((o) {
@@ -212,9 +206,7 @@ class DispatcherHomeNotifier extends StateNotifier<AsyncValue<DispatcherHomeStat
           ),
         );
       } catch (error, stackTrace) {
-        state = AsyncValue.data(
-          currentState.copyWith(isUpdatingOrder: false),
-        );
+        state = AsyncValue.data(currentState.copyWith(isUpdatingOrder: false));
 
         state = AsyncValue.error(error, stackTrace);
       }

@@ -33,15 +33,15 @@ class DispatcherDetailDialog extends ConsumerWidget {
         ),
         TextButton(
           onPressed: () async {
-            await ref.read(dispatcherMutationProvider.notifier).deleteDispatcher(dispatcher.id);
+            await ref
+                .read(dispatcherMutationProvider.notifier)
+                .deleteDispatcher(dispatcher.id);
 
             if (context.mounted) {
               Navigator.of(context).pop();
             }
           },
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.red,
-          ),
+          style: TextButton.styleFrom(foregroundColor: Colors.red),
           child: const Text('Eliminar'),
         ),
       ],
@@ -63,12 +63,7 @@ class DispatcherDetailDialog extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-            ),
-          ),
+          Text(value, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );

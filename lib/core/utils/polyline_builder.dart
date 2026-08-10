@@ -2,22 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:packlead/core/models/location.dart';
 
-
 class PolylineBuilder {
   PolylineBuilder._();
 
   /// Creates a route polyline from a list of Location points
   static Polyline buildRoutePolyline(
-      List<Location> routePoints, {
-        String polylineId = 'route',
-        Color color = Colors.blue,
-        int width = 5,
-      }) {
+    List<Location> routePoints, {
+    String polylineId = 'route',
+    Color color = Colors.blue,
+    int width = 5,
+  }) {
     if (routePoints.isEmpty) {
-      return Polyline(
-        polylineId: PolylineId(polylineId),
-        points: const [],
-      );
+      return Polyline(polylineId: PolylineId(polylineId), points: const []);
     }
 
     // Convert Location to LatLng to create polyline points
@@ -37,11 +33,11 @@ class PolylineBuilder {
 
   /// Wrapper that returns a Set of polylines for a route
   static Set<Polyline> buildRoutePolylineSet(
-      List<Location> routePoints, {
-        String polylineId = 'route',
-        Color color = Colors.blue,
-        int width = 5,
-      }) {
+    List<Location> routePoints, {
+    String polylineId = 'route',
+    Color color = Colors.blue,
+    int width = 5,
+  }) {
     if (routePoints.isEmpty) {
       return {};
     }
@@ -90,10 +86,7 @@ class PolylineBuilder {
       int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
       lng += dlng;
 
-      points.add(Location(
-        lat: lat / 1E5,
-        lng: lng / 1E5,
-      ));
+      points.add(Location(lat: lat / 1E5, lng: lng / 1E5));
     }
 
     return points;

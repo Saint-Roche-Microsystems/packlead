@@ -12,7 +12,8 @@ class AdminDispatcherScreen extends ConsumerStatefulWidget {
   const AdminDispatcherScreen({super.key});
 
   @override
-  ConsumerState<AdminDispatcherScreen> createState() => _AdminDispatcherScreenState();
+  ConsumerState<AdminDispatcherScreen> createState() =>
+      _AdminDispatcherScreenState();
 }
 
 class _AdminDispatcherScreenState extends ConsumerState<AdminDispatcherScreen>
@@ -33,7 +34,6 @@ class _AdminDispatcherScreenState extends ConsumerState<AdminDispatcherScreen>
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         Padding(
@@ -99,7 +99,8 @@ class _DispatcherListByState extends ConsumerWidget {
         }
 
         return RefreshIndicator(
-          onRefresh: () => ref.read(dispatcherMutationProvider.notifier).refresh(),
+          onRefresh: () =>
+              ref.read(dispatcherMutationProvider.notifier).refresh(),
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: dispatchers.length,
@@ -111,9 +112,9 @@ class _DispatcherListByState extends ConsumerWidget {
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => ErrorScreen(
-          title: 'No se pudieron cargar los repartidores',
-          message: ErrorHandler.getErrorMessage(error),
-          onRetry: () => ref.read(dispatcherMutationProvider.notifier).refresh(),
+        title: 'No se pudieron cargar los repartidores',
+        message: ErrorHandler.getErrorMessage(error),
+        onRetry: () => ref.read(dispatcherMutationProvider.notifier).refresh(),
       ),
     );
   }

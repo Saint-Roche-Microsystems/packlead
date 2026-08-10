@@ -4,7 +4,7 @@ class FirebaseRTDBService {
   final FirebaseDatabase _database;
 
   FirebaseRTDBService({FirebaseDatabase? database})
-      : _database = database ?? FirebaseDatabase.instance;
+    : _database = database ?? FirebaseDatabase.instance;
 
   /// Obtain reference to a specific path
   DatabaseReference ref(String path) {
