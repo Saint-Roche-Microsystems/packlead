@@ -22,8 +22,6 @@ void main() {
       // ================= ASSERT =================
       expect(result, isA<List<Dispatcher>>());
       expect(result.isNotEmpty, true);
-
-      print('Test 1 PASÓ: getAllDispatchers retorna lista válida');
     });
 
     test('2 Debe filtrar dispatchers por estado available', () async {
@@ -35,8 +33,6 @@ void main() {
 
       // ================= ASSERT =================
       expect(result.every((d) => d.state == state), true);
-
-      print('Test 2 PASÓ: getDispatchersByState filtra correctamente');
     });
 
     test(' Debe retornar dispatcher por ID existente', () async {
@@ -50,8 +46,6 @@ void main() {
       // ================= ASSERT =================
       expect(result.id, dispatcher.id);
       expect(result.name, dispatcher.name);
-
-      print('Test 3 PASÓ: getDispatcherById retorna dispatcher correcto');
     });
 
     test('4️ Debe lanzar excepción si el dispatcher no existe', () async {
@@ -63,8 +57,6 @@ void main() {
             () => dataSource.getDispatcherById(invalidId),
         throwsException,
       );
-
-      print('Test 4 PASÓ: getDispatcherById lanza excepción correctamente');
     });
 
     test('5️ Debe crear dispatcher con estado default available', () async {
@@ -84,8 +76,6 @@ void main() {
       // ================= ASSERT =================
       expect(result.dispatcher.id.startsWith('disp-'), true);
       expect(result.dispatcher.state, DispatcherState.available);
-
-      print('Test 5 PASÓ: createDispatcher crea dispatcher con estado available');
     });
 
     test('6️ Debe actualizar dispatcher cambiando su estado a inactive', () async {
@@ -107,8 +97,6 @@ void main() {
 
       // ================= ASSERT =================
       expect(result.state, DispatcherState.inactive);
-
-      print('Test 6 PASÓ: updateDispatcher actualiza correctamente el estado');
     });
 
     test('7️ Debe eliminar dispatcher correctamente', () async {
@@ -122,8 +110,6 @@ void main() {
 
       // ================= ASSERT =================
       expect(updatedList.any((d) => d.id == dispatcher.id), false);
-
-      print('Test 7 PASÓ: deleteDispatcher elimina correctamente el dispatcher');
     });
 
   });

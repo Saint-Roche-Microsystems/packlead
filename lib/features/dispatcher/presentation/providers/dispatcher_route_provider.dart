@@ -9,7 +9,7 @@ import 'package:packlead/services/location/location_tracking_service.dart';
 
 /// Hardcoded origin location.
 Location _getHQOrigin() {
-  return SRMCHQ;
+  return srmchq;
 }
 
 final routeProvider = FutureProvider.family<List<Location>, Order>(

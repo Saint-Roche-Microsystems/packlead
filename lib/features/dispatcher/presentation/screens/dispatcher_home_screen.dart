@@ -70,7 +70,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
     final currentLocation = ref.read(dispatcherCurrentLocationProvider);
 
     // If current location is null, use SRMC HQ as default initial location
-    final initialLocation = currentLocation ?? SRMCHQ;
+    final initialLocation = currentLocation ?? srmchq;
 
     _locationNotifier = ref.read(dispatcherLocationProvider.notifier);
 
@@ -171,7 +171,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
             destination: state.selectedOrder?.location,
             selectedOrder: state.selectedOrder,
             currentPosition: currentLocation,
-            hqLocation: SRMCHQ,
+            hqLocation: srmchq,
           ),
         ),
 

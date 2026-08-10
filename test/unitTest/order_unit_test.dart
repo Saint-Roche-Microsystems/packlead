@@ -33,8 +33,6 @@ void main() {
       // =============== ASSERT ===============
       expect(result.id, '');
       expect(result.state, OrderState.pending);
-
-      print('Test 1 PASÓ: Order.create asigna estado pending e id vacío');
     });
 
     test('2️ toJson debe serializar correctamente', () {
@@ -59,8 +57,6 @@ void main() {
       expect(json['id'], 'ORD-1');
       expect(json['state'], 'shipped');
       expect(json['location']['lat'], location.lat);
-
-      print('Test 2 PASÓ: toJson serializa correctamente');
     });
 
     test('3️ fromJson debe deserializar correctamente', () {
@@ -85,8 +81,6 @@ void main() {
       expect(order.id, 'ORD-1');
       expect(order.state, OrderState.delivered);
       expect(order.location.lat, -0.18);
-
-      print('Test 3 PASÓ: fromJson deserializa correctamente');
     });
 
     test('4️ copyWith debe modificar solo los campos enviados', () {
@@ -110,8 +104,6 @@ void main() {
       // =============== ASSERT ===============
       expect(updated.state, OrderState.delivered);
       expect(updated.clientName, order.clientName);
-
-      print('Test 4 PASÓ: copyWith actualiza correctamente');
     });
 
     test('5️ operator == debe comparar correctamente dos órdenes iguales', () {
@@ -136,8 +128,6 @@ void main() {
 
       // =============== ASSERT ===============
       expect(isEqual, true);
-
-      print('Test 5 PASÓ: operator == funciona correctamente');
     });
 
   });
@@ -154,8 +144,6 @@ void main() {
       // =============== ASSERT ===============
       expect(json['lat'], -0.18);
       expect(json['lng'], -78.48);
-
-      print('Test 6 PASÓ: Location.toJson funciona correctamente');
     });
 
     test('7️ fromJson debe deserializar Location correctamente', () {
@@ -168,8 +156,6 @@ void main() {
       // =============== ASSERT ===============
       expect(location.lat, -0.18);
       expect(location.lng, -78.48);
-
-      print('Test 7 PASÓ: Location.fromJson funciona correctamente');
     });
 
     test('8️ operator == debe comparar Locations correctamente', () {
@@ -182,8 +168,6 @@ void main() {
 
       // =============== ASSERT ===============
       expect(isEqual, true);
-
-      print('Test 8 PASÓ: Location equality funciona correctamente');
     });
 
   });
