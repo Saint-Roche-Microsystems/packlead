@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:packlead/core/errors/auth_exceptions.dart';
 import 'package:packlead/core/models/user.dart';
 import 'package:packlead/features/auth/data/datasources/auth_mock_datasource.dart';
-import 'package:packlead/core/constants/user_roles.dart';
 
 void main() {
   late AuthMockDataSource dataSource;
