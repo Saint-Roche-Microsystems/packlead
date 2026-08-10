@@ -100,7 +100,7 @@ class _DispatcherHomeScreenState extends ConsumerState<DispatcherHomeScreen> {
     // Load today's orders using the backend dispatcher id (GET /dispatchers/me)
     // - not the Firebase UID - exactly once, as soon as the profile resolves.
     ref.listen<AsyncValue<Dispatcher>>(dispatcherMeProvider, (previous, next) {
-      final me = next.value;
+      final me = next.valueOrNull;
       if (me != null && !_hasLoadedOrders) {
         _hasLoadedOrders = true;
         ref.read(dispatcherHomeProvider.notifier).loadTodayOrders(me.id);
